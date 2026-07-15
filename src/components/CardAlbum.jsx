@@ -12,14 +12,19 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
   // Manual card add states
   const [isAdding, setIsAdding] = useState(false);
   const [manualName, setManualName] = useState('');
+  const [manualCode, setManualCode] = useState(''); // 卡匣編號 (如 2-2-031 TC)
   const [manualStars, setManualStars] = useState(5);
   const [manualType1, setManualType1] = useState('一般');
   const [manualType2, setManualType2] = useState('');
   const [manualMoveName, setManualMoveName] = useState('');
   const [manualMoveType, setManualMoveType] = useState('一般');
+  const [manualMoveCategory, setManualMoveCategory] = useState('物理'); // 招式類型 (物理/特殊)
   const [manualHp, setManualHp] = useState(150);
   const [manualAttack, setManualAttack] = useState(100);
   const [manualDefense, setManualDefense] = useState(80);
+  const [manualSpAtk, setManualSpAtk] = useState(80);
+  const [manualSpDef, setManualSpDef] = useState(80);
+  const [manualSpeed, setManualSpeed] = useState(80);
   const [manualStorage, setManualStorage] = useState('');
 
   // Handle opening detailed card info modal
@@ -84,14 +89,19 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
   const handleNameBlur = () => {
     const preset = findPokemonByName(manualName);
     if (preset) {
+      setManualCode(preset.cardId || '');
       setManualStars(preset.stars);
       setManualType1(preset.type1);
       setManualType2(preset.type2 || '');
       setManualMoveName(preset.moveName);
       setManualMoveType(preset.moveType);
+      setManualMoveCategory(preset.moveCategory || '物理');
       setManualHp(preset.hp);
       setManualAttack(preset.attack);
       setManualDefense(preset.defense);
+      setManualSpAtk(preset.spAtk || preset.attack);
+      setManualSpDef(preset.spDef || preset.defense);
+      setManualSpeed(preset.speed || 80);
     }
   };
 
@@ -102,20 +112,23 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
       return;
     }
 
+    const customId = manualCode.trim() || `${manualName.trim()}-${Date.now()}`;
+
     const newCard = {
-      cardId: `${manualName.trim()}-${Date.now()}`,
+      cardId: customId,
       name: manualName.trim(),
       stars: Number(manualStars),
       type1: manualType1,
       type2: manualType2,
       moveName: manualMoveName.trim(),
       moveType: manualMoveType,
+      moveCategory: manualMoveCategory,
       hp: Number(manualHp),
       attack: Number(manualAttack),
       defense: Number(manualDefense),
-      spAtk: Math.round(Number(manualAttack) * 0.8), // defaults
-      spDef: Math.round(Number(manualDefense) * 0.8),
-      speed: Math.round(Number(manualAttack) * 0.9),
+      spAtk: Number(manualSpAtk),
+      spDef: Number(manualSpDef),
+      speed: Number(manualSpeed),
       count: 1,
       storageLocation: manualStorage.trim()
     };
@@ -125,10 +138,12 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
     
     // Clear forms
     setManualName('');
+    setManualCode('');
     setManualMoveName('');
     setManualStorage('');
     alert(`成功登錄「${newCard.name}」！`);
   };
+
 
   // Filter logic
   const filteredCards = collection.filter(card => {
@@ -197,13 +212,15 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
         {filteredCards.length > 0 ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {filteredCards.map((card) => {
+              const isSuperStar = card.stars === 6;
               const isGold = card.stars === 5;
               const isPurple = card.stars === 4;
               const isBlue = card.stars === 3;
               const isGreen = card.stars === 2;
               
               let diskGradeClass = 'disk-grade-1';
-              if (isGold) diskGradeClass = 'disk-grade-5';
+              if (isSuperStar) diskGradeClass = 'disk-grade-6';
+              else if (isGold) diskGradeClass = 'disk-grade-5';
               else if (isPurple) diskGradeClass = 'disk-grade-4';
               else if (isBlue) diskGradeClass = 'disk-grade-3';
               else if (isGreen) diskGradeClass = 'disk-grade-2';
@@ -229,8 +246,9 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
                   {/* Right Main Stats Side */}
                   <div className="disk-main-section">
                     <div className="disk-header">
-                      <div className="disk-id">No. {card.cardId.slice(0, 6)}</div>
+                      <div className="disk-id">No. {card.cardId}</div>
                     </div>
+
                     <div>
                       <div className="disk-name">{card.name}</div>
                       <div className="disk-type-row">
@@ -279,7 +297,10 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
 
               {/* General details */}
               <div style={{ textAlign: 'center', marginBottom: '16px' }}>
-                <h4 style={{ fontSize: '24px', fontWeight: '900', color: '#ff9f0a', margin: '6px 0' }}>
+                <div style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--text-muted)' }}>
+                  卡匣編號：{selectedCard.cardId}
+                </div>
+                <h4 style={{ fontSize: '24px', fontWeight: '900', color: '#ff9f0a', margin: '4px 0' }}>
                   {selectedCard.name} ({selectedCard.stars}★)
                 </h4>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
@@ -288,8 +309,41 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
                 </div>
                 <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
                   招式：<b>{selectedCard.moveName}</b>（
-                  <span className={`type-badge type-${selectedCard.moveType}`} style={{ padding: '0px 3px', fontSize: '9px' }}>{selectedCard.moveType}</span>系）
+                  <span className={`type-badge type-${selectedCard.moveType}`} style={{ padding: '0px 3px', fontSize: '9px' }}>{selectedCard.moveType}</span>系 
+                  <span style={{ marginLeft: '4px', padding: '1px 4px', fontSize: '10px', background: selectedCard.moveCategory === '特殊' ? '#30b0c7' : '#ff9f0a', color: '#000', borderRadius: '3px', fontWeight: 'bold' }}>
+                    {selectedCard.moveCategory || '物理'}
+                  </span>）
                 </p>
+              </div>
+
+              {/* MEZASTAR 6-Stat Grid */}
+              <div className="glass-panel mb-4" style={{ padding: '12px', background: 'rgba(255,255,255,0.02)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', textAlign: 'center', fontSize: '11px' }}>
+                  <div style={{ background: 'rgba(255,255,255,0.04)', padding: '6px', borderRadius: '8px' }}>
+                    <span style={{ color: '#34c759', fontWeight: 'bold' }}>HP</span>
+                    <div style={{ fontSize: '16px', fontWeight: '900', color: '#fff', marginTop: '2px' }}>{selectedCard.hp}</div>
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.04)', padding: '6px', borderRadius: '8px' }}>
+                    <span style={{ color: '#ff9f0a', fontWeight: 'bold' }}>攻擊</span>
+                    <div style={{ fontSize: '16px', fontWeight: '900', color: '#fff', marginTop: '2px' }}>{selectedCard.attack}</div>
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.04)', padding: '6px', borderRadius: '8px' }}>
+                    <span style={{ color: '#ff453a', fontWeight: 'bold' }}>防禦</span>
+                    <div style={{ fontSize: '16px', fontWeight: '900', color: '#fff', marginTop: '2px' }}>{selectedCard.defense}</div>
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.04)', padding: '6px', borderRadius: '8px' }}>
+                    <span style={{ color: '#30b0c7', fontWeight: 'bold' }}>特攻</span>
+                    <div style={{ fontSize: '16px', fontWeight: '900', color: '#fff', marginTop: '2px' }}>{selectedCard.spAtk || 0}</div>
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.04)', padding: '6px', borderRadius: '8px' }}>
+                    <span style={{ color: '#af52de', fontWeight: 'bold' }}>特防</span>
+                    <div style={{ fontSize: '16px', fontWeight: '900', color: '#fff', marginTop: '2px' }}>{selectedCard.spDef || 0}</div>
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.04)', padding: '6px', borderRadius: '8px' }}>
+                    <span style={{ color: '#ffcc00', fontWeight: 'bold' }}>速度</span>
+                    <div style={{ fontSize: '16px', fontWeight: '900', color: '#fff', marginTop: '2px' }}>{selectedCard.speed || 0}</div>
+                  </div>
+                </div>
               </div>
 
               {/* Persist Storage Tag Input (Reserved / 保留方案) */}
@@ -389,7 +443,7 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
       {/* Manual Card Add Modal */}
       {isAdding && (
         <div className="modal-overlay" onClick={() => setIsAdding(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ borderTop: '6px solid #34c759' }}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ borderTop: '6px solid #34c759', maxHeight: '90vh', overflowY: 'auto' }}>
             <div className="modal-header">
               <h3 style={{ fontSize: '18px', fontWeight: '900', color: '#fff' }}>
                 ＋ 手動新增卡匣
@@ -398,24 +452,41 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
             </div>
 
             <form onSubmit={handleAddSubmit}>
-              <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>
-                寶可夢名稱 (輸入已知的名稱可自動帶入數值)：
-              </label>
-              <input
-                type="text"
-                className="input-field"
-                placeholder="例如：狂歡浪舞鴨、蓋歐卡"
-                value={manualName}
-                onChange={(e) => setManualName(e.target.value)}
-                onBlur={handleNameBlur}
-                required
-              />
+              <div className="grid-2">
+                <div>
+                  <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                    寶可夢名稱：
+                  </label>
+                  <input
+                    type="text"
+                    className="input-field"
+                    placeholder="例如：狂歡浪舞鴨、蓋歐卡"
+                    value={manualName}
+                    onChange={(e) => setManualName(e.target.value)}
+                    onBlur={handleNameBlur}
+                    required
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                    卡匣編號 (印在卡片左上角，如 2-2-031 TC)：
+                  </label>
+                  <input
+                    type="text"
+                    className="input-field"
+                    placeholder="例如：2-2-031 TC"
+                    value={manualCode}
+                    onChange={(e) => setManualCode(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
 
               <div className="grid-2">
                 <div>
                   <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>星等：</label>
                   <select className="input-field" value={manualStars} onChange={(e) => setManualStars(Number(e.target.value))}>
-                    {[5, 4, 3, 2, 1].map(n => <option key={n} value={n}>{n}★</option>)}
+                    {[6, 5, 4, 3, 2, 1].map(n => <option key={n} value={n}>{n}★ {n === 6 ? '超級明星' : n === 5 ? '明星' : ''}</option>)}
                   </select>
                 </div>
                 <div>
@@ -466,22 +537,55 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '10px' }} className="mb-4">
-                <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>HP值：</label>
-                  <input type="number" className="input-field" value={manualHp} onChange={(e) => setManualHp(Number(e.target.value))} />
+              <div className="grid-2" style={{ marginBottom: '10px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>招式類型 (物理/特殊)：</label>
+                  <select className="input-field" value={manualMoveCategory} onChange={(e) => setManualMoveCategory(e.target.value)}>
+                    <option value="物理">物理 (如下盤踢、巨獸斬)</option>
+                    <option value="特殊">特殊 (如魔法閃耀、精神強念)</option>
+                  </select>
                 </div>
-                <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>攻擊力：</label>
-                  <input type="number" className="input-field" value={manualAttack} onChange={(e) => setManualAttack(Number(e.target.value))} />
+                <div />
+              </div>
+
+              {/* MEZASTAR 6-Stat Input Section */}
+              <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '12px', marginBottom: '16px' }}>
+                <span style={{ display: 'block', fontSize: '12px', fontWeight: 'bold', color: '#ff9f0a', marginBottom: '8px' }}>
+                  📊 官方卡匣背面真實數值：
+                </span>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }} className="mb-4">
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>HP：</label>
+                    <input type="number" className="input-field" value={manualHp} onChange={(e) => setManualHp(Number(e.target.value))} />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>攻擊 (物理)：</label>
+                    <input type="number" className="input-field" value={manualAttack} onChange={(e) => setManualAttack(Number(e.target.value))} />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>防禦 (物理)：</label>
+                    <input type="number" className="input-field" value={manualDefense} onChange={(e) => setManualDefense(Number(e.target.value))} />
+                  </div>
                 </div>
-                <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>防禦力：</label>
-                  <input type="number" className="input-field" value={manualDefense} onChange={(e) => setManualDefense(Number(e.target.value))} />
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>特攻 (特殊)：</label>
+                    <input type="number" className="input-field" value={manualSpAtk} onChange={(e) => setManualSpAtk(Number(e.target.value))} />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>特防 (特殊)：</label>
+                    <input type="number" className="input-field" value={manualSpDef} onChange={(e) => setManualSpDef(Number(e.target.value))} />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>速度：</label>
+                    <input type="number" className="input-field" value={manualSpeed} onChange={(e) => setManualSpeed(Number(e.target.value))} />
+                  </div>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '10px' }}>
+              <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
                 <button type="button" className="btn-primary" onClick={() => setIsAdding(false)} style={{ background: '#4b5563' }}>
                   取消
                 </button>
@@ -496,3 +600,4 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
     </div>
   );
 }
+

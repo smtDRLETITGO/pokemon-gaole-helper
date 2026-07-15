@@ -50,8 +50,8 @@ export default function CounterRecommender({ collection, selectedOpponents }) {
       };
     });
     
-    // 分數從高到低排序，取前 4 名
-    return merged.sort((a, b) => b.score - a.score).slice(0, 4);
+    // 分數從高到低排序，僅推薦前 3 名（符合實機上場上限）
+    return merged.sort((a, b) => b.score - a.score).slice(0, 3);
   };
 
   const recommendations = calculateCombinedRecommendations();
@@ -86,7 +86,7 @@ export default function CounterRecommender({ collection, selectedOpponents }) {
                 alignItems: 'center',
                 gap: '12px',
                 boxShadow: index === 0 ? '0 4px 15px rgba(245, 158, 11, 0.15)' : 'none',
-                borderLeft: index === 0 ? '4px solid #f59e0b' : '4px solid rgba(255, 255, 255, 0.15)'
+                borderLeft: index === 0 ? '4px solid #f59e0b' : index === 1 ? '4px solid #a1a1aa' : '4px solid #b45309'
               }}
             >
               {/* 推薦排名 */}
@@ -94,15 +94,15 @@ export default function CounterRecommender({ collection, selectedOpponents }) {
                 position: 'absolute',
                 top: '-8px',
                 left: '12px',
-                background: index === 0 ? '#f59e0b' : '#4b5563',
-                color: index === 0 ? '#111' : '#fff',
+                background: index === 0 ? '#f59e0b' : index === 1 ? '#a1a1aa' : '#b45309',
+                color: index === 2 ? '#fff' : '#111',
                 fontSize: '9px',
                 fontWeight: 'bold',
                 padding: '2px 8px',
                 borderRadius: '10px',
                 boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
               }}>
-                {index === 0 ? '🥇 首選對策' : `推薦 #${index + 1}`}
+                {index === 0 ? '🥇 首選隊員' : index === 1 ? '🥈 次選隊員' : '🥉 三選隊員'}
               </div>
 
               {/* 收納位置標記 */}
