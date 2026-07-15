@@ -219,7 +219,7 @@ export default function App() {
 
         {/* CardRegister 為全畫面 overlay，不佔用 main 版面 */}
 
-        {activeTab === 'ocr' && (
+        {activeTab === 'ocr' && !showRegister && (
           <ScreenOcr 
             onOcrMatchOpponents={handleOcrMatchMultipleOpponents}
           />

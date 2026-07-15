@@ -147,10 +147,7 @@ function handleOcrAnalysis(imageBase64, apiKey, mode) {
     var json = JSON.parse(responseText);
     var content = json.choices[0].message.content;
     
-    // Clean up markdown wrapping if present
-    content = content.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
-    
-    var resultObj = JSON.parse(content);
+    var resultObj = cleanAndParseJson(content);
     return ContentService.createTextOutput(JSON.stringify({ success: true, result: resultObj }))
       .setMimeType(ContentService.MimeType.JSON);
       
@@ -158,4 +155,26 @@ function handleOcrAnalysis(imageBase64, apiKey, mode) {
     return ContentService.createTextOutput(JSON.stringify({ success: false, error: '系統錯誤: ' + err.toString() }))
       .setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+function cleanAndParseJson(text) {
+  var cleaned = text.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
+  var firstBrace = cleaned.indexOf('{');
+  var firstBracket = cleaned.indexOf('[');
+  var startIdx = -1;
+  var endIdx = -1;
+  
+  if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+    startIdx = firstBrace;
+    endIdx = cleaned.lastIndexOf('}');
+  } else if (firstBracket !== -1) {
+    startIdx = firstBracket;
+    endIdx = cleaned.lastIndexOf(']');
+  }
+  
+  if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+    cleaned = cleaned.substring(startIdx, endIdx + 1);
+  }
+  
+  return JSON.parse(cleaned);
 }

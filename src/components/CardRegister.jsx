@@ -1,6 +1,26 @@
 import React, { useState, useMemo, useRef, useCallback } from 'react';
 import { PRESET_POKEMON_DB, ACTIVE_PRESET_DB, updateLocalDbOverride } from '../data/pokemonDb';
 
+function cleanAndParseJson(text) {
+  let cleaned = text.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
+  const firstBrace = cleaned.indexOf('{');
+  const firstBracket = cleaned.indexOf('[');
+  let startIdx = -1;
+  let endIdx = -1;
+  if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+    startIdx = firstBrace;
+    endIdx = cleaned.lastIndexOf('}');
+  } else if (firstBracket !== -1) {
+    startIdx = firstBracket;
+    endIdx = cleaned.lastIndexOf(']');
+  }
+  if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+    cleaned = cleaned.substring(startIdx, endIdx + 1);
+  }
+  return JSON.parse(cleaned);
+}
+
+
 
 
 // ── 星等顯示 ──
@@ -155,17 +175,31 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
   // ── OCR 相機 ──
   const startCamera = useCallback(async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
-      });
+      const constraints = {
+        video: { facingMode: { ideal: 'environment' } },
+        audio: false
+      };
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        videoRef.current.play();
+        videoRef.current.play().catch(e => console.log("Video play pending:", e));
       }
+      setOcrStatus('idle');
     } catch (err) {
-      console.error('相機開啟失敗:', err);
-      setOcrStatus('error');
+      console.warn("First camera constraint failed, trying basic fallback...", err);
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        streamRef.current = stream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play().catch(e => console.log("Video play pending:", e));
+        }
+        setOcrStatus('idle');
+      } catch (fallbackErr) {
+        console.error("Camera completely failed:", fallbackErr);
+        setOcrStatus('error');
+      }
     }
   }, []);
 
@@ -203,25 +237,38 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
       let resultObj = null;
 
       if (syncUrl) {
-        // Send request via Google Apps Script server-side proxy (removes CORS issues)
-        const response = await fetch(syncUrl, {
-          method: 'POST',
-          credentials: 'omit',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify({
-            action: 'ocr',
-            imageBase64: imageData,
-            openRouterApiKey: apiKey
-          })
-        });
+        try {
+          // Send request via Google Apps Script server-side proxy
+          const response = await fetch(syncUrl, {
+            method: 'POST',
+            credentials: 'omit',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({
+              action: 'ocr',
+              imageBase64: imageData,
+              openRouterApiKey: apiKey,
+              mode: 'tag'
+            })
+          });
 
-        if (!response.ok) throw new Error('雲端辨識代理連線失敗');
-        const resData = await response.json();
-        if (!resData.success) throw new Error(resData.error || '大模型辨識失敗');
-        resultObj = resData.result;
-      } else {
-        // Direct request to OpenRouter from browser (falls back if no Web App proxy exists)
-        const systemPrompt = "你是一個專業的寶可夢街機 MEZASTAR（星塵/銀河系列）卡匣辨識專家。\n你的任務是分析使用者上傳的卡匣圖片（可能是卡匣正面，也可能是卡匣背面），並精準提取出所有的欄位資訊。\n\n請仔細辨識圖片中出現的以下實體資訊：\n\n【如果是卡匣背面 (Back of the Tag)】：\n1. 卡匣編號 (卡片左上角，格式通常為：X-X-XXX 後綴字母，例如：2-2-031 TC)\n2. 寶可夢名稱 (位於頂部中央，繁體中文，例如：狂歡浪舞鴨)\n3. 星等 (編號下方的星星數量，例如：4)\n4. 招式名稱 (位於粉紅色招式欄中，例如：下盤踢)\n5. 招式屬性 (招式名稱右側的屬性圖標文字，例如：格鬥)\n6. 招式分類 (如果是拳頭圖標則為「物理」，如果是同心圓/星狀光芒圖標則為「特殊」)\n7. 六維數值 (位於右側的綠、粉、藍、紫、青色長條參數區)：\n   - HP (體力)\n   - 攻擊 (物理攻擊)\n   - 防禦 (物理防禦)\n   - 特攻 (特殊攻擊)\n   - 特防 (特殊防禦)\n   - 速度\n\n【如果是卡匣正面 (Front of the Tag)】：\n1. 卡匣編號 (卡片右下角，格式通常為：X-X-XXX 後綴字母，例如：2-2-031 TC)\n2. 寶可夢名稱 (位於下方中央偏左，繁體中文，例如：狂歡浪舞鴨)\n3. 星等 (名稱上方的星星數量，例如：4)\n4. 寶可能量 (右下角的紅色/橙色大數字，例如：118)\n5. 寶可夢屬性 (名稱下方的屬性圓圈圖標，可能有一個或兩個，例如：水、格鬥)\n\n【回傳格式要求】：\n請「只」回傳一個 JSON 格式的物件，不要包含任何 markdown 語法 (不要 ```json 包裹)、不要任何多餘的解釋或客套話。如果某個欄位在圖片中完全無法看清或不存在，請填入 null。\n\nJSON 格式欄位如下：\n{\n  \"cardSide\": \"front\" 或 \"back\",\n  \"cardId\": \"卡匣編號(字串)\",\n  \"name\": \"寶可夢名稱(字串)\",\n  \"stars\": 星等(整數),\n  \"pokeEne\": 寶可能量(整數，若無則為null),\n  \"type1\": \"主屬性(字串，例如：水，若無則為null)\",\n  \"type2\": \"副屬性(字串，例如：格鬥，若無則為null)\",\n  \"moveName\": \"招式名稱(字串，若無則為null)\",\n  \"moveType\": \"招式屬性(字串，例如：格鬥，若無則為null)\",\n  \"moveCategory\": \"招式分類(物理 或 特殊，若無則為null)\",\n  \"hp\": HP值(整數，若無則為null),\n  \"attack\": 攻擊力(整數,\n  \"defense\": 防禦力(整數),\n  \"spAtk\": 特攻值(整數),\n  \"spDef\": 特防值(整數),\n  \"speed\": 速度值(整數)\n}";
+          if (response.ok) {
+            const resData = await response.json();
+            if (resData.success) {
+              resultObj = resData.result;
+            } else {
+              console.warn("GAS proxy returned error, falling back to direct client call:", resData.error);
+            }
+          } else {
+            console.warn("GAS proxy HTTP error, falling back to direct client call");
+          }
+        } catch (gasErr) {
+          console.warn("GAS proxy exception, falling back to direct client call:", gasErr);
+        }
+      }
+
+      // Fallback: Direct request to OpenRouter if GAS wasn't used or failed
+      if (!resultObj) {
+        const systemPrompt = "你是一個專業的寶可夢街機 MEZASTAR（星塵/銀河系列）卡匣辨識專家。\n你的任務是分析使用者上傳的卡匣圖片（可能是卡匣正面，也可能是卡匣背面），並精準提取出所有的欄位資訊。\n\n請仔細辨識圖片中出現的以下實體資訊：\n\n【如果是卡匣背面 (Back of the Tag)】：\n1. 卡匣編號 (卡片左上角，格式通常為：X-X-XXX 後綴字母，例如：2-2-031 TC)\n2. 寶可夢名稱 (位於頂部中央，繁體中文，例如：狂歡浪舞鴨)\n3. 星等 (編號下方的星星數量，例如：4)\n4. 招式名稱 (位於粉紅色招式欄中，例如：下盤踢)\n5. 招式屬性 (招式名稱右側的屬性圖標文字，例如：格鬥)\n6. 招式分類 (如果是拳頭圖標則為「物理」，如果是同心圓/星狀光芒圖標則為「特殊」)\n7. 六維數值 (位於右側的綠、粉、藍、紫、青色長條參數區)：\n   - HP (體力)\n   - 攻擊 (物理攻擊)\n   - 防禦 (物理防禦)\n   - 特攻 (特殊攻擊)\n   - 特防 (特殊防禦)\n   - 速度\n\n【如果是卡匣正面 (Front of the Tag)】：\n1. 卡匣編號 (卡片右下角，格式通常為：X-X-XXX 後綴字母，例如：2-2-031 TC)\n2. 寶可夢名稱 (位於下方中央偏左，繁體中文，例如：狂歡浪舞鴨)\n3. 星等 (名稱上方的星星數量，例如：4)\n4. 寶可能量 (右下角的紅色/橙色大數字，例如：118)\n5. 寶可夢屬性 (名稱下方的屬性圓圈圖標，可能有一個或兩個，例如：水、格鬥)\n\n【回傳格式要求】：\n請「只」回傳一個 JSON 格式的物件，不要包含 any markdown tags, no ```json formatting, no conversational text. 如果某個欄位在圖片中完全無法看清或不存在，請填入 null。\n\nJSON 格式欄位如下：\n{\n  \"cardSide\": \"front\" 或 \"back\",\n  \"cardId\": \"卡匣編號(字串)\",\n  \"name\": \"寶可夢名稱(字串)\",\n  \"stars\": 星等(整數),\n  \"pokeEne\": 寶可能量(整裝，若無則為null),\n  \"type1\": \"主屬性(字串，例如：水，若無則為null)\",\n  \"type2\": \"副屬性(字串，例如：格鬥，若無則為null)\",\n  \"moveName\": \"招式名稱(字串，若無則為null)\",\n  \"moveType\": \"招式屬性(字串，例如：格鬥，若無則為null)\",\n  \"moveCategory\": \"招式分類(物理 或 特殊，若無則為null)\",\n  \"hp\": HP值(整數，若無則為null),\n  \"attack\": 攻擊力(整數),\n  \"defense\": 防禦力(整數),\n  \"spAtk\": 特攻值(整數),\n  \"spDef\": 特防值(整數),\n  \"speed\": 速度值(整數)\n}";
 
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
           method: "POST",

@@ -1,5 +1,28 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { PRESET_POKEMON_DB } from '../data/pokemonDb';
+import { PRESET_POKEMON_DB, ACTIVE_PRESET_DB } from '../data/pokemonDb';
+
+function cleanAndParseJson(text) {
+  var cleaned = text.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
+  var firstBrace = cleaned.indexOf('{');
+  var firstBracket = cleaned.indexOf('[');
+  var startIdx = -1;
+  var endIdx = -1;
+  
+  if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
+    startIdx = firstBrace;
+    endIdx = cleaned.lastIndexOf('}');
+  } else if (firstBracket !== -1) {
+    startIdx = firstBracket;
+    endIdx = cleaned.lastIndexOf(']');
+  }
+  
+  if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+    cleaned = cleaned.substring(startIdx, endIdx + 1);
+  }
+  
+  return JSON.parse(cleaned);
+}
+
 
 export default function ScreenOcr({ onOcrMatchOpponents }) {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -22,11 +45,7 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
     stopCamera();
     try {
       const constraints = {
-        video: { 
-          facingMode: facingMode,
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        },
+        video: { facingMode: { ideal: facingMode } },
         audio: false
       };
       
@@ -34,11 +53,23 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        videoRef.current.play().catch(e => console.log("Video play pending:", e));
       }
       setHasCameraPermission(true);
     } catch (err) {
-      console.error("Camera access error:", err);
-      setHasCameraPermission(false);
+      console.warn("First camera constraint failed, trying basic fallback...", err);
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        streamRef.current = stream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play().catch(e => console.log("Video play pending:", e));
+        }
+        setHasCameraPermission(true);
+      } catch (fallbackErr) {
+        console.error("Camera completely failed:", fallbackErr);
+        setHasCameraPermission(false);
+      }
     }
   };
 
@@ -86,26 +117,38 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
       let opponentNames = [];
 
       if (syncUrl) {
-        // Send request via Google Apps Script server-side proxy
-        const response = await fetch(syncUrl, {
-          method: 'POST',
-          credentials: 'omit',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify({
-            action: 'ocr',
-            imageBase64: imageData,
-            openRouterApiKey: apiKey,
-            mode: 'screen'
-          })
-        });
+        try {
+          // Send request via Google Apps Script server-side proxy
+          const response = await fetch(syncUrl, {
+            method: 'POST',
+            credentials: 'omit',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({
+              action: 'ocr',
+              imageBase64: imageData,
+              openRouterApiKey: apiKey,
+              mode: 'screen'
+            })
+          });
 
-        if (!response.ok) throw new Error('雲端辨識代理連線失敗');
-        const resData = await response.json();
-        if (!resData.success) throw new Error(resData.error || '大模型辨識失敗');
-        opponentNames = resData.result;
-      } else {
-        // Direct request to OpenRouter from browser
-        const systemPrompt = "你是一個專業的寶可夢街機 MEZASTAR（星塵/銀河系列）對戰畫面分析專家。\n你的任務是分析使用者拍下的機台遊戲螢幕，找出畫面上此時正在對戰的「對手寶可夢」（通常是三個，有時可能是一個或兩個）。\n\n請仔細觀察圖片中出現在對面陣營的所有寶可夢，並辨識出牠們的繁體中文名稱（例如：蒼響、噴火龍、烈空坐）。\n請「只」回傳一個 JSON 格式的陣列，包含所辨識到的寶可夢名稱，不要包含任何 markdown 語法 (不要 ```json 包裹)、不要任何多餘的解釋或客套話。如果沒有辨識到任何寶可夢，請回傳空陣列 []。\n\n格式範例：\n[\n  \"蒼響\",\n  \"噴火龍\",\n  \"烈空坐\"\n]";
+          if (response.ok) {
+            const resData = await response.json();
+            if (resData.success) {
+              opponentNames = resData.result;
+            } else {
+              console.warn("GAS proxy screen OCR failed, falling back to direct client call:", resData.error);
+            }
+          } else {
+            console.warn("GAS proxy screen OCR HTTP error, falling back to direct client call");
+          }
+        } catch (gasErr) {
+          console.warn("GAS proxy exception, falling back to direct client call:", gasErr);
+        }
+      }
+
+      // Fallback: Direct request to OpenRouter from browser
+      if (!opponentNames || opponentNames.length === 0) {
+        const systemPrompt = "你是一個專業的寶可夢街機 MEZASTAR（星塵/銀河系列）對戰畫面分析專家。\n你的任務是分析使用者拍下的機台遊戲螢幕，找出畫面上此時正在對戰的「對手寶可夢」（通常是三個，有時可能是一個或兩個）。\n\n請仔細觀察圖片中出現在對面陣營的所有寶可夢，並辨識出牠們的繁體中文名稱（例如：蒼響、噴火龍、烈空坐）。\n請「只」回傳一個 JSON 格式的陣列，包含所辨識到的寶可夢名稱，不要包含 any markdown tags, no ```json formatting, no conversational text. 如果沒有辨識到任何寶可夢，請回傳空陣列 []。\n\n格式範例：\n[\n  \"蒼響\",\n  \"噴火龍\",\n  \"烈空坐\"\n]";
 
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
           method: "POST",
@@ -113,7 +156,7 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
             "Authorization": `Bearer ${apiKey}`,
             "Content-Type": "application/json",
             "HTTP-Referer": "https://smtDRLETITGO.github.io/pokemon-gaole-helper/",
-            "X-Title": "MEZASTAR Battle Helper"
+            "X-Title": "MEZASTAR Screen Opponents Scanner"
           },
           body: JSON.stringify({
             model: "google/gemma-4-31b-it:free",
@@ -130,11 +173,10 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
           })
         });
 
-        if (!response.ok) throw new Error('OpenRouter API 呼叫失敗');
+        if (!response.ok) throw new Error('OpenRouter API 呼叫失敗，請確認金鑰有效與餘額足夠。');
         const resData = await response.json();
         let content = resData.choices[0].message.content;
-        content = content.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
-        opponentNames = JSON.parse(content);
+        opponentNames = cleanAndParseJson(content);
       }
 
       if (!Array.isArray(opponentNames) || opponentNames.length === 0) {
@@ -143,12 +185,12 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
 
       setOcrResultText(`辨識成功：${opponentNames.join(', ')}`);
 
-      // Match the list of names to PRESET_POKEMON_DB
+      // Match the list of names to ACTIVE_PRESET_DB
       const matchedCards = [];
       opponentNames.forEach(name => {
         const cleanName = name.trim();
         // Look up by exact name or substring
-        const match = PRESET_POKEMON_DB.find(p => p.name === cleanName || p.name.includes(cleanName) || cleanName.includes(p.name));
+        const match = ACTIVE_PRESET_DB.find(p => p.name === cleanName || p.name.includes(cleanName) || cleanName.includes(p.name));
         if (match) {
           matchedCards.push(match);
         } else {
