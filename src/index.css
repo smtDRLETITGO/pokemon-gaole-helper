@@ -1,0 +1,558 @@
+/* Pokémon Ga-Olé Companion App - Core Stylesheet */
+
+:root {
+  --bg-dark: #0f111a;
+  --bg-card: rgba(30, 34, 51, 0.65);
+  --bg-glass: rgba(25, 28, 41, 0.8);
+  --border-glass: rgba(255, 255, 255, 0.08);
+  
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  
+  --accent-gold: #f59e0b;
+  --accent-gold-glow: rgba(245, 158, 11, 0.4);
+  
+  --star-5: linear-gradient(135deg, #f59e0b, #d97706);
+  --star-4: linear-gradient(135deg, #a855f7, #7c3aed);
+  --star-3: linear-gradient(135deg, #3b82f6, #2563eb);
+  --star-2: linear-gradient(135deg, #10b981, #059669);
+  --star-1: linear-gradient(135deg, #6b7280, #4b5563);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.12) 0px, transparent 50%);
+  color: var(--text-main);
+  min-height: 100vh;
+  padding-bottom: 75px; /* Leave room for floating navigation bar */
+  overflow-x: hidden;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
+}
+
+/* Glassmorphic Container */
+.glass-panel {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Navigation Menu */
+.nav-bar {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  max-width: 500px;
+  height: 60px;
+  background: rgba(18, 22, 35, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 100;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  border: none;
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.nav-item.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-icon {
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+
+/* Header Component */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: rgba(18, 22, 35, 0.4);
+  border-bottom: 1px solid var(--border-glass);
+  margin-bottom: 16px;
+}
+
+.app-title {
+  font-size: 20px;
+  font-weight: 800;
+  background: linear-gradient(to right, #ff453a, #ff9f0a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.poke-ball-logo {
+  width: 24px;
+  height: 24px;
+  animation: rotateBall 3s linear infinite;
+}
+
+@keyframes rotateBall {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Pokémon Type Badges */
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.type-一般 { background-color: #A8A878; }
+.type-火 { background-color: #F08030; }
+.type-水 { background-color: #6890F0; }
+.type-草 { background-color: #78C850; }
+.type-電 { background-color: #F8D030; color: #333; text-shadow: none; }
+.type-冰 { background-color: #98D8D8; color: #333; text-shadow: none; }
+.type-格鬥 { background-color: #C03028; }
+.type-毒 { background-color: #A040A0; }
+.type-地面 { background-color: #E0C068; color: #333; text-shadow: none; }
+.type-飛行 { background-color: #A890F0; }
+.type-超能力 { background-color: #F85888; }
+.type-蟲 { background-color: #A8B820; }
+.type-岩石 { background-color: #B8A038; }
+.type-幽靈 { background-color: #705898; }
+.type-龍 { background-color: #7038F8; }
+.type-惡 { background-color: #705848; }
+.type-鋼 { background-color: #B8B8D0; color: #333; text-shadow: none; }
+.type-妖精 { background-color: #EE99AC; }
+
+/* Skeuomorphic Ga-Olé Disk layout */
+.gaole-disk {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  height: 160px;
+  border-radius: 80px 24px 24px 80px; /* Real Ga-Olé disk has round left and square/slightly rounded right */
+  background: #fdfdfd;
+  border: 8px solid #ececec; /* Grey-white plastic case */
+  color: #111;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+  margin: 12px auto;
+  transition: transform 0.2s;
+}
+
+.gaole-disk:active {
+  transform: scale(0.98);
+}
+
+/* Left part of the disk containing QR code */
+.disk-qr-section {
+  width: 32%;
+  height: 100%;
+  border-right: 2px dashed #ccc;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  padding: 8px;
+}
+
+.disk-qr-mock {
+  width: 58px;
+  height: 58px;
+  border: 1px solid #ddd;
+  background-image: radial-gradient(black 3px, transparent 3px), radial-gradient(black 3px, transparent 3px);
+  background-size: 8px 8px;
+  background-position: 0 0, 4px 4px;
+}
+
+.disk-star-container {
+  display: flex;
+  gap: 1px;
+  margin-top: 6px;
+}
+
+.disk-star {
+  font-size: 11px;
+  color: #d97706;
+}
+
+/* Right main body of the disk */
+.disk-main-section {
+  width: 68%;
+  height: 100%;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  background: linear-gradient(135deg, #dfc07b, #b99339); /* Default Gold/4-5 star grade */
+}
+
+/* Colors by Stars */
+.disk-grade-5 .disk-main-section { background: linear-gradient(135deg, #ffcc00, #cc9900); }
+.disk-grade-4 .disk-main-section { background: linear-gradient(135deg, #d397ff, #7f22d6); color: #fff; }
+.disk-grade-3 .disk-main-section { background: linear-gradient(135deg, #8dc3ff, #1d6ed6); color: #fff; }
+.disk-grade-2 .disk-main-section { background: linear-gradient(135deg, #9ae2ad, #2d944e); color: #fff; }
+.disk-grade-1 .disk-main-section { background: linear-gradient(135deg, #d0d0d0, #737373); color: #fff; }
+
+.disk-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.disk-id {
+  font-size: 10px;
+  opacity: 0.8;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.disk-name {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.disk-type-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.disk-move-box {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 4px 8px;
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  font-size: 12px;
+}
+
+.disk-move-type {
+  font-weight: bold;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.disk-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 10px;
+  text-align: center;
+}
+
+.disk-stat-item {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  padding: 3px 0;
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+}
+
+.disk-stat-val {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.disk-storage-badge {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: #ff453a;
+  color: white;
+  font-size: 9px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.disk-count-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 10px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* Quick-Tap Panel Grid */
+.boss-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.boss-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.boss-card:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.boss-card.selected {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 12px var(--accent-gold-glow);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.boss-avatar-mock {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  margin-bottom: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.boss-card.grade-5 .boss-avatar-mock {
+  border-color: #f59e0b;
+}
+
+.boss-card.grade-4 .boss-avatar-mock {
+  border-color: #a855f7;
+}
+
+.boss-name {
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.boss-badge-stars {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--accent-gold);
+  color: #111;
+  font-size: 9px;
+  font-weight: bold;
+  padding: 1px 4px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Forms & Inputs */
+.input-field {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 12px;
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+
+.input-field:focus {
+  border-color: #ff9f0a;
+  outline: none;
+}
+
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(to right, #ff453a, #ff9f0a);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-primary:active {
+  opacity: 0.9;
+}
+
+/* Overlay & Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: #1c1f2e;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 450px;
+  padding: 20px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Scanner Layout */
+.scanner-viewport {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #000;
+  border: 2px dashed #ff9f0a;
+}
+
+.scanner-overlay-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 100px;
+  border: 2px solid #00ff00;
+  box-shadow: 0 0 0 200px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+.scanner-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #00ff00;
+  animation: scanLine 2s linear infinite;
+}
+
+@keyframes scanLine {
+  0% { top: 0; }
+  50% { top: 100%; }
+  100% { top: 0; }
+}
+
+/* Utility */
+.mb-4 { margin-bottom: 16px; }
+.text-center { text-align: center; }
+.flex { display: flex; }
+.justify-between { justify-content: space-between; }
+.align-center { align-items: center; }
+.gap-2 { gap: 8px; }
+.flex-1 { flex: 1; }
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
