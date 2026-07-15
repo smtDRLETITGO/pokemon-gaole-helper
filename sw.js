@@ -1,11 +1,10 @@
 const CACHE_NAME = 'gaole-helper-cache-v1';
 
-// Active assets to cache immediately
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/favicon.svg',
-  '/manifest.json'
+  './',
+  'index.html',
+  'favicon.svg',
+  'manifest.json'
 ];
 
 // Install Event - Pre-cache shell assets

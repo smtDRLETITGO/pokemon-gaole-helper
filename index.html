@@ -17,10 +17,41 @@
     <!-- SEO & Metadata -->
     <title>寶可夢加傲樂對戰助手</title>
     <meta name="description" content="寶可夢加傲樂 Ga-Olé 助手：分類整理手牌，機台出怪最速屬性剋制推薦！" />
-    <script type="module" crossorigin src="/pokemon-gaole-helper/assets/index-CrchCrjg.js"></script>
+    <script type="module" crossorigin src="/pokemon-gaole-helper/assets/index-BvsQmkTi.js"></script>
     <link rel="stylesheet" crossorigin href="/pokemon-gaole-helper/assets/index-CrrWthLV.css">
   </head>
   <body>
     <div id="root"></div>
+    <!-- Global Error Interceptor for PWA Mobile Debugging -->
+    <script>
+      window.addEventListener('error', function(event) {
+        var errorDiv = document.getElementById('error-display');
+        if (!errorDiv) {
+          errorDiv = document.createElement('div');
+          errorDiv.id = 'error-display';
+          errorDiv.style.position = 'fixed';
+          errorDiv.style.top = '0';
+          errorDiv.style.left = '0';
+          errorDiv.style.width = '100%';
+          errorDiv.style.height = '100%';
+          errorDiv.style.backgroundColor = '#1a0505';
+          errorDiv.style.color = '#ff6b6b';
+          errorDiv.style.padding = '24px';
+          errorDiv.style.zIndex = '999999';
+          errorDiv.style.fontFamily = 'monospace';
+          errorDiv.style.whiteSpace = 'pre-wrap';
+          errorDiv.style.fontSize = '14px';
+          errorDiv.style.boxSizing = 'border-box';
+          errorDiv.style.overflowY = 'auto';
+          document.body.appendChild(errorDiv);
+        }
+        errorDiv.textContent = '⚠️ 程式執行出錯 (Runtime Error):\n\n' + 
+          '訊息: ' + event.message + '\n' +
+          '檔案: ' + event.filename + '\n' +
+          '行號: ' + event.lineno + ':' + event.colno + '\n\n' +
+          '錯誤堆疊 (Stack Trace):\n' + 
+          (event.error ? event.error.stack : '無堆疊資訊');
+      });
+    </script>
   </body>
 </html>
