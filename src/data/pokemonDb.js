@@ -34,13 +34,11 @@ export const TYPE_MATCHUPS = {
 };
 
 // ============================================================
-// 3. MEZASTAR 銀河第二彈 完整卡匣資料庫
-// 數值說明：以台灣代理實體卡匣（Double Chain 雙重連鎖 2 彈）背面印製之六維真實數值為準
-// 編號格式：2-2-xxx TC (Tag Cassette)
+// 3. MEZASTAR 銀河第二彈 靜態卡匣原始資料庫
+// 數值說明：以台灣代理實體卡匣背面印製之六維真實數值為準
 // stars: 6=超級明星, 5=明星, 4=精選, 3=普通, 2=普通, 1=普通
 // ============================================================
 export const PRESET_POKEMON_DB = [
-
   // --- ★6 超級明星 ---
   { cardId:"2-2-001 TC", diskCode:"2-2-001 TC", name:"蒼響", series:"銀河第二彈", stars:6,
     type1:"鋼", type2:"妖精", moveName:"巨獸斬", moveType:"鋼", moveCategory:"物理",
@@ -308,16 +306,89 @@ export const PRESET_POKEMON_DB = [
     hp:165, attack:95, defense:95, spAtk:70, spDef:90, speed:70 }
 ];
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// 4. Helper 工具函式
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ============================================================
+// 4. 自學習型動態資料庫 (Local Override System)
+// 確保當玩家透過大模型掃描或手動修改卡匣時，系統資料庫會同步更新並變聰明！
+// ============================================================
+
+export let ACTIVE_PRESET_DB = [];
+let localOverrides = {};
+
+export function reloadActiveDb() {
+  try {
+    const saved = localStorage.getItem('mezastar_db_overrides');
+    if (saved) {
+      localOverrides = JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error("Failed to load DB overrides:", e);
+  }
+
+  // 清空並重新組合 merged 資料庫
+  ACTIVE_PRESET_DB.length = 0;
+  PRESET_POKEMON_DB.forEach(preset => {
+    if (localOverrides[preset.cardId]) {
+      ACTIVE_PRESET_DB.push({ ...preset, ...localOverrides[preset.cardId] });
+    } else {
+      ACTIVE_PRESET_DB.push({ ...preset });
+    }
+  });
+
+  // 同步也加入自定義新增的卡匣（不在預設裡面的）
+  Object.keys(localOverrides).forEach(id => {
+    const exists = PRESET_POKEMON_DB.some(p => p.cardId === id);
+    if (!exists) {
+      ACTIVE_PRESET_DB.push({ ...localOverrides[id] });
+    }
+  });
+}
+
+// 供 OCR 及手動登錄呼叫，即時覆蓋/新增卡匣數值到全域 Preset 圖譜中
+export function updateLocalDbOverride(card) {
+  if (!card || !card.cardId) return;
+  
+  localOverrides[card.cardId] = {
+    cardId: card.cardId,
+    diskCode: card.cardId,
+    name: card.name,
+    series: card.series || "自定義新增",
+    stars: Number(card.stars) || 3,
+    type1: card.type1,
+    type2: card.type2 || "",
+    moveName: card.moveName,
+    moveType: card.moveType,
+    moveCategory: card.moveCategory || "物理",
+    hp: Number(card.hp) || 0,
+    attack: Number(card.attack) || 0,
+    defense: Number(card.defense) || 0,
+    spAtk: Number(card.spAtk) || 0,
+    spDef: Number(card.spDef) || 0,
+    speed: Number(card.speed) || 0
+  };
+  
+  try {
+    localStorage.setItem('mezastar_db_overrides', JSON.stringify(localOverrides));
+  } catch (e) {
+    console.error("Failed to save DB overrides to localStorage:", e);
+  }
+  
+  // 重新加載 active 圖譜，實現即時熱更新
+  reloadActiveDb();
+}
+
+// 執行初始加載
+reloadActiveDb();
+
+// ============================================================
+// 5. Helper 工具函式 (使用動態 ACTIVE_PRESET_DB)
+// ============================================================
 
 export function findPokemonByName(name) {
   if (!name) return null;
   const cleanName = name.trim();
-  let found = PRESET_POKEMON_DB.find(p => p.name === cleanName);
+  let found = ACTIVE_PRESET_DB.find(p => p.name === cleanName);
   if (found) return found;
-  found = PRESET_POKEMON_DB.find(p =>
+  found = ACTIVE_PRESET_DB.find(p =>
     cleanName.includes(p.name) || p.name.includes(cleanName)
   );
   return found || null;
@@ -325,7 +396,7 @@ export function findPokemonByName(name) {
 
 export function findPokemonByCode(code) {
   if (!code) return null;
-  return PRESET_POKEMON_DB.find(p => p.diskCode === code.trim()) || null;
+  return ACTIVE_PRESET_DB.find(p => p.diskCode === code.trim()) || null;
 }
 
 export function getEffectiveness(attackType, defenderTypes) {

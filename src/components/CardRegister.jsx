@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useRef, useCallback } from 'react';
-import { PRESET_POKEMON_DB } from '../data/pokemonDb';
+import { PRESET_POKEMON_DB, ACTIVE_PRESET_DB, updateLocalDbOverride } from '../data/pokemonDb';
+
 
 
 // ── 星等顯示 ──
@@ -123,7 +124,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
 
   // 篩選後的圖鑑清單
   const catalogList = useMemo(() => {
-    return PRESET_POKEMON_DB.filter(p => {
+    return ACTIVE_PRESET_DB.filter(p => {
       if (filterSeries !== 'all' && p.series !== filterSeries) return false;
       if (filterStars !== 'all' && String(p.stars) !== filterStars) return false;
       return true;
@@ -135,7 +136,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
     setSearchQuery(val);
     if (!val.trim()) { setSuggestions([]); return; }
     const q = val.trim().toLowerCase();
-    const matches = PRESET_POKEMON_DB.filter(p =>
+    const matches = ACTIVE_PRESET_DB.filter(p =>
       p.name.toLowerCase().includes(q) ||
       p.diskCode.toLowerCase().includes(q) ||
       p.series.toLowerCase().includes(q)
@@ -258,19 +259,30 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
 
       setOcrResult(`成功分析！寶可夢：${resultObj.name || '未知'}, 編號：${resultObj.cardId || '未知'}`);
 
-      // Match the recognized card with PRESET_POKEMON_DB if possible
+      // Match the recognized card with ACTIVE_PRESET_DB if possible
       const matchedCode = resultObj.cardId || '';
       const matchedName = resultObj.name || '';
       
       let finalCard = null;
-      const dbMatch = PRESET_POKEMON_DB.find(p => 
+      const dbMatch = ACTIVE_PRESET_DB.find(p => 
         (matchedCode && p.cardId.trim() === matchedCode.trim()) || 
         (matchedName && p.name.trim() === matchedName.trim())
       );
 
       if (dbMatch) {
-        // Use verified preset card information as primary
-        finalCard = { ...dbMatch };
+        // Merge scanned stats into the verified preset card structure (prioritizing scanned values)
+        finalCard = {
+          ...dbMatch,
+          hp: Number(resultObj.hp) || dbMatch.hp,
+          attack: Number(resultObj.attack) || dbMatch.attack,
+          defense: Number(resultObj.defense) || dbMatch.defense,
+          spAtk: Number(resultObj.spAtk) || dbMatch.spAtk,
+          spDef: Number(resultObj.spDef) || dbMatch.spDef,
+          speed: Number(resultObj.speed) || dbMatch.speed,
+          moveName: resultObj.moveName || dbMatch.moveName,
+          moveType: resultObj.moveType || dbMatch.moveType,
+          moveCategory: resultObj.moveCategory || dbMatch.moveCategory
+        };
       } else {
         // Create custom card based on VLM output
         finalCard = {
@@ -289,6 +301,11 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
           spDef: Number(resultObj.spDef) || 60,
           speed: Number(resultObj.speed) || 60
         };
+      }
+
+      // Update/insert into the dynamic self-updating database overrides
+      if (finalCard.cardId) {
+        updateLocalDbOverride(finalCard);
       }
 
       setOcrMatches([finalCard]);

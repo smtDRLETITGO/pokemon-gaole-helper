@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { POKEMON_TYPES, findPokemonByName, TYPE_MATCHUPS } from '../data/pokemonDb';
+import { POKEMON_TYPES, findPokemonByName, TYPE_MATCHUPS, updateLocalDbOverride } from '../data/pokemonDb';
+
 
 export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCard, onAddManualCard }) {
   const [filterStars, setFilterStars] = useState('all');
@@ -134,6 +135,12 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
     };
 
     onAddManualCard(newCard);
+    
+    // Save to local dynamic database overrides
+    if (newCard.cardId) {
+      updateLocalDbOverride(newCard);
+    }
+
     setIsAdding(false);
     
     // Clear forms
