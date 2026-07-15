@@ -147,9 +147,9 @@ export default function App() {
     if (exists) {
       setSelectedOpponents(selectedOpponents.filter(o => o.cardId !== opponent.cardId));
     } else {
-      if (selectedOpponents.length >= 2) {
-        // limit to 2 opponents maximum
-        setSelectedOpponents([selectedOpponents[1], opponent]);
+      if (selectedOpponents.length >= 3) {
+        // limit to 3 opponents maximum (remove the oldest selected)
+        setSelectedOpponents([selectedOpponents[1], selectedOpponents[2], opponent]);
       } else {
         setSelectedOpponents([...selectedOpponents, opponent]);
       }
@@ -165,8 +165,8 @@ export default function App() {
     // Check if already selected
     const exists = selectedOpponents.some(o => o.cardId === matchedOpponent.cardId);
     if (!exists) {
-      if (selectedOpponents.length >= 2) {
-        setSelectedOpponents([selectedOpponents[1], matchedOpponent]);
+      if (selectedOpponents.length >= 3) {
+        setSelectedOpponents([selectedOpponents[1], selectedOpponents[2], matchedOpponent]);
       } else {
         setSelectedOpponents([...selectedOpponents, matchedOpponent]);
       }
