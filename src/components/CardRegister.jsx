@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useCallback } from 'react';
 import { PRESET_POKEMON_DB } from '../data/pokemonDb';
-import Tesseract from 'tesseract.js';
+
 
 // ── 星等顯示 ──
 const STAR_COLORS = { 6: '#FFD700', 5: '#C0A000', 4: '#9370DB', 3: '#4A9EFF', 2: '#50C878', 1: '#808080' };
@@ -177,26 +177,126 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
 
   const captureAndOCR = useCallback(async () => {
     if (!videoRef.current) return;
+    
+    const apiKey = localStorage.getItem('openrouter_api_key');
+    const syncUrl = localStorage.getItem('gaole_sync_url');
+    
+    if (!apiKey) {
+      alert('⚠️ 未設定 OpenRouter API Key！\n請先前往「連線設定 (⚙️)」填入您的免費 API Key，即可啟用精準的大模型相機掃描。');
+      setOcrStatus('idle');
+      return;
+    }
+
+    // Capture current video frame
     const canvas = document.createElement('canvas');
     canvas.width = videoRef.current.videoWidth;
     canvas.height = videoRef.current.videoHeight;
-    canvas.getContext('2d').drawImage(videoRef.current, 0, 0);
-    const imageData = canvas.toDataURL('image/jpeg', 0.9);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(videoRef.current, 0, 0);
+    const imageData = canvas.toDataURL('image/jpeg', 0.85);
+
     setOcrStatus('loading');
+    setOcrResult('正在上傳並分析卡片...');
+
     try {
-      const { data } = await Tesseract.recognize(imageData, 'chi_tra+eng', {
-        logger: m => console.log(m),
-      });
-      const text = data.text || '';
-      setOcrResult(text);
-      // 模糊比對所有卡匣名稱
-      const matches = PRESET_POKEMON_DB.filter(p =>
-        text.includes(p.name) ||
-        text.replace(/\s/g,'').includes(p.diskCode.replace(/\s/g,''))
+      let resultObj = null;
+
+      if (syncUrl) {
+        // Send request via Google Apps Script server-side proxy (removes CORS issues)
+        const response = await fetch(syncUrl, {
+          method: 'POST',
+          credentials: 'omit',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({
+            action: 'ocr',
+            imageBase64: imageData,
+            openRouterApiKey: apiKey
+          })
+        });
+
+        if (!response.ok) throw new Error('雲端辨識代理連線失敗');
+        const resData = await response.json();
+        if (!resData.success) throw new Error(resData.error || '大模型辨識失敗');
+        resultObj = resData.result;
+      } else {
+        // Direct request to OpenRouter from browser (falls back if no Web App proxy exists)
+        const systemPrompt = "你是一個專業的寶可夢街機 MEZASTAR（星塵/銀河系列）卡匣辨識專家。\n你的任務是分析使用者上傳的卡匣圖片（可能是卡匣正面，也可能是卡匣背面），並精準提取出所有的欄位資訊。\n\n請仔細辨識圖片中出現的以下實體資訊：\n\n【如果是卡匣背面 (Back of the Tag)】：\n1. 卡匣編號 (卡片左上角，格式通常為：X-X-XXX 後綴字母，例如：2-2-031 TC)\n2. 寶可夢名稱 (位於頂部中央，繁體中文，例如：狂歡浪舞鴨)\n3. 星等 (編號下方的星星數量，例如：4)\n4. 招式名稱 (位於粉紅色招式欄中，例如：下盤踢)\n5. 招式屬性 (招式名稱右側的屬性圖標文字，例如：格鬥)\n6. 招式分類 (如果是拳頭圖標則為「物理」，如果是同心圓/星狀光芒圖標則為「特殊」)\n7. 六維數值 (位於右側的綠、粉、藍、紫、青色長條參數區)：\n   - HP (體力)\n   - 攻擊 (物理攻擊)\n   - 防禦 (物理防禦)\n   - 特攻 (特殊攻擊)\n   - 特防 (特殊防禦)\n   - 速度\n\n【如果是卡匣正面 (Front of the Tag)】：\n1. 卡匣編號 (卡片右下角，格式通常為：X-X-XXX 後綴字母，例如：2-2-031 TC)\n2. 寶可夢名稱 (位於下方中央偏左，繁體中文，例如：狂歡浪舞鴨)\n3. 星等 (名稱上方的星星數量，例如：4)\n4. 寶可能量 (右下角的紅色/橙色大數字，例如：118)\n5. 寶可夢屬性 (名稱下方的屬性圓圈圖標，可能有一個或兩個，例如：水、格鬥)\n\n【回傳格式要求】：\n請「只」回傳一個 JSON 格式的物件，不要包含任何 markdown 語法 (不要 ```json 包裹)、不要任何多餘的解釋或客套話。如果某個欄位在圖片中完全無法看清或不存在，請填入 null。\n\nJSON 格式欄位如下：\n{\n  \"cardSide\": \"front\" 或 \"back\",\n  \"cardId\": \"卡匣編號(字串)\",\n  \"name\": \"寶可夢名稱(字串)\",\n  \"stars\": 星等(整數),\n  \"pokeEne\": 寶可能量(整數，若無則為null),\n  \"type1\": \"主屬性(字串，例如：水，若無則為null)\",\n  \"type2\": \"副屬性(字串，例如：格鬥，若無則為null)\",\n  \"moveName\": \"招式名稱(字串，若無則為null)\",\n  \"moveType\": \"招式屬性(字串，例如：格鬥，若無則為null)\",\n  \"moveCategory\": \"招式分類(物理 或 特殊，若無則為null)\",\n  \"hp\": HP值(整數，若無則為null),\n  \"attack\": 攻擊力(整數,\n  \"defense\": 防禦力(整數),\n  \"spAtk\": 特攻值(整數),\n  \"spDef\": 特防值(整數),\n  \"speed\": 速度值(整數)\n}";
+
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://smtDRLETITGO.github.io/pokemon-gaole-helper/",
+            "X-Title": "MEZASTAR Battle Helper"
+          },
+          body: JSON.stringify({
+            model: "google/gemma-4-31b-it:free",
+            messages: [
+              { role: "system", content: systemPrompt },
+              {
+                role: "user",
+                content: [
+                  { type: "text", text: "請分析這張卡片圖片，找出對應資訊" },
+                  { type: "image_url", image_url: { url: imageData } }
+                ]
+              }
+            ]
+          })
+        });
+
+        if (!response.ok) throw new Error('OpenRouter API 呼叫失敗');
+        const resData = await response.json();
+        let content = resData.choices[0].message.content;
+        content = content.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
+        resultObj = JSON.parse(content);
+      }
+
+      if (!resultObj || (!resultObj.name && !resultObj.cardId)) {
+        throw new Error('無法從圖像中解析有效的寶可夢資料');
+      }
+
+      setOcrResult(`成功分析！寶可夢：${resultObj.name || '未知'}, 編號：${resultObj.cardId || '未知'}`);
+
+      // Match the recognized card with PRESET_POKEMON_DB if possible
+      const matchedCode = resultObj.cardId || '';
+      const matchedName = resultObj.name || '';
+      
+      let finalCard = null;
+      const dbMatch = PRESET_POKEMON_DB.find(p => 
+        (matchedCode && p.cardId.trim() === matchedCode.trim()) || 
+        (matchedName && p.name.trim() === matchedName.trim())
       );
-      setOcrMatches(matches);
+
+      if (dbMatch) {
+        // Use verified preset card information as primary
+        finalCard = { ...dbMatch };
+      } else {
+        // Create custom card based on VLM output
+        finalCard = {
+          cardId: resultObj.cardId || `custom-${Date.now()}`,
+          name: resultObj.name || "未命名卡匣",
+          stars: Number(resultObj.stars) || 3,
+          type1: resultObj.type1 || "一般",
+          type2: resultObj.type2 || "",
+          moveName: resultObj.moveName || "撞擊",
+          moveType: resultObj.moveType || "一般",
+          moveCategory: resultObj.moveCategory || "物理",
+          hp: Number(resultObj.hp) || 100,
+          attack: Number(resultObj.attack) || 60,
+          defense: Number(resultObj.defense) || 60,
+          spAtk: Number(resultObj.spAtk) || 60,
+          spDef: Number(resultObj.spDef) || 60,
+          speed: Number(resultObj.speed) || 60
+        };
+      }
+
+      setOcrMatches([finalCard]);
       setOcrStatus('done');
-    } catch {
+
+    } catch (err) {
+      console.error(err);
+      setOcrResult(`辨識失敗: ${err.message}`);
       setOcrStatus('error');
     }
   }, []);
@@ -391,7 +491,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
         {activeTab === 'ocr' && (
           <div style={{ display:'flex', flexDirection:'column', height:'100%', alignItems:'center', padding:'12px' }}>
             <div style={{ color:'rgba(255,255,255,0.6)', fontSize:'0.75rem', marginBottom:'8px', textAlign:'center' }}>
-              將相機對準卡匣正面，讓寶可夢名稱出現在畫面中央
+              將相機對準卡匣正面或背面，保持清晰穩定以進行大模型辨識
             </div>
             {/* 預覽框 */}
             <div style={{
@@ -423,30 +523,32 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
               {ocrStatus === 'loading' ? '⏳ 辨識中...' : '📸 拍照辨識'}
             </button>
             {/* 辨識結果 */}
-            {ocrStatus === 'done' && (
+            {(ocrStatus === 'done' || ocrStatus === 'loading') && (
               <div style={{
                 width:'100%', maxWidth:'400px',
                 background:'rgba(255,255,255,0.06)',
                 borderRadius:'12px', padding:'12px',
               }}>
-                <div style={{ color:'rgba(255,255,255,0.5)', fontSize:'0.7rem', marginBottom:'8px' }}>
-                  辨識到的文字：{ocrResult?.substring(0,60)}...
+                <div style={{ color:'rgba(255,255,255,0.8)', fontSize:'0.75rem', marginBottom:'8px', fontWeight: 'bold' }}>
+                  📢 {ocrResult}
                 </div>
-                {ocrMatches.length > 0 ? (
-                  <>
-                    <div style={{ color:'#4FC3F7', fontWeight:700, fontSize:'0.85rem', marginBottom:'8px' }}>
-                      ✅ 找到 {ocrMatches.length} 個匹配：
+                {ocrStatus === 'done' && (
+                  ocrMatches.length > 0 ? (
+                    <>
+                      <div style={{ color:'#4FC3F7', fontWeight:700, fontSize:'0.85rem', marginBottom:'8px' }}>
+                        ✅ 找到 {ocrMatches.length} 個匹配：
+                      </div>
+                      <div style={{ display:'grid', gridTemplateColumns:'1fr', gap:'6px' }}>
+                        {ocrMatches.map(p => (
+                          <MiniCard key={p.cardId} pokemon={p} onAdd={handleAdd} ownedCount={ownedCountMap[p.cardId]||0} />
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <div style={{ color:'rgba(255,255,255,0.4)', textAlign:'center', padding:'12px' }}>
+                      😔 未能比對到卡匣，請改用關鍵字搜尋
                     </div>
-                    <div style={{ display:'grid', gridTemplateColumns:'1fr', gap:'6px' }}>
-                      {ocrMatches.map(p => (
-                        <MiniCard key={p.cardId} pokemon={p} onAdd={handleAdd} ownedCount={ownedCountMap[p.cardId]||0} />
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <div style={{ color:'rgba(255,255,255,0.4)', textAlign:'center', padding:'12px' }}>
-                    😔 未能比對到卡匣，請改用關鍵字搜尋
-                  </div>
+                  )
                 )}
               </div>
             )}

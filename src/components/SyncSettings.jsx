@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 
 export default function SyncSettings({ syncUrl, setSyncUrl, onFetchCollection, onSyncCollection, cards }) {
   const [urlInput, setUrlInput] = useState(syncUrl);
+  const [openRouterKeyInput, setOpenRouterKeyInput] = useState('');
   const [status, setStatus] = useState('unconfigured'); // unconfigured, connected, loading, error
   const [errorMessage, setErrorMessage] = useState('');
   const [showGuide, setShowGuide] = useState(false);
 
   useEffect(() => {
     setUrlInput(syncUrl);
+    const savedKey = localStorage.getItem('openrouter_api_key') || '';
+    setOpenRouterKeyInput(savedKey);
     if (syncUrl) {
       setStatus('connected');
     } else {
@@ -17,10 +20,19 @@ export default function SyncSettings({ syncUrl, setSyncUrl, onFetchCollection, o
 
   const handleSave = async (e) => {
     e.preventDefault();
+    
+    // Save OpenRouter Key if present
+    if (openRouterKeyInput.trim()) {
+      localStorage.setItem('openrouter_api_key', openRouterKeyInput.trim());
+    } else {
+      localStorage.removeItem('openrouter_api_key');
+    }
+
     if (!urlInput.trim()) {
       setSyncUrl('');
       setStatus('unconfigured');
       localStorage.removeItem('gaole_sync_url');
+      alert('OpenRouter API Key 已更新，但試算表網址為空，切換為本地離線模式。');
       return;
     }
 
@@ -41,6 +53,7 @@ export default function SyncSettings({ syncUrl, setSyncUrl, onFetchCollection, o
         localStorage.setItem('gaole_sync_url', urlInput.trim());
         setStatus('connected');
         onFetchCollection(data); // Sync retrieved data into the parent state
+        alert('設定儲存成功，且已與試算表連線同步！');
       } else {
         throw new Error('伺服器回傳格式不正確（預期應為卡匣陣列）');
       }
@@ -68,24 +81,42 @@ export default function SyncSettings({ syncUrl, setSyncUrl, onFetchCollection, o
   return (
     <div className="glass-panel mb-4">
       <h2 style={{ fontSize: '18px', fontWeight: '800', marginBottom: '12px', color: '#ff9f0a' }}>
-        ⚙️ Google 試算表同步設定
+        ⚙️ Google 試算表與 AI 連線設定
       </h2>
       
       <form onSubmit={handleSave} className="mb-4">
-        <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>
-          Google Apps Script 網頁應用程式網址 (Web App URL):
-        </label>
-        <input
-          type="url"
-          className="input-field"
-          placeholder="https://script.google.com/macros/s/.../exec"
-          value={urlInput}
-          onChange={(e) => setUrlInput(e.target.value)}
-        />
+        <div className="mb-4">
+          <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>
+            Google Apps Script 網頁應用程式網址 (Web App URL):
+          </label>
+          <input
+            type="url"
+            className="input-field"
+            placeholder="https://script.google.com/macros/s/.../exec"
+            value={urlInput}
+            onChange={(e) => setUrlInput(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-4">
+          <label style={{ display: 'block', fontSize: '12px', color: 'var(--text-muted)', marginBottom: '6px' }}>
+            OpenRouter API Key (選填，啟用 Gemma 4 免費視覺大模型精準掃描)：
+          </label>
+          <input
+            type="password"
+            className="input-field"
+            placeholder="sk-or-v1-..."
+            value={openRouterKeyInput}
+            onChange={(e) => setOpenRouterKeyInput(e.target.value)}
+          />
+          <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+            取得免費 Key 可以前往 <a href="https://openrouter.ai/keys" target="_blank" rel="noreferrer" style={{ color: '#30b0c7', textDecoration: 'underline' }}>OpenRouter 官網</a> 建立。
+          </span>
+        </div>
         
-        <div className="grid-2">
+        <div className="grid-2" style={{ marginTop: '12px' }}>
           <button type="submit" className="btn-primary" style={{ background: 'linear-gradient(to right, #34c759, #30b0c7)' }}>
-            {status === 'loading' ? '連線中...' : '儲存並下載卡片'}
+            {status === 'loading' ? '連線中...' : '儲存設定並下載卡片'}
           </button>
           
           <button 

@@ -160,16 +160,10 @@ export default function App() {
     setSelectedOpponents([]);
   };
 
-  // Callback for OCR component matches
-  const handleOcrMatchOpponent = (matchedOpponent) => {
-    // Check if already selected
-    const exists = selectedOpponents.some(o => o.cardId === matchedOpponent.cardId);
-    if (!exists) {
-      if (selectedOpponents.length >= 3) {
-        setSelectedOpponents([selectedOpponents[1], selectedOpponents[2], matchedOpponent]);
-      } else {
-        setSelectedOpponents([...selectedOpponents, matchedOpponent]);
-      }
+  // Callback for OCR component matches (supports multiple opponents recognized from screen)
+  const handleOcrMatchMultipleOpponents = (matchedList) => {
+    if (Array.isArray(matchedList) && matchedList.length > 0) {
+      setSelectedOpponents(matchedList.slice(0, 3));
     }
     // Switch back to recommender dashboard to see recommendations
     setActiveTab('recommender');
@@ -227,7 +221,7 @@ export default function App() {
 
         {activeTab === 'ocr' && (
           <ScreenOcr 
-            onOcrMatchOpponent={handleOcrMatchOpponent}
+            onOcrMatchOpponents={handleOcrMatchMultipleOpponents}
           />
         )}
 
