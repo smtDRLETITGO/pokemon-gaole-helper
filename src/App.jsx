@@ -32,7 +32,13 @@ export default function App() {
     }
 
     if (savedCards) {
-      setCards(JSON.parse(savedCards));
+      try {
+        setCards(JSON.parse(savedCards));
+      } catch (e) {
+        console.error("Failed to parse saved cards:", e);
+        setCards(DEFAULT_COLLECTION);
+        localStorage.setItem('gaole_collection', JSON.stringify(DEFAULT_COLLECTION));
+      }
     } else {
       setCards(DEFAULT_COLLECTION);
       localStorage.setItem('gaole_collection', JSON.stringify(DEFAULT_COLLECTION));
