@@ -75,6 +75,7 @@ export default function App() {
     try {
       const response = await fetch(syncUrl, {
         method: 'POST',
+        credentials: 'omit',
         headers: { 'Content-Type': 'text/plain' }, // Avoid CORS preflight options block
         body: JSON.stringify({
           action: 'sync',
@@ -105,6 +106,7 @@ export default function App() {
     if (syncUrl) {
       fetch(syncUrl, {
         method: 'POST',
+        credentials: 'omit',
         headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({ action: 'sync', cards: updated })
       }).catch(err => console.warn("Background sync failed (saved locally):", err));
@@ -118,6 +120,7 @@ export default function App() {
     if (syncUrl) {
       fetch(syncUrl, {
         method: 'POST',
+        credentials: 'omit',
         headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({ action: 'sync', cards: updated })
       }).catch(err => console.warn("Background sync failed (saved locally):", err));
@@ -131,6 +134,7 @@ export default function App() {
     if (syncUrl) {
       fetch(syncUrl, {
         method: 'POST',
+        credentials: 'omit',
         headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({ action: 'sync', cards: updated })
       }).catch(err => console.warn("Background sync failed (saved locally):", err));

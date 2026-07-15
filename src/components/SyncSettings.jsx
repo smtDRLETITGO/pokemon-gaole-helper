@@ -28,8 +28,11 @@ export default function SyncSettings({ syncUrl, setSyncUrl, onFetchCollection, o
     setErrorMessage('');
     
     try {
-      // Test URL with a fetch request
-      const response = await fetch(urlInput.trim());
+      // Test URL with a fetch request, explicitly omitting credentials to prevent Google multi-account login CORS redirect errors
+      const response = await fetch(urlInput.trim(), {
+        method: 'GET',
+        credentials: 'omit'
+      });
       if (!response.ok) throw new Error('伺服器回應錯誤');
       
       const data = await response.json();
