@@ -350,7 +350,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
             "X-Title": "MEZASTAR Battle Helper"
           },
           body: JSON.stringify({
-            model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+            model: "google/gemini-2.0-flash-exp:free",
             messages: [
               { role: "system", content: systemPrompt },
               {
@@ -390,15 +390,30 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
       const matchedName = resultObj.name || '';
       
       let finalCard = null;
-      const dbMatch = ACTIVE_PRESET_DB.find(p => 
-        (matchedCode && p.cardId.trim() === matchedCode.trim()) || 
+      
+      // 1. Try exact match on BOTH Name and ID
+      let dbMatch = ACTIVE_PRESET_DB.find(p => 
+        (matchedCode && p.cardId.trim() === matchedCode.trim()) && 
         (matchedName && p.name.trim() === matchedName.trim())
       );
+
+      // 2. If not found, Name is generally much more reliable in OCR than a single digit in ID
+      if (!dbMatch && matchedName) {
+        dbMatch = ACTIVE_PRESET_DB.find(p => p.name.trim() === matchedName.trim());
+      }
+
+      // 3. If still not found, fallback to ID match
+      if (!dbMatch && matchedCode) {
+        dbMatch = ACTIVE_PRESET_DB.find(p => p.cardId.trim() === matchedCode.trim());
+      }
 
       if (dbMatch) {
         // Merge scanned stats into the verified preset card structure (prioritizing scanned values)
         finalCard = {
           ...dbMatch,
+          // Trust the DB's cardId and name if we matched it, because OCR numbers are easily misread (e.g. 044 vs 034)
+          cardId: dbMatch.cardId,
+          name: dbMatch.name,
           hp: Number(resultObj.hp) || dbMatch.hp,
           attack: Number(resultObj.attack) || dbMatch.attack,
           defense: Number(resultObj.defense) || dbMatch.defense,
