@@ -3,10 +3,10 @@ import { PRESET_POKEMON_DB, ACTIVE_PRESET_DB } from '../data/pokemonDb';
 
 function cleanAndParseJson(text) {
   var cleaned = text.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
-  var firstBrace = cleaned.indexOf('{');
-  var firstBracket = cleaned.indexOf('[');
-  var startIdx = -1;
-  var endIdx = -1;
+  const firstBrace = cleaned.indexOf('{');
+  const firstBracket = cleaned.indexOf('[');
+  let startIdx = -1;
+  let endIdx = -1;
   
   if (firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket)) {
     startIdx = firstBrace;
@@ -23,9 +23,9 @@ function cleanAndParseJson(text) {
   return JSON.parse(cleaned);
 }
 
-
 export default function ScreenOcr({ onOcrMatchOpponents }) {
-  const [hasCameraPermission, setHasCameraPermission] = useState(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState(true);
+  const [streamActive, setStreamActive] = useState(false);
   const [ocrStatus, setOcrStatus] = useState('idle'); // idle, loading, success, error
   const [ocrResultText, setOcrResultText] = useState('');
   const [facingMode, setFacingMode] = useState('environment'); // environment (back camera) or user (front)
@@ -34,7 +34,11 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
 
+  // Check if inside LINE / FB / Instagram WebView
+  const isWebView = /Line|FBAN|FBAV|Instagram/i.test(navigator.userAgent);
+
   useEffect(() => {
+    // Attempt auto-start, but user-click fallback will be available if blocked
     startCamera();
     return () => {
       stopCamera();
@@ -56,6 +60,8 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
         videoRef.current.play().catch(e => console.log("Video play pending:", e));
       }
       setHasCameraPermission(true);
+      setStreamActive(true);
+      setOcrStatus('idle');
     } catch (err) {
       console.warn("First camera constraint failed, trying basic fallback...", err);
       try {
@@ -66,9 +72,13 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
           videoRef.current.play().catch(e => console.log("Video play pending:", e));
         }
         setHasCameraPermission(true);
+        setStreamActive(true);
+        setOcrStatus('idle');
       } catch (fallbackErr) {
         console.error("Camera completely failed:", fallbackErr);
         setHasCameraPermission(false);
+        setStreamActive(false);
+        setOcrStatus('error');
       }
     }
   };
@@ -78,6 +88,7 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
     }
+    setStreamActive(false);
   };
 
   const toggleCameraFacing = () => {
@@ -104,8 +115,8 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
     const ctx = canvas.getContext('2d');
 
     // Real video dimensions
-    const videoWidth = video.videoWidth;
-    const videoHeight = video.videoHeight;
+    const videoWidth = video.videoWidth || 640;
+    const videoHeight = video.videoHeight || 480;
     canvas.width = videoWidth;
     canvas.height = videoHeight;
 
@@ -173,7 +184,11 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
           })
         });
 
-        if (!response.ok) throw new Error('OpenRouter API 呼叫失敗，請確認金鑰有效與餘額足夠。');
+        if (!response.ok) {
+          const errText = await response.text();
+          throw new Error(`OpenRouter 伺服器回報狀態碼 ${response.status}: ${errText}`);
+        }
+        
         const resData = await response.json();
         let content = resData.choices[0].message.content;
         opponentNames = cleanAndParseJson(content);
@@ -211,8 +226,6 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
 
       setOcrStatus('success');
       alert(`🎉 成功辨識 ${matchedCards.length} 隻對手！\n已為您自動載入最佳對戰隊伍推薦。`);
-      
-      // Auto redirect & apply selection
       onOcrMatchOpponents(matchedCards);
 
     } catch (err) {
@@ -227,20 +240,22 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
       <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#ff9f0a', marginBottom: '12px' }}>
         📷 AI 掃描螢幕辨識對手
       </h2>
+
+      {isWebView && (
+        <div style={{ color: '#ff9f0a', fontSize: '12px', padding: '10px 14px', borderRadius: '8px', background: 'rgba(255,159,10,0.1)', border: '1px solid rgba(255,159,10,0.2)', marginBottom: '12px', lineHeight: '1.5' }}>
+          ⚠️ <b>系統提示：偵測到您目前使用 LINE 或社群軟體內置瀏覽器開啟</b><br />
+          由於 LINE/FB 內建瀏覽器限制了相機權限，請點擊右上角 <b>「...」選單</b>，並選擇 <b>「以瀏覽器開啟 (Chrome 或 Safari)」</b>，即可正常使用相機功能！
+        </div>
+      )}
       
       <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px' }}>
         請直接將鏡頭對齊<b>「整張機台遊戲螢幕」</b>並拍照。Gemma 4 視覺大模型會自動找出畫面上所有的對手並為您分析弱點！
       </p>
 
-      {hasCameraPermission === false && (
-        <div style={{ color: '#ff453a', fontSize: '13px', padding: '16px', borderRadius: '10px', background: 'rgba(255,69,58,0.1)', textAlign: 'center', border: '1px solid rgba(255,69,58,0.2)' }} className="mb-4">
-          ⚠️ 無法取得相機存取權限。請確認瀏覽器相機設定，或手動點選上方「一鍵快選」。
-        </div>
-      )}
-
-      {hasCameraPermission && (
-        <div className="mb-4">
-          <div className="scanner-viewport" style={{ aspectRatio: '4/3' }}>
+      {/* Camera Viewport Container */}
+      <div className="mb-4" style={{ width: '100%', maxWidth: '400px', margin: '0 auto 12px auto' }}>
+        {streamActive ? (
+          <div className="scanner-viewport" style={{ aspectRatio: '4/3', overflow: 'hidden', borderRadius: '12px', border: '2px solid rgba(245, 158, 11, 0.4)', position: 'relative' }}>
             <video 
               ref={videoRef} 
               autoPlay 
@@ -264,15 +279,48 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
                 border: '1px solid rgba(255,255,255,0.3)',
                 borderRadius: '8px',
                 color: '#fff',
-                padding: '4px 8px',
+                padding: '6px 10px',
                 fontSize: '11px',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                zIndex: 10
               }}
             >
               🔄 切換鏡頭
             </button>
           </div>
-          
+        ) : (
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            aspectRatio: '4/3', 
+            background: 'rgba(255,255,255,0.03)', 
+            borderRadius: '12px', 
+            border: '2px dashed rgba(255,255,255,0.1)',
+            padding: '20px'
+          }}>
+            <button 
+              onClick={startCamera} 
+              className="btn-primary" 
+              style={{ 
+                background: 'linear-gradient(to right, #34c759, #30b0c7)', 
+                width: 'auto', 
+                padding: '12px 28px',
+                borderRadius: '50px',
+                fontWeight: 'bold',
+                boxShadow: '0 4px 15px rgba(52, 199, 89, 0.3)'
+              }}
+            >
+              📷 啟用相機鏡頭
+            </button>
+            <span style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '10px', textAlign: 'center' }}>
+              若相機未自動開啟，請點擊按鈕手動授權啟用
+            </span>
+          </div>
+        )}
+        
+        {streamActive && (
           <button 
             className="btn-primary" 
             onClick={handleCaptureAndOcr}
@@ -284,8 +332,8 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
           >
             {ocrStatus === 'loading' ? '⏳ 正在讀取並分析中...' : '📸 拍照辨識螢幕對手'}
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* OCR Status Panel */}
       {ocrStatus !== 'idle' && (
@@ -297,9 +345,11 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
           fontSize: '13px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '4px'
+          gap: '4px',
+          maxWidth: '400px',
+          margin: '0 auto'
         }}>
-          <div style={{ color: '#fff', fontWeight: 'bold' }}>📢 {ocrResultText}</div>
+          <div style={{ color: '#fff', fontWeight: 'bold', wordBreak: 'break-all' }}>📢 {ocrResultText}</div>
           {ocrStatus === 'loading' && <div style={{ color: '#30b0c7', fontSize: '11px' }}>正在將畫面壓縮上傳並等待 Gemma 4 視覺推理完成...</div>}
         </div>
       )}

@@ -130,8 +130,12 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
   const [ocrResult, setOcrResult] = useState(null);
   const [ocrMatches, setOcrMatches] = useState([]);
   const [addedFlash, setAddedFlash] = useState(null);
+  const [streamActive, setStreamActive] = useState(false);
   const videoRef = useRef(null);
   const streamRef = useRef(null);
+
+  // Check if inside LINE / FB / Instagram WebView
+  const isWebView = /Line|FBAN|FBAV|Instagram/i.test(navigator.userAgent);
 
   // 擁有數量 map
   const ownedCountMap = useMemo(() => {
@@ -186,6 +190,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
         videoRef.current.play().catch(e => console.log("Video play pending:", e));
       }
       setOcrStatus('idle');
+      setStreamActive(true);
     } catch (err) {
       console.warn("First camera constraint failed, trying basic fallback...", err);
       try {
@@ -196,9 +201,11 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
           videoRef.current.play().catch(e => console.log("Video play pending:", e));
         }
         setOcrStatus('idle');
+        setStreamActive(true);
       } catch (fallbackErr) {
         console.error("Camera completely failed:", fallbackErr);
         setOcrStatus('error');
+        setStreamActive(false);
       }
     }
   }, []);
@@ -208,6 +215,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
       streamRef.current.getTracks().forEach(t => t.stop());
       streamRef.current = null;
     }
+    setStreamActive(false);
   }, []);
 
   const captureAndOCR = useCallback(async () => {
@@ -554,38 +562,83 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
         {/* ── OCR 相機辨識 ── */}
         {activeTab === 'ocr' && (
           <div style={{ display:'flex', flexDirection:'column', height:'100%', alignItems:'center', padding:'12px' }}>
+            {isWebView && (
+              <div style={{ color: '#ff9f0a', fontSize: '11px', padding: '8px 12px', borderRadius: '8px', background: 'rgba(255,159,10,0.1)', border: '1px solid rgba(255,159,10,0.2)', marginBottom: '10px', width: '100%', maxWidth: '400px', lineHeight: '1.4' }}>
+                ⚠️ <b>偵測到 LINE/社群軟體內置瀏覽器</b><br />
+                由於內建瀏覽器限制了相機權限，請點擊右上角 <b>「...」選單</b> 並選擇 <b>「以瀏覽器開啟 (Chrome 或 Safari)」</b>，即可順利拍照辨識卡匣！
+              </div>
+            )}
+            
             <div style={{ color:'rgba(255,255,255,0.6)', fontSize:'0.75rem', marginBottom:'8px', textAlign:'center' }}>
               將相機對準卡匣正面或背面，保持清晰穩定以進行大模型辨識
             </div>
-            {/* 預覽框 */}
-            <div style={{
-              width:'100%', maxWidth:'400px',
-              aspectRatio:'16/9',
-              background:'rgba(0,0,0,0.5)',
-              borderRadius:'12px', overflow:'hidden',
-              border:'2px solid rgba(74,144,217,0.4)',
-              position:'relative',
-              marginBottom:'12px',
-            }}>
-              <video ref={videoRef} style={{ width:'100%', height:'100%', objectFit:'cover' }} playsInline muted />
-              {/* 掃描框 */}
-              <div style={{
-                position:'absolute', inset:'15%', border:'2px dashed rgba(74,144,217,0.7)',
-                borderRadius:'8px', pointerEvents:'none',
-              }}/>
+
+            {/* 預覽框 / 啟動相機按鈕 */}
+            <div style={{ width: '100%', maxWidth: '400px', marginBottom: '12px' }}>
+              {streamActive ? (
+                <div style={{
+                  width:'100%',
+                  aspectRatio:'16/9',
+                  background:'rgba(0,0,0,0.5)',
+                  borderRadius:'12px', overflow:'hidden',
+                  border:'2px solid rgba(74,144,217,0.4)',
+                  position:'relative',
+                }}>
+                  <video ref={videoRef} style={{ width:'100%', height:'100%', objectFit:'cover' }} playsInline muted />
+                  {/* 掃描框 */}
+                  <div style={{
+                    position:'absolute', inset:'15%', border:'2px dashed rgba(74,144,217,0.7)',
+                    borderRadius:'8px', pointerEvents:'none',
+                  }}/>
+                </div>
+              ) : (
+                <div style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  aspectRatio: '16/9', 
+                  background: 'rgba(255,255,255,0.03)', 
+                  borderRadius: '12px', 
+                  border: '2px dashed rgba(255,255,255,0.1)',
+                  padding: '20px'
+                }}>
+                  <button 
+                    onClick={startCamera} 
+                    className="btn-primary" 
+                    style={{ 
+                      background: 'linear-gradient(to right, #34c759, #30b0c7)', 
+                      width: 'auto', 
+                      padding: '10px 24px',
+                      borderRadius: '50px',
+                      fontWeight: 'bold',
+                      fontSize: '0.85rem'
+                    }}
+                  >
+                    📷 啟用相機鏡頭
+                  </button>
+                  <span style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '8px', textAlign: 'center' }}>
+                    請點擊按鈕授權啟用相機鏡頭以進行大模型辨識
+                  </span>
+                </div>
+              )}
             </div>
+
             {/* 拍照按鈕 */}
-            <button onClick={captureAndOCR} disabled={ocrStatus === 'loading'} style={{
-              background: ocrStatus === 'loading'
-                ? 'rgba(100,100,100,0.5)'
-                : 'linear-gradient(90deg,#4A90D9,#7B52D9)',
-              border:'none', borderRadius:'50px',
-              color:'#fff', fontWeight:800, fontSize:'1rem',
-              padding:'12px 32px', cursor: ocrStatus === 'loading' ? 'not-allowed' : 'pointer',
-              marginBottom:'12px',
-            }}>
-              {ocrStatus === 'loading' ? '⏳ 辨識中...' : '📸 拍照辨識'}
-            </button>
+            {streamActive && (
+              <button onClick={captureAndOCR} disabled={ocrStatus === 'loading'} style={{
+                background: ocrStatus === 'loading'
+                  ? 'rgba(100,100,100,0.5)'
+                  : 'linear-gradient(90deg,#4A90D9,#7B52D9)',
+                border:'none', borderRadius:'50px',
+                color:'#fff', fontWeight:800, fontSize:'1rem',
+                padding:'12px 32px', cursor: ocrStatus === 'loading' ? 'not-allowed' : 'pointer',
+                marginBottom:'12px',
+              }}>
+                {ocrStatus === 'loading' ? '⏳ 辨識中...' : '📸 拍照辨識'}
+              </button>
+            )}
+
             {/* 辨識結果 */}
             {(ocrStatus === 'done' || ocrStatus === 'loading') && (
               <div style={{
@@ -622,7 +675,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
                 padding:'12px 16px', color:'#ef9a9a', fontSize:'0.8rem', textAlign:'center',
                 maxWidth:'400px', width:'100%',
               }}>
-                ⚠️ 相機啟動失敗。請確認已授權相機權限，或改用「關鍵字搜尋」。
+                ⚠️ 相機開啟失敗。請確認瀏覽器相機設定，或手動點選上方「啟用相機鏡頭」。
               </div>
             )}
           </div>
