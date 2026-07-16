@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useCallback } from 'react';
+import jsQR from "jsqr";
 import { PRESET_POKEMON_DB, ACTIVE_PRESET_DB, updateLocalDbOverride } from '../data/pokemonDb';
 
 function cleanAndParseJson(text) {
@@ -177,6 +178,23 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
   // 加入背包
   const handleAdd = (pokemon) => {
     const newEntry = { ...pokemon, storageNote: '', quantity: 1 };
+    
+    // Asynchronously save to QR Cache if it was a new QR code
+    if (pokemon._newQrCode) {
+      const syncUrl = localStorage.getItem('gaole_sync_url');
+      if (syncUrl) {
+        // Strip out the internal tracking flag before saving
+        const savePayload = { ...pokemon };
+        delete savePayload._newQrCode;
+        fetch(syncUrl, {
+          method: 'POST',
+          credentials: 'omit',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({ action: 'saveQr', qrCode: pokemon._newQrCode, cardData: savePayload })
+        }).catch(e => console.warn("saveQr failed", e));
+      }
+    }
+
     onAddCard(newEntry);
     setAddedFlash(pokemon.cardId);
     setTimeout(() => setAddedFlash(null), 800);
@@ -237,19 +255,57 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
       return;
     }
 
-    // Capture current video frame
+    // Capture full video frame
     const canvas = document.createElement('canvas');
     canvas.width = videoRef.current.videoWidth;
     canvas.height = videoRef.current.videoHeight;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(videoRef.current, 0, 0);
-    const imageData = canvas.toDataURL('image/jpeg', 0.85);
-
+    ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+    
     setOcrStatus('loading');
-    setOcrResult('正在上傳並分析卡片...');
+    setOcrResult('分析影像中...');
 
     try {
       let resultObj = null;
+      
+      // 1. Scan for QR Code first
+      const imageDataObj = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const qrCode = jsQR(imageDataObj.data, imageDataObj.width, imageDataObj.height);
+      let qrPayload = qrCode ? qrCode.data : null;
+      
+      // 2. If QR found, try to fetch from Cache
+      if (qrPayload && syncUrl) {
+        setOcrResult('QR Code 讀取成功，正在比對快取資料庫...');
+        try {
+          const qrRes = await fetch(syncUrl, {
+            method: 'POST',
+            credentials: 'omit',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ action: 'checkQr', qrCode: qrPayload })
+          });
+          const qrData = await qrRes.json();
+          if (qrData.success && qrData.found) {
+            resultObj = qrData.result;
+            resultObj._fromCache = true;
+          }
+        } catch (e) { console.warn("QR Cache check failed:", e); }
+      }
+      
+      // 3. Auto-Crop for VLM if not found in Cache
+      let finalImageUrl = canvas.toDataURL('image/jpeg', 0.85);
+      if (!resultObj) {
+        setOcrResult('正在裁切畫面並呼叫大模型深度解析...');
+        const cropX = canvas.width * 0.05;
+        const cropY = canvas.height * 0.10;
+        const cropW = canvas.width * 0.90;
+        const cropH = canvas.height * 0.80;
+        const croppedCanvas = document.createElement('canvas');
+        croppedCanvas.width = cropW;
+        croppedCanvas.height = cropH;
+        const croppedCtx = croppedCanvas.getContext('2d');
+        croppedCtx.drawImage(canvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+        finalImageUrl = croppedCanvas.toDataURL('image/jpeg', 0.85);
+      }
 
       if (syncUrl) {
         try {
@@ -260,7 +316,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
             headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify({
               action: 'ocr',
-              imageBase64: imageData,
+              imageBase64: finalImageUrl,
               openRouterApiKey: apiKey,
               mode: 'tag'
             })
@@ -283,7 +339,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
 
       // Fallback: Direct request to OpenRouter if GAS wasn't used or failed
       if (!resultObj) {
-        const systemPrompt = "你是一個專業的寶可夢街機 MEZASTAR（星塵/銀河系列）卡匣辨識專家。\n你的任務是分析使用者上傳的卡匣圖片（可能是卡匣正面，也可能是卡匣背面），並精準提取出所有的欄位資訊。\n\n請仔細辨識圖片中出現的以下實體資訊：\n\n【如果是卡匣背面 (Back of the Tag)】：\n1. 卡匣編號 (卡片左上角，格式通常為：X-X-XXX 後綴字母，例如：2-2-031 TC)\n2. 寶可夢名稱 (位於頂部中央，繁體中文，例如：狂歡浪舞鴨)\n3. 星等 (編號下方的星星數量，例如：4)\n4. 招式名稱 (位於粉紅色招式欄中，例如：下盤踢)\n5. 招式屬性 (招式名稱右側的屬性圖標文字，例如：格鬥)\n6. 招式分類 (如果是拳頭圖標則為「物理」，如果是同心圓/星狀光芒圖標則為「特殊」)\n7. 六維數值 (位於右側的綠、粉、藍、紫、青色長條參數區)：\n   - HP (體力)\n   - 攻擊 (物理攻擊)\n   - 防禦 (物理防禦)\n   - 特攻 (特殊攻擊)\n   - 特防 (特殊防禦)\n   - 速度\n\n【如果是卡匣正面 (Front of the Tag)】：\n1. 卡匣編號 (卡片右下角，格式通常為：X-X-XXX 後綴字母，例如：2-2-031 TC)\n2. 寶可夢名稱 (位於下方中央偏左，繁體中文，例如：狂歡浪舞鴨)\n3. 星等 (名稱上方的星星數量，例如：4)\n4. 寶可能量 (右下角的紅色/橙色大數字，例如：118)\n5. 寶可夢屬性 (名稱下方的屬性圓圈圖標，可能有一個或兩個，例如：水、格鬥)\n\n【回傳格式要求】：\n請「只」回傳一個 JSON 格式的物件，不要包含 any markdown tags, no ```json formatting, no conversational text. 如果某個欄位在圖片中完全無法看清或不存在，請填入 null。\n\nJSON 格式欄位如下：\n{\n  \"cardSide\": \"front\" 或 \"back\",\n  \"cardId\": \"卡匣編號(字串)\",\n  \"name\": \"寶可夢名稱(字串)\",\n  \"stars\": 星等(整數),\n  \"pokeEne\": 寶可能量(整裝，若無則為null),\n  \"type1\": \"主屬性(字串，例如：水，若無則為null)\",\n  \"type2\": \"副屬性(字串，例如：格鬥，若無則為null)\",\n  \"moveName\": \"招式名稱(字串，若無則為null)\",\n  \"moveType\": \"招式屬性(字串，例如：格鬥，若無則為null)\",\n  \"moveCategory\": \"招式分類(物理 或 特殊，若無則為null)\",\n  \"hp\": HP值(整數，若無則為null),\n  \"attack\": 攻擊力(整數),\n  \"defense\": 防禦力(整數),\n  \"spAtk\": 特攻值(整數),\n  \"spDef\": 特防值(整數),\n  \"speed\": 速度值(整數)\n}";
+        const systemPrompt = "你是一個專業的寶可夢街機 MEZASTAR（星塵/銀河系列）卡匣辨識專家。\n你的任務是分析使用者上傳的卡匣圖片，並精準提取出所有的欄位資訊。\n\n請仔細辨識圖片中出現的以下實體資訊：\n\n【如果是卡匣背面 (Back of the Tag)】：\n1. 卡匣編號 (卡片左上角，格式通常為：X-X-XXX 後綴字母，例如：2-2-031 TC)\n2. 寶可夢名稱 (位於頂部中央，繁體中文，例如：狂歡浪舞鴨)\n3. 星等 (編號下方的星星數量，請仔細數，通常為 2 到 6 顆星，例如：4)\n4. 招式名稱 (位於粉紅色/綠色/藍色等招式欄中，例如：下盤踢)\n5. 招式屬性 (招式名稱右側的屬性圖標文字，例如：格鬥)\n6. 招式分類 (如果是拳頭圖標則為「物理」，如果是同心圓/星狀光芒圖標則為「特殊」)\n7. 六維數值 (這是最容易讀錯的地方，請嚴格按照以下顏色與上下左右相對位置讀取右側數值區塊)：\n   - 第一行（黃綠色底）：只有一項，即 HP (體力)\n   - 第二行（紅色底）：左邊是「攻擊」，右邊是「防禦」\n   - 第三行（藍色底）：左邊是「特攻」，右邊是「特防」\n   - 第四行（深綠色底）：只有一項，即「速度」\n   *請絕對不要將第一行的 HP 誤認為速度，也不要將第四行的速度誤認為 HP。*\n\n【如果是卡匣正面 (Front of the Tag)】：\n1. 卡匣編號 (卡片右下角)\n2. 寶可夢名稱 (位於下方中央偏左)\n3. 星等 (名稱上方的星星數量)\n4. 寶可能量 (右下角的紅色/橙色大數字，例如：118)\n5. 寶可夢屬性 (名稱下方的屬性圓圈圖標)\n\n【回傳格式要求】：\n請「只」回傳一個 JSON 格式的物件，不要包含 any markdown tags, no ```json formatting, no conversational text. 如果某個欄位在圖片中完全無法看清或不存在，請填入 null。\n\nJSON 格式欄位如下：\n{\n  \"cardSide\": \"front\" 或 \"back\",\n  \"cardId\": \"卡匣編號(字串)\",\n  \"name\": \"寶可夢名稱(字串)\",\n  \"stars\": 星等(整數),\n  \"pokeEne\": 寶可能量(整數，若無則為null),\n  \"type1\": \"主屬性(字串)\",\n  \"type2\": \"副屬性(字串)\",\n  \"moveName\": \"招式名稱(字串)\",\n  \"moveType\": \"招式屬性(字串)\",\n  \"moveCategory\": \"招式分類(物理 或 特殊)\",\n  \"hp\": HP值(整數),\n  \"attack\": 攻擊力(整數),\n  \"defense\": 防禦力(整數),\n  \"spAtk\": 特攻值(整數),\n  \"spDef\": 特防值(整數),\n  \"speed\": 速度值(整數)\n}";
 
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
           method: "POST",
@@ -300,8 +356,8 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
               {
                 role: "user",
                 content: [
-                  { type: "text", text: "請分析這張卡片圖片，找出對應資訊" },
-                  { type: "image_url", image_url: { url: imageData } }
+                  { type: "text", text: "請分析這張裁切好的卡片圖片，找出對應資訊" },
+                  { type: "image_url", image_url: { url: finalImageUrl } }
                 ]
               }
             ]
@@ -314,12 +370,17 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
         }
         const resData = await response.json();
         let content = resData.choices[0].message.content;
-        content = content.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
-        resultObj = JSON.parse(content);
+        content = content.replace(/^```json\s*/i, '').replace(/```$/i, '').trim();
+        resultObj = cleanAndParseJson(content);
       }
 
       if (!resultObj || (!resultObj.name && !resultObj.cardId)) {
         throw new Error('無法從圖像中解析有效的寶可夢資料');
+      }
+      
+      // If VLM was used and QR exists, tag it so we can save it later
+      if (qrPayload && !resultObj._fromCache) {
+        resultObj._newQrCode = qrPayload;
       }
 
       setOcrResult(`成功分析！寶可夢：${resultObj.name || '未知'}, 編號：${resultObj.cardId || '未知'}`);
@@ -595,11 +656,21 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
                   position:'relative',
                 }}>
                   <video ref={videoRef} style={{ width:'100%', height:'100%', objectFit:'cover' }} playsInline muted />
-                  {/* 掃描框 */}
+                  {/* 掃描框 (Ga-Olé 卡匣形狀) */}
                   <div style={{
-                    position:'absolute', inset:'15%', border:'2px dashed rgba(74,144,217,0.7)',
-                    borderRadius:'8px', pointerEvents:'none',
-                  }}/>
+                    position:'absolute', 
+                    top:'10%', bottom:'10%', left:'5%', right:'5%',
+                    border:'3px solid rgba(255, 255, 255, 0.8)',
+                    borderRadius:'9999px',
+                    boxShadow: '0 0 0 4000px rgba(0, 0, 0, 0.6)',
+                    pointerEvents:'none',
+                  }}>
+                    <div style={{
+                      position:'absolute', top:'50%', left:'8%', width:'22%', height:'50%',
+                      border:'2px dashed rgba(255, 255, 255, 0.4)', borderRadius:'8px', transform:'translateY(-50%)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    }}><span style={{fontSize:'10px', color:'rgba(255,255,255,0.6)', textAlign: 'center'}}>QR<br/>Code</span></div>
+                  </div>
                 </div>
               ) : (
                 <div style={{ 

@@ -24,6 +24,14 @@ function doPost(e) {
     return handleOcrAnalysis(postData.imageBase64, postData.openRouterApiKey, postData.mode || 'tag');
   }
   
+  if (postData.action === 'checkQr') {
+    return handleCheckQr(postData.qrCode);
+  }
+  
+  if (postData.action === 'saveQr') {
+    return handleSaveQr(postData.qrCode, postData.cardData);
+  }
+  
   return ContentService.createTextOutput(JSON.stringify({ success: false, error: 'Unknown action' }))
     .setMimeType(ContentService.MimeType.JSON);
 }
@@ -39,6 +47,56 @@ function setupSheetIfNeeded(sheet) {
     // Bold headers and add light grey background
     sheet.getRange(1, 1, 1, 16).setFontWeight("bold").setBackground("#f3f3f3");
   }
+
+  // Ensure QR_CACHE sheet exists
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var qrSheet = ss.getSheetByName('QR_CACHE');
+  if (!qrSheet) {
+    qrSheet = ss.insertSheet('QR_CACHE');
+    qrSheet.appendRow(["qrCode", "cardData", "lastUpdated"]);
+    qrSheet.getRange(1, 1, 1, 3).setFontWeight("bold").setBackground("#e0f7fa");
+  }
+}
+
+function handleCheckQr(qrCode) {
+  if (!qrCode) return ContentService.createTextOutput(JSON.stringify({ success: false, error: 'No QR code provided' })).setMimeType(ContentService.MimeType.JSON);
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var qrSheet = ss.getSheetByName('QR_CACHE');
+  if (!qrSheet) return ContentService.createTextOutput(JSON.stringify({ success: false, found: false })).setMimeType(ContentService.MimeType.JSON);
+  
+  var data = qrSheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    if (data[i][0] === qrCode) {
+      return ContentService.createTextOutput(JSON.stringify({ success: true, found: true, result: JSON.parse(data[i][1]) })).setMimeType(ContentService.MimeType.JSON);
+    }
+  }
+  
+  return ContentService.createTextOutput(JSON.stringify({ success: true, found: false })).setMimeType(ContentService.MimeType.JSON);
+}
+
+function handleSaveQr(qrCode, cardData) {
+  if (!qrCode || !cardData) return ContentService.createTextOutput(JSON.stringify({ success: false, error: 'Missing data' })).setMimeType(ContentService.MimeType.JSON);
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var qrSheet = ss.getSheetByName('QR_CACHE');
+  if (qrSheet) {
+    var data = qrSheet.getDataRange().getValues();
+    var exists = false;
+    for (var i = 1; i < data.length; i++) {
+      if (data[i][0] === qrCode) {
+        exists = true;
+        qrSheet.getRange(i + 1, 2).setValue(JSON.stringify(cardData));
+        qrSheet.getRange(i + 1, 3).setValue(new Date().toISOString());
+        break;
+      }
+    }
+    if (!exists) {
+      qrSheet.appendRow([qrCode, JSON.stringify(cardData), new Date().toISOString()]);
+    }
+  }
+  
+  return ContentService.createTextOutput(JSON.stringify({ success: true })).setMimeType(ContentService.MimeType.JSON);
 }
 
 function getSheetData(sheet) {
@@ -94,7 +152,7 @@ function handleOcrAnalysis(imageBase64, apiKey, mode) {
   if (mode === "screen") {
     systemPrompt = "你是一個專業的寶可夢街機 MEZASTAR（星塵/銀河系列）對戰畫面分析專家。\n你的任務是分析使用者拍下的機台遊戲螢幕，找出畫面上此時正在對戰的「對手寶可夢」（通常是三個，有時可能是一個或兩個）。\n\n請仔細觀察圖片中出現在對面陣營的所有寶可夢，並辨識出牠們的繁體中文名稱（例如：蒼響、噴火龍、烈空坐）。\n請「只」回傳一個 JSON 格式的陣列，包含所辨識到的寶可夢名稱，不要包含任何 markdown 語法 (不要 ```json 包裹)、不要任何多餘的解釋或客套話。如果沒有辨識到任何寶可夢，請回傳空陣列 []。\n\n格式範例：\n[\n  \"蒼響\",\n  \"噴火龍\",\n  \"烈空坐\"\n]";
   } else {
-    systemPrompt = "你是一個專業的寶可夢街機 MEZASTAR（星塵/銀河系列）卡匣辨識專家。\n你的任務是分析使用者上傳的卡匣圖片（可能是卡匣正面，也可能是卡匣背面），並精準提取出所有的欄位資訊。\n\n請仔細辨識圖片中出現的以下實體資訊：\n\n【如果是卡匣背面 (Back of the Tag)】：\n1. 卡匣編號 (卡片左上角，格式通常為：X-X-XXX 後綴字母，例如：2-2-031 TC)\n2. 寶可夢名稱 (位於頂部中央，繁體中文，例如：狂歡浪舞鴨)\n3. 星等 (編號下方的星星數量，例如：4)\n4. 招式名稱 (位於粉紅色招式欄中，例如：下盤踢)\n5. 招式屬性 (招式名稱右側的屬性圖標文字，例如：格鬥)\n6. 招式分類 (如果是拳頭圖標則為「物理」，如果是同心圓/星狀光芒圖標則為「特殊」)\n7. 六維數值 (位於右側的綠、粉、藍、紫、青色長條參數區)：\n   - HP (體力)\n   - 攻擊 (物理攻擊)\n   - 防禦 (物理防禦)\n   - 特攻 (特殊攻擊)\n   - 特防 (特殊防禦)\n   - 速度\n\n【如果是卡匣正面 (Front of the Tag)】：\n1. 卡匣編號 (卡片右下角，格式通常為：X-X-XXX 後綴字母，例如：2-2-031 TC)\n2. 寶可夢名稱 (位於下方中央偏左，繁體中文，例如：狂歡浪舞鴨)\n3. 星等 (名稱上方的星星數量，例如：4)\n4. 寶可能量 (右下角的紅色/橙色大數字，例如：118)\n5. 寶可夢屬性 (名稱下方的屬性圓圈圖標，可能有一個或兩個，例如：水、格鬥)\n\n【回傳格式要求】：\n請「只」回傳一個 JSON 格式的物件，不要包含任何 markdown 語法 (不要 ```json 包裹)、不要任何多餘的解釋或客套話。如果某個欄位在圖片中完全無法看清或不存在，請填入 null。\n\nJSON 格式欄位如下：\n{\n  \"cardSide\": \"front\" 或 \"back\",\n  \"cardId\": \"卡匣編號(字串)\",\n  \"name\": \"寶可夢名稱(字串)\",\n  \"stars\": 星等(整數),\n  \"pokeEne\": 寶可能量(整數，若無則為null),\n  \"type1\": \"主屬性(字串，例如：水，若無則為null)\",\n  \"type2\": \"副屬性(字串，例如：格鬥，若無則為null)\",\n  \"moveName\": \"招式名稱(字串，若無則為null)\",\n  \"moveType\": \"招式屬性(字串，例如：格鬥，若無則為null)\",\n  \"moveCategory\": \"招式分類(物理 或 特殊，若無則為null)\",\n  \"hp\": HP值(整數，若無則為null),\n  \"attack\": 攻擊力(整數，若無則為null),\n  \"defense\": 防禦力(整數，若無則為null),\n  \"spAtk\": 特攻值(整數，若無則為null),\n  \"spDef\": 特防值(整數，若無則為null),\n  \"speed\": 速度值(整數，若無則為null)\n}";
+    systemPrompt = "你是一個專業的寶可夢街機 MEZASTAR（星塵/銀河系列）卡匣辨識專家。\n你的任務是分析使用者上傳的卡匣圖片，並精準提取出所有的欄位資訊。\n\n請仔細辨識圖片中出現的以下實體資訊：\n\n【如果是卡匣背面 (Back of the Tag)】：\n1. 卡匣編號 (卡片左上角，格式通常為：X-X-XXX 後綴字母，例如：2-2-031 TC)\n2. 寶可夢名稱 (位於頂部中央，繁體中文，例如：狂歡浪舞鴨)\n3. 星等 (編號下方的星星數量，請仔細數，通常為 2 到 6 顆星，例如：4)\n4. 招式名稱 (位於粉紅色/綠色/藍色等招式欄中，例如：下盤踢)\n5. 招式屬性 (招式名稱右側的屬性圖標文字，例如：格鬥)\n6. 招式分類 (如果是拳頭圖標則為「物理」，如果是同心圓/星狀光芒圖標則為「特殊」)\n7. 六維數值 (這是最容易讀錯的地方，請嚴格按照以下顏色與上下左右相對位置讀取右側數值區塊)：\n   - 第一行（黃綠色底）：只有一項，即 HP (體力)\n   - 第二行（紅色底）：左邊是「攻擊」，右邊是「防禦」\n   - 第三行（藍色底）：左邊是「特攻」，右邊是「特防」\n   - 第四行（深綠色底）：只有一項，即「速度」\n   *請絕對不要將第一行的 HP 誤認為速度，也不要將第四行的速度誤認為 HP。*\n\n【如果是卡匣正面 (Front of the Tag)】：\n1. 卡匣編號 (卡片右下角)\n2. 寶可夢名稱 (位於下方中央偏左)\n3. 星等 (名稱上方的星星數量)\n4. 寶可能量 (右下角的紅色/橙色大數字，例如：118)\n5. 寶可夢屬性 (名稱下方的屬性圓圈圖標)\n\n【回傳格式要求】：\n請「只」回傳一個 JSON 格式的物件，不要包含任何 markdown 語法 (不要 ```json 包裹)、不要任何多餘的解釋或客套話。如果某個欄位在圖片中完全無法看清或不存在，請填入 null。\n\nJSON 格式欄位如下：\n{\n  \"cardSide\": \"front\" 或 \"back\",\n  \"cardId\": \"卡匣編號(字串)\",\n  \"name\": \"寶可夢名稱(字串)\",\n  \"stars\": 星等(整數),\n  \"pokeEne\": 寶可能量(整數，若無則為null),\n  \"type1\": \"主屬性(字串)\",\n  \"type2\": \"副屬性(字串)\",\n  \"moveName\": \"招式名稱(字串)\",\n  \"moveType\": \"招式屬性(字串)\",\n  \"moveCategory\": \"招式分類(物理 或 特殊)\",\n  \"hp\": HP值(整數),\n  \"attack\": 攻擊力(整數),\n  \"defense\": 防禦力(整數),\n  \"spAtk\": 特攻值(整數),\n  \"spDef\": 特防值(整數),\n  \"speed\": 速度值(整數)\n}";
   }
 
   var payload = {
