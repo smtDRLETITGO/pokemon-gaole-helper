@@ -84,6 +84,150 @@ export async function ensureReferenceHashes() {
   return refHashes;
 }
 
+// ═══════════════════════════════════════════════════════
+// 星等偵測：數上尖端（直立式）
+// ═══════════════════════════════════════════════════════
+//
+// 卡片正面佈局（以實卡 2-2-026 蒂蕾喵 為準）：
+//   ★★★  ← 左下角，金黃色填實五角星
+//   蒂蕾喵  ← 星星下方，黑字白底橫幅
+//
+// 演算法：
+//   1. 裁切左下角區域（排除右側 HP/黃可能量）
+//   2. 金黃色通道閾值二值化（R>G 且 G>B，排除粉紅 HP）
+//   3. 沿垂直軸掃描，找每列局部最高點 → 上尖端
+//   4. 尖端數量 = 星等
+//
+
+/** 裁切卡片左下角的星等+名字區域 */
+export function cropStarRegion(canvas) {
+  const w = canvas.width, h = canvas.height;
+  // 左下角：水平 5%~42%（含星星+名字），垂直 68%~96%
+  const sx = Math.floor(w * 0.05);
+  const sy = Math.floor(h * 0.68);
+  const sw = Math.max(1, Math.floor(w * 0.37));
+  const sh = Math.max(1, Math.floor(h * 0.28));
+  const c = document.createElement('canvas');
+  c.width = sw; c.height = sh;
+  c.getContext('2d').drawImage(canvas, sx, sy, sw, sh, 0, 0, sw, sh);
+  return c;
+}
+
+/**
+ * 從裁切後的星等區域畫布中，數金黃色星星的上尖端數。
+ * @param {HTMLCanvasElement} starCanvas - cropStarRegion() 的輸出
+ * @returns {{ count: number, confidence: number }} count=星等(0~6), confidence=可信度(0~1)
+ */
+export function countStarsByTips(starCanvas) {
+  const ctx = starCanvas.getContext('2d');
+  const w = starCanvas.width, h = starCanvas.height;
+  if (w < 4 || h < 4) return { count: 0, confidence: 0 };
+
+  const imgData = ctx.getImageData(0, 0, w, h);
+  const d = imgData.data;
+
+  // Step 1: 金黃色閾值二值化
+  // 金黃色特徵：R 很高(>180), G 中高(>120), B 低(<100), R > G > B
+  // 排除粉紅色（HP 數字：R 高但 B 也高）
+  const binary = new Uint8Array(w * h); // 1 = 可能是星星像素
+  let totalYellowPixels = 0;
+  for (let i = 0; i < w * h; i++) {
+    const o = i * 4;
+    const r = d[o], g = d[o + 1], b = d[o + 2];
+    // 金黃色：亮、偏暖、不偏藍
+    if (r > 160 && g > 100 && b < 110 && r > g && r - b > 60) {
+      binary[i] = 1;
+      totalYellowPixels++;
+    }
+  }
+
+  // 如果幾乎沒有金黃色像素 → 可能是暗場/對焦失敗/裁切偏了
+  const minAreaThreshold = w * h * 0.003; // 至少佔 0.3% 面積
+  if (totalYellowPixels < minAreaThreshold) {
+    return { count: 0, confidence: 0 };
+  }
+
+  // Step 2: 沿垂直軸掃描，每行找「連續金黃像素段」的最高點（上尖端候選）
+  //
+  // 策略：
+  // - 從上往下逐行掃描
+  // - 在每個 x 座標上，記錄該 column 第一次遇到金黃像素的 y 座標（= 該列的上邊界）
+  // - 把這些上邊界點做水平聚類（相鄰的 x 屬於同一顆星）
+  // - 每個 cluster 的最低 y 點就是一顆星的「上尖端」
+
+  // 先建立每個 x column 的「最頂部金黃像素 y 座標」
+  const colTopY = new Int16Array(w); // -1 表示該列無金黃像素
+  for (let x = 0; x < w; x++) colTopY[x] = -1;
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (colTopY[x] === -1 && binary[y * w + x] === 1) {
+        colTopY[x] = y; // 記錄此 x 的第一個金黃像素（最高點）
+      }
+    }
+  }
+
+  // Step 3: 把有值的 colTopY 做水平聚類（gap > 3px = 不同星星）
+  const clusters = []; // 每個 cluster = [minX, maxX, tipY]
+  let curStart = -1, curMinY = h;
+
+  for (let x = 0; x < w; x++) {
+    if (colTopY[x] >= 0) {
+      if (curStart < 0) { curStart = x; curMinY = colTopY[x]; }
+      else { curMinY = Math.min(curMinY, colTopY[x]); }
+    } else {
+      if (curStart >= 0) {
+        clusters.push({ startX: curStart, endX: x - 1, tipY: curMinY });
+        curStart = -1;
+      }
+    }
+  }
+  if (curStart >= 0) {
+    clusters.push({ startX: curStart, endX: w - 1, tipY: curMinY });
+  }
+
+  // Step 4: 過濾 — 太窄的 cluster 是雜訊（星星至少要 ~4px 寬）
+  const MIN_STAR_WIDTH = Math.max(3, Math.floor(w * 0.06)); // 至少 6% 區域寬度
+  const validClusters = clusters.filter(c => (c.endX - c.startX + 1) >= MIN_STAR_WIDTH);
+
+  const starCount = Math.min(validClusters.length, 6); // MEZASTAR 最大 6 星
+
+  // Confidence: 基於金黃面積占比 + cluster 整齊度
+  const areaRatio = totalYellowPixels / (w * h);
+  const avgWidth = validClusters.length > 0
+    ? validClusters.reduce((s, c) => s + (c.endX - c.startX + 1), 0) / validClusters.length
+    : 0;
+  const widthConsistency = validClusters.length > 1
+    ? 1 - (validClusters.reduce((s, c) => s + Math.abs((c.endX - c.startX + 1) - avgWidth), 0) / validClusters.length / avgWidth)
+    : 1;
+  const confidence = Math.min(1, areaRatio * 8 * widthConsistency); // 面積×8 做歸一化
+
+  console.log(`[StarDetect] count=${starCount} clusters=${validClusters.length} areaRatio=${areaRatio.toFixed(3)} conf=${confidence.toFixed(2)}`);
+  return { count: starCount, confidence };
+}
+
+/**
+ * 根據星等從 DB 中預篩候選卡。
+ * @param {number} starCount - 偵測到的星等
+ * @param {number} starConfidence - 星等可信度
+ * @returns {Array} 預範後的候選卡列表；若 confidence 過低則回傳全部（不預篩）
+ */
+export function filterByStars(starCount, starConfidence) {
+  const db = PRESET_POKEMON_DB;
+  if (!db || db.length === 0) return db;
+  // 可信度太低 → 不預篩，交給下游處理
+  if (starConfidence < 0.25 || starCount <= 0) return db;
+  // 寬鬆匹配：±1 顆星容忍誤差（手機拍攝可能有漏檢）
+  return db.filter(c => {
+    const s = c.stars | 0;
+    return Math.abs(s - starCount) <= 1;
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// 模板比對（原有功能）
+// ═══════════════════════════════════════════════════════
+
 // 傳入拍攝的 video canvas → 回傳最佳吻合 {cardId, name, distance, confidence}
 // confidence: 1 - 正規化距離（0~1，越高越像）
 export async function matchTemplateCanvas(srcCanvas) {

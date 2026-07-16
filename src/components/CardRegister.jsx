@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useCallback } from 'react';
 import jsQR from "jsqr";
 import { PRESET_POKEMON_DB, ACTIVE_PRESET_DB, updateLocalDbOverride } from '../data/pokemonDb';
-import { matchTemplateCanvas, ensureReferenceHashes } from '../data/cardTemplateMatcher';
+import { matchTemplateCanvas, ensureReferenceHashes, countStarsByTips, cropStarRegion, filterByStars } from '../data/cardTemplateMatcher';
 
 function cleanAndParseJson(text) {
   let cleaned = text.replace(/^```json\s*/i, '').replace(/```$/i, '').trim();
@@ -327,28 +327,59 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
       let qrPayload = null;
       let finalImageUrl = canvas.toDataURL('image/jpeg', 0.85);
 
-      // 0. 模板比對（主路徑，離線、瞬時）：與官網正面圖感知雜湊比對
-      //    參考庫已在進入相機時預熱（switchTab 內 ensureReferenceHashes）。
+      // ── Step 0: 星等偵測（直立式、數上尖端）──
+      // 裁切左下角星等區域 → 金黃色閾值 → 數上尖端 → 預範候選集
+      // 這步是純 Canvas 計算，零網路、零模型、<5ms
+      let detectedStars = { count: 0, confidence: 0 };
+      let starFilteredDb = ACTIVE_PRESET_DB; // 預設 = 全部（星等偵測失敗時不預篩）
       try {
-        setOcrResult('正在比對本地參考庫（模板比對）...');
+        const starRegion = cropStarRegion(canvas);
+        detectedStars = countStarsByTips(starRegion);
+        if (detectedStars.confidence >= 0.25 && detectedStars.count > 0) {
+          starFilteredDb = filterByStars(detectedStars.count, detectedStars.confidence);
+          setOcrResult(`偵測到 ${detectedStars.count} 顆星（${starFilteredDb.length} 張候選卡），正在比對...`);
+        }
+        console.log(`[Pipeline] Stars: ${detectedStars.count} (conf=${detectedStars.confidence.toFixed(2)}), candidates: ${starFilteredDb.length}/${ACTIVE_PRESET_DB.length}`);
+      } catch (starErr) {
+        console.warn('星等偵測異常，跳過預篩：', starErr);
+      }
+
+      // ── Step 1: 模板比對（主路徑，離線、瞬時）──
+      //    與官網正面圖感知雜湊比對。參考庫已在進入相機時預熱。
+      //    若星等預篩有效，比對範圍已縮小（更快更準）
+      try {
+        setOcrResult(starFilteredDb.length < ACTIVE_PRESET_DB.length
+          ? '正在比對本地參考庫（星等預篩後）...'
+          : '正在比對本地參考庫（模板比對）...');
         const tmpl = await matchTemplateCanvas(canvas);
         if (tmpl && tmpl.confidence >= 0.80) {
-          // 高信心 → 直接命中，無需任何模型/網路
-          const dbCard = ACTIVE_PRESET_DB.find(p => normalizeId(p.cardId) === normalizeId(tmpl.cardId));
+          // 高信心 → 直接命中
+          const dbCard = starFilteredDb.find(p => normalizeId(p.cardId) === normalizeId(tmpl.cardId))
+                       || ACTIVE_PRESET_DB.find(p => normalizeId(p.cardId) === normalizeId(tmpl.cardId));
           if (dbCard) {
             resultObj = { ...dbCard, _fromTemplate: true };
-            setOcrResult(`模板比對命中：${dbCard.name}（信心 ${(tmpl.confidence * 100 | 0)}%）`);
+            setOcrResult(`模板比對命中：${dbCard.name}（信心 ${(tmpl.confidence * 100 | 0)}%，${detectedStars.count > 0 ? `${detectedStars.count}★` : ''}）`);
           }
         } else if (tmpl && tmpl.confidence >= 0.55) {
-          // 中信心 → 卡號 OCR 確認（只問卡號，便宜，避免慢速 VLM）
-          setOcrResult('模板比對中置信，正在 OCR 卡號確認...');
-          const ocrId = await ocrCardNumber(canvas);
-          if (ocrId) {
-            const dbCard = ACTIVE_PRESET_DB.find(p => normalizeId(p.cardId) === normalizeId(ocrId));
-            if (dbCard) {
-              resultObj = { ...dbCard, _fromTemplate: true };
-              setOcrResult(`模板比對 + 卡號 OCR 確認：${dbCard.name}（${ocrId}）`);
+          // 中信心 → 驗證星等是否匹配（若星等偵測可信）
+          const tmplCard = ACTIVE_PRESET_DB.find(p => normalizeId(p.cardId) === normalizeId(tmpl.cardId));
+          const starMatch = !tmplCard || detectedStars.confidence < 0.25
+            ? true // 星等不可信 → 不用星等驗證
+            : Math.abs((tmplCard.stars | 0) - detectedStars.count) <= 1;
+          if (starMatch) {
+            if (tmplCard) {
+              resultObj = { ...tmplCard, _fromTemplate: true };
+              setOcrResult(`模板比對命中：${tmplCard.name}（${detectedStars.count > 0 ? `${detectedStars.count}★+` : ''}信心 ${(tmpl.confidence * 100 | 0)}%）`);
             }
+          } else {
+            // 模板命中但星等不符 → 在同星等組內找次佳匹配
+            console.log(`[Pipeline] Template star mismatch: tmpl=${tmplCard?.stars ?? '?'} vs detected=${detectedStars.count}, searching star-filtered...`);
+            const altMatch = starFilteredDb.find(p => normalizeId(p.cardId) === normalizeId(tmpl.cardId));
+            if (altMatch) {
+              resultObj = { ...altMatch, _fromTemplate: true };
+              setOcrResult(`模板比對（星等校正）：${altMatch.name}（${detectedStars.count}★）`);
+            }
+            // 如果同星等組也找不到這張卡，就讓它掉到 VLM 備援
           }
         }
       } catch (tmplErr) {
