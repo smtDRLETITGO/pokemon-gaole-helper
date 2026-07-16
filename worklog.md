@@ -189,3 +189,34 @@
 - ⚠️ 待辦事項（未變）：
   - 改善 CV 腳本以支援橫式卡片（自動偵測 layout → 切換裁切/計數策略）
   - 全部 73 張卡的六維數值仍為舊 DB 值，需實卡背面 OCR
+
+## Phase 5.7 — 背面圖六維 OCR 校正 (2026-07-17)
+
+### 發現：官網「確實有」背面圖！
+- **更正之前的錯誤假設**：「官網不提供背面圖」→ ❌ 錯誤
+- PING 提供了官網背面圖 URL 證據：`/uploads/images/<hash>.png`
+- **來源**：每個 cassette/N 頁面的 Nuxt 內嵌 payload 中包含 `back_image` 欄位
+- **腳本** `scripts/extract-backs.mjs` 從 HTML payload 解析出 front + back URL
+- 已下載全部 73 張背面圖 → `public/cards/11/back/`
+
+### easyocr 六維數值 OCR 管線
+- **腳本**：`scripts/ocr_back_stats.py`（easyocr + OpenCV）
+- **策略**：easyocr 讀全文 → 篩選 2~3 位純數字 → Y 軸排序(同行用 X 決勝) → 對應 [HP, atk, def, spAtk, spDef, spd]
+- **關鍵修正**：
+  - easyocr 回傳格式是 `(bbox, text, confidence)` — 最初搞反了 item[0]/item[1]
+  - 移除數值去重邏輯（寶可夢攻擊=特攻 是合法的，如烈空坐 188/188）
+  - Y/X 決勝排序解決特攻/特防同行互換問題
+- **結果**：
+  - 測試準確度：**18/18 = 100%**（2-2-001, 2-2-026, 2-2-066）
+  - 批量：**73/73 = 100% 成功，0 失敗**，耗時 2 分 18 秒
+- **合併**：`scripts/merge_ocr_stats.mjs` → 更新 `pokemonDb.cards.generated.js`
+- **驗證**：2-2-026 OCR 值（HP103/攻72）與 PING 實卡完全一致 ✅
+- **之前 8 張 needsStats 卡片**（066~070, R-2-1/2/3）全部填入
+
+### 數據校正規模
+- 71/73 張卡的六維數值被修正（舊 DB 值全部錯誤）
+- 8 張原本 null 的卡片獲得完整數值
+- 2 張未變（偶然碰對）
+
+### Commits
+- (待 push) Phase 5.7: OCR 六維校正 + 背面圖抓取腳本
