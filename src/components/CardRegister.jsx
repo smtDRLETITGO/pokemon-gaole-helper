@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useRef, useCallback } from 'react';
 import jsQR from "jsqr";
 import { PRESET_POKEMON_DB, ACTIVE_PRESET_DB, updateLocalDbOverride } from '../data/pokemonDb';
+import { matchTemplateCanvas, ensureReferenceHashes } from '../data/cardTemplateMatcher';
 
 function cleanAndParseJson(text) {
   let cleaned = text.replace(/^```json\s*/i, '').replace(/```$/i, '').trim();
@@ -45,6 +46,48 @@ function cleanAndParseJson(text) {
 // ── 星等顯示 ──
 const STAR_COLORS = { 6: '#FFD700', 5: '#C0A000', 4: '#9370DB', 3: '#4A9EFF', 2: '#50C878', 1: '#808080' };
 const STAR_LABELS = { 6: '超級明星', 5: '明星', 4: '精選', 3: '普通', 2: '普通', 1: '普通' };
+
+// 正規化卡號：去空白與尾端 TC（2-2-001 TC → 2-2-001）
+const normalizeId = (s) => String(s || '').replace(/\s+/g, '').replace(/TC$/i, '');
+
+// 卡號 OCR 確認：裁切左上角卡號區 → 迷你 VLM（僅問卡號）→ 回傳 cardId 或 null
+async function ocrCardNumber(canvas) {
+  const apiKey = localStorage.getItem('openrouter_api_key');
+  if (!apiKey) return null;
+  const cw = Math.max(1, Math.floor(canvas.width * 0.32));
+  const ch = Math.max(1, Math.floor(canvas.height * 0.16));
+  const cc = document.createElement('canvas');
+  cc.width = cw; cc.height = ch;
+  cc.getContext('2d').drawImage(canvas, 0, 0, cw, ch, 0, 0, cw, ch);
+  const url = cc.toDataURL('image/jpeg', 0.9);
+  try {
+    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://smtDRLETITGO.github.io/pokemon-gaole-helper/",
+        "X-Title": "MEZASTAR Battle Helper"
+      },
+      body: JSON.stringify({
+        model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+        messages: [
+          { role: "system", content: "你是一個卡號辨識器。請只看圖片左上角的卡匣編號（格式如 2-2-001 或 2-2-001 TC），回傳『只』該編號字串。若看不清楚回傳 null。不要任何其他文字。" },
+          { role: "user", content: [
+            { type: "text", text: "圖片左上角的卡號是？" },
+            { type: "image_url", image_url: { url } }
+          ] }
+        ]
+      })
+    });
+    if (!res.ok) return null;
+    const j = await res.json();
+    let t = j.choices?.[0]?.message?.content || '';
+    t = t.replace(/^```json\s*/i, '').replace(/```$/i, '').trim().replace(/^["']|["']$/g, '');
+    if (!t || t.toLowerCase() === 'null') return null;
+    return t;
+  } catch (e) { console.warn('ocrCardNumber failed', e); return null; }
+}
 
 function StarBadge({ stars }) {
   return (
@@ -192,6 +235,8 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
     const newEntry = { ...pokemon, storageNote: '', quantity: 1 };
     
     // Asynchronously save to QR Cache if it was a new QR code
+    // （FROZEN 後備路徑：實體卡背面 QR 為機台專用，一般掃描器掃不到，故此分支對自己的卡幾乎不觸發。
+    //   保留以相容後端 QR_CACHE 防禦性後備，見 backend/google_apps_script.js 凍結說明。）
     if (pokemon._newQrCode) {
       const syncUrl = localStorage.getItem('gaole_sync_url');
       if (syncUrl) {
@@ -279,47 +324,79 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
 
     try {
       let resultObj = null;
-      
-      // 1. Scan for QR Code first
-      const imageDataObj = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const qrCode = jsQR(imageDataObj.data, imageDataObj.width, imageDataObj.height);
-      let qrPayload = qrCode ? qrCode.data : null;
-      
-      // 2. If QR found, try to fetch from Cache
-      if (qrPayload && syncUrl) {
-        setOcrResult('QR Code 讀取成功，正在比對快取資料庫...');
-        try {
-          const qrRes = await fetch(syncUrl, {
-            method: 'POST',
-            credentials: 'omit',
-            headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify({ action: 'checkQr', qrCode: qrPayload })
-          });
-          const qrData = await qrRes.json();
-          if (qrData.success && qrData.found) {
-            resultObj = qrData.result;
-            resultObj._fromCache = true;
-          }
-        } catch (e) { console.warn("QR Cache check failed:", e); }
-      }
-      
-      // 3. Auto-Crop for VLM if not found in Cache
+      let qrPayload = null;
       let finalImageUrl = canvas.toDataURL('image/jpeg', 0.85);
-      if (!resultObj) {
-        setOcrResult('正在裁切畫面並呼叫大模型深度解析...');
-        const cropX = canvas.width * 0.05;
-        const cropY = canvas.height * 0.10;
-        const cropW = canvas.width * 0.90;
-        const cropH = canvas.height * 0.80;
-        const croppedCanvas = document.createElement('canvas');
-        croppedCanvas.width = cropW;
-        croppedCanvas.height = cropH;
-        const croppedCtx = croppedCanvas.getContext('2d');
-        croppedCtx.drawImage(canvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
-        finalImageUrl = croppedCanvas.toDataURL('image/jpeg', 0.85);
+
+      // 0. 模板比對（主路徑，離線、瞬時）：與官網正面圖感知雜湊比對
+      //    參考庫已在進入相機時預熱（switchTab 內 ensureReferenceHashes）。
+      try {
+        setOcrResult('正在比對本地參考庫（模板比對）...');
+        const tmpl = await matchTemplateCanvas(canvas);
+        if (tmpl && tmpl.confidence >= 0.80) {
+          // 高信心 → 直接命中，無需任何模型/網路
+          const dbCard = ACTIVE_PRESET_DB.find(p => normalizeId(p.cardId) === normalizeId(tmpl.cardId));
+          if (dbCard) {
+            resultObj = { ...dbCard, _fromTemplate: true };
+            setOcrResult(`模板比對命中：${dbCard.name}（信心 ${(tmpl.confidence * 100 | 0)}%）`);
+          }
+        } else if (tmpl && tmpl.confidence >= 0.55) {
+          // 中信心 → 卡號 OCR 確認（只問卡號，便宜，避免慢速 VLM）
+          setOcrResult('模板比對中置信，正在 OCR 卡號確認...');
+          const ocrId = await ocrCardNumber(canvas);
+          if (ocrId) {
+            const dbCard = ACTIVE_PRESET_DB.find(p => normalizeId(p.cardId) === normalizeId(ocrId));
+            if (dbCard) {
+              resultObj = { ...dbCard, _fromTemplate: true };
+              setOcrResult(`模板比對 + 卡號 OCR 確認：${dbCard.name}（${ocrId}）`);
+            }
+          }
+        }
+      } catch (tmplErr) {
+        console.warn('模板比對失敗，降級至 QR/VLM：', tmplErr);
       }
 
-      if (syncUrl) {
+      // 1. 若模板比對未命中，掃描 QR Code（機台敵卡 / 舊流程）
+      if (!resultObj) {
+        const imageDataObj = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const qrCode = jsQR(imageDataObj.data, imageDataObj.width, imageDataObj.height);
+        qrPayload = qrCode ? qrCode.data : null;
+
+        // 2. If QR found, try to fetch from Cache
+        if (qrPayload && syncUrl) {
+          setOcrResult('QR Code 讀取成功，正在比對快取資料庫...');
+          try {
+            const qrRes = await fetch(syncUrl, {
+              method: 'POST',
+              credentials: 'omit',
+              headers: { 'Content-Type': 'text/plain' },
+              body: JSON.stringify({ action: 'checkQr', qrCode: qrPayload })
+            });
+            const qrData = await qrRes.json();
+            if (qrData.success && qrData.found) {
+              resultObj = qrData.result;
+              resultObj._fromCache = true;
+            }
+          } catch (e) { console.warn("QR Cache check failed:", e); }
+        }
+
+        // 3. Auto-Crop for VLM if not found in Cache
+        if (!resultObj) {
+          setOcrResult('正在裁切畫面並呼叫大模型深度解析...');
+          const cropX = canvas.width * 0.05;
+          const cropY = canvas.height * 0.10;
+          const cropW = canvas.width * 0.90;
+          const cropH = canvas.height * 0.80;
+          const croppedCanvas = document.createElement('canvas');
+          croppedCanvas.width = cropW;
+          croppedCanvas.height = cropH;
+          const croppedCtx = croppedCanvas.getContext('2d');
+          croppedCtx.drawImage(canvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+          finalImageUrl = croppedCanvas.toDataURL('image/jpeg', 0.85);
+        }
+      }
+
+      // GAS 代理 OCR：僅在模板比對 + QR 都未命中時才呼叫（避免覆蓋模板命中結果）
+      if (syncUrl && !resultObj) {
         try {
           // Send request via Google Apps Script server-side proxy
           const response = await fetch(syncUrl, {
@@ -391,6 +468,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
       }
       
       // If VLM was used and QR exists, tag it so we can save it later
+      // （FROZEN 後備：背面 QR 機台專用、一般掃描器掃不到，qrPayload 通常為 null；此分支極少觸發）
       if (qrPayload && !resultObj._fromCache) {
         resultObj._newQrCode = qrPayload;
       }
@@ -476,7 +554,11 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
   const switchTab = (tab) => {
     if (tab !== 'ocr') stopCamera();
     setActiveTab(tab);
-    if (tab === 'ocr') setTimeout(startCamera, 300);
+    if (tab === 'ocr') {
+      // 預熱參考庫雜湊（背景載入 73 張官網正面圖），首次拍照比對才不會卡
+      ensureReferenceHashes().catch(() => {});
+      setTimeout(startCamera, 300);
+    }
   };
 
   const handleClose = () => {
@@ -671,7 +753,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
             )}
             
             <div style={{ color:'rgba(255,255,255,0.6)', fontSize:'0.75rem', marginBottom:'8px', textAlign:'center' }}>
-              將相機對準卡匣正面或背面，保持清晰穩定以進行大模型辨識
+              對準卡匣正面（含寶可夢美術）即可秒速模板比對；辨識不確定時自動降級卡號 OCR / 大模型
             </div>
 
             {/* 預覽框 / 啟動相機按鈕 */}

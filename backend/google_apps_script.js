@@ -24,6 +24,11 @@ function doPost(e) {
     return handleOcrAnalysis(postData.imageBase64, postData.openRouterApiKey, postData.mode || 'tag');
   }
   
+  // ── QR_CACHE 流程（FROZEN / 凍結）──────────────────────────────────────
+  // 凍結理由：實體卡匣「背面 QR Code」為機台專用加密碼，一般 QR 掃描器（jsQR）掃不出內容，
+  // 使用者已實測多款掃描器均無法解析。因此 checkQr/saveQr 對「自己的卡」實際上永遠不會觸發。
+  // 此路徑保留為「防禦性後備」：(1) 若未來出現可被一般掃描器讀取的 QR；(2) 使用者手動貼入 QR 字串；
+  // 即可自動命中快取，免再呼叫 VLM。自 2026-07-16 Phase 4 起凍結，邏輯不再改動，僅維護相容。
   if (postData.action === 'checkQr') {
     return handleCheckQr(postData.qrCode);
   }
@@ -48,7 +53,7 @@ function setupSheetIfNeeded(sheet) {
     sheet.getRange(1, 1, 1, 16).setFontWeight("bold").setBackground("#f3f3f3");
   }
 
-  // Ensure QR_CACHE sheet exists
+  // Ensure QR_CACHE sheet exists（FROZEN 後備表，見 doPost 凍結說明；保留建立以免舊部署報錯）
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var qrSheet = ss.getSheetByName('QR_CACHE');
   if (!qrSheet) {
@@ -58,6 +63,7 @@ function setupSheetIfNeeded(sheet) {
   }
 }
 
+// FROZEN (Phase 4, 2026-07-16)：詳見 doPost 內凍結說明。僅作防禦性後備，邏輯不再改動。
 function handleCheckQr(qrCode) {
   if (!qrCode) return ContentService.createTextOutput(JSON.stringify({ success: false, error: 'No QR code provided' })).setMimeType(ContentService.MimeType.JSON);
   
@@ -75,6 +81,7 @@ function handleCheckQr(qrCode) {
   return ContentService.createTextOutput(JSON.stringify({ success: true, found: false })).setMimeType(ContentService.MimeType.JSON);
 }
 
+// FROZEN (Phase 4, 2026-07-16)：詳見 doPost 內凍結說明。僅作防禦性後備，邏輯不再改動。
 function handleSaveQr(qrCode, cardData) {
   if (!qrCode || !cardData) return ContentService.createTextOutput(JSON.stringify({ success: false, error: 'Missing data' })).setMimeType(ContentService.MimeType.JSON);
   
