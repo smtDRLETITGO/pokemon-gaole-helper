@@ -156,7 +156,7 @@ function handleOcrAnalysis(imageBase64, apiKey, mode) {
   }
 
   var payload = {
-    "model": "google/gemini-2.0-flash-exp:free",
+    "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
     "messages": [
       {
         "role": "system",

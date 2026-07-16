@@ -350,7 +350,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
             "X-Title": "MEZASTAR Battle Helper"
           },
           body: JSON.stringify({
-            model: "google/gemini-2.0-flash-exp:free",
+            model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
             messages: [
               { role: "system", content: systemPrompt },
               {
