@@ -17,9 +17,21 @@ function cleanAndParseJson(text) {
   }
   if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
     cleaned = cleaned.substring(startIdx, endIdx + 1);
-    try {
-      return JSON.parse(cleaned);
-    } catch (e) {
+
+    // Attempt 1: Parse as-is
+    try { return JSON.parse(cleaned); } catch (_) { /* fall through to repair */ }
+
+    // Attempt 2: Repair common LLM JSON errors
+    let repaired = cleaned
+      .replace(/,\s*([}\]])/g, '$1')          // trailing commas: {a:1,} → {a:1}
+      .replace(/'/g, '"')                       // single quotes → double quotes
+      .replace(/([{,]\s*)(\w+)\s*:/g, '$1"$2":') // unquoted keys: {hp: 1} → {"hp": 1}
+      .replace(/:\s*"([^"]*?)"\s*或\s*"([^"]*?)"/g, ':"$1"'); // "front" 或 "back" → "front"
+    try { return JSON.parse(repaired); } catch (_) { /* fall through */ }
+
+    // Attempt 3: Strip non-ASCII control chars and retry
+    repaired = repaired.replace(/[\x00-\x1f\x7f]/g, '');
+    try { return JSON.parse(repaired); } catch (e) {
       throw new Error("大模型回傳了 JSON 格式，但語法不正確：" + e.message);
     }
   }
@@ -414,6 +426,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
           // Trust the DB's cardId and name if we matched it, because OCR numbers are easily misread (e.g. 044 vs 034)
           cardId: dbMatch.cardId,
           name: dbMatch.name,
+          _newQrCode: resultObj._newQrCode || undefined,
           hp: Number(resultObj.hp) || dbMatch.hp,
           attack: Number(resultObj.attack) || dbMatch.attack,
           defense: Number(resultObj.defense) || dbMatch.defense,
@@ -427,6 +440,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
       } else {
         // Create custom card based on VLM output
         finalCard = {
+          _newQrCode: resultObj._newQrCode || undefined,
           cardId: resultObj.cardId || `custom-${Date.now()}`,
           name: resultObj.name || "未命名卡匣",
           stars: Number(resultObj.stars) || 3,
@@ -537,8 +551,9 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
                 borderRadius:'8px', color:'#fff', padding:'6px 8px', fontSize:'0.75rem',
               }}>
                 <option value="all">全部彈數</option>
-                <option value="星塵第一彈">⭐ 星塵第一彈</option>
-                <option value="星塵第二彈">⭐ 星塵第二彈</option>
+                {[...new Set(ACTIVE_PRESET_DB.map(p => p.series))].sort().map(s => (
+                  <option key={s} value={s}>⭐ {s}</option>
+                ))}
               </select>
               <select value={filterStars} onChange={e => setFilterStars(e.target.value)} style={{
                 flex: 1, background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.15)',
