@@ -204,6 +204,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
         setStreamActive(true);
       } catch (fallbackErr) {
         console.error("Camera completely failed:", fallbackErr);
+        setOcrResult('⚠️ 相機開啟失敗。請確認瀏覽器相機設定，或手動點選上方「啟用相機鏡頭」。');
         setOcrStatus('error');
         setStreamActive(false);
       }
@@ -287,7 +288,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
             "X-Title": "MEZASTAR Battle Helper"
           },
           body: JSON.stringify({
-            model: "google/gemma-4-31b-it:free",
+            model: "qwen/qwen2.5-vl-32b-instruct:free",
             messages: [
               { role: "system", content: systemPrompt },
               {
@@ -301,7 +302,10 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
           })
         });
 
-        if (!response.ok) throw new Error('OpenRouter API 呼叫失敗');
+        if (!response.ok) {
+          const errText = await response.text();
+          throw new Error(`OpenRouter 伺服器回報狀態碼 ${response.status}: ${errText}`);
+        }
         const resData = await response.json();
         let content = resData.choices[0].message.content;
         content = content.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
@@ -673,9 +677,9 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
               <div style={{
                 background:'rgba(244,67,54,0.15)', borderRadius:'12px',
                 padding:'12px 16px', color:'#ef9a9a', fontSize:'0.8rem', textAlign:'center',
-                maxWidth:'400px', width:'100%',
+                maxWidth:'400px', width:'100%', wordBreak: 'break-all'
               }}>
-                ⚠️ 相機開啟失敗。請確認瀏覽器相機設定，或手動點選上方「啟用相機鏡頭」。
+                📢 {ocrResult}
               </div>
             )}
           </div>

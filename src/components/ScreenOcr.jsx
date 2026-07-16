@@ -170,7 +170,7 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
             "X-Title": "MEZASTAR Screen Opponents Scanner"
           },
           body: JSON.stringify({
-            model: "google/gemma-4-31b-it:free",
+            model: "qwen/qwen2.5-vl-32b-instruct:free",
             messages: [
               { role: "system", content: systemPrompt },
               {

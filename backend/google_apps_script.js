@@ -98,7 +98,7 @@ function handleOcrAnalysis(imageBase64, apiKey, mode) {
   }
 
   var payload = {
-    "model": "google/gemma-4-31b-it:free",
+    "model": "qwen/qwen2.5-vl-32b-instruct:free",
     "messages": [
       {
         "role": "system",
