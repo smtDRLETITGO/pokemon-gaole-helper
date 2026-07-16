@@ -158,7 +158,7 @@ function handleOcrAnalysis(imageBase64, apiKey, mode) {
 }
 
 function cleanAndParseJson(text) {
-  var cleaned = text.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
+  var cleaned = text.replace(/^```json\s*/i, '').replace(/```$/i, '').trim();
   var firstBrace = cleaned.indexOf('{');
   var firstBracket = cleaned.indexOf('[');
   var startIdx = -1;
@@ -174,7 +174,13 @@ function cleanAndParseJson(text) {
   
   if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
     cleaned = cleaned.substring(startIdx, endIdx + 1);
+    try {
+      return JSON.parse(cleaned);
+    } catch (e) {
+      throw new Error("大模型回傳了 JSON 格式，但語法不正確：" + e.toString());
+    }
   }
   
-  return JSON.parse(cleaned);
+  var snippet = text.length > 50 ? text.substring(0, 50).replace(/\n/g, ' ') + "..." : text.replace(/\n/g, ' ');
+  throw new Error("未能在畫面中辨識到有效的卡匣或螢幕資訊，或大模型未按格式回答。(回傳內容: " + snippet + ")");
 }

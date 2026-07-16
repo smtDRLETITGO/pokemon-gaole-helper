@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { PRESET_POKEMON_DB, ACTIVE_PRESET_DB } from '../data/pokemonDb';
 
 function cleanAndParseJson(text) {
-  var cleaned = text.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
+  var cleaned = text.replace(/^```json\s*/i, '').replace(/```$/i, '').trim();
   const firstBrace = cleaned.indexOf('{');
   const firstBracket = cleaned.indexOf('[');
   let startIdx = -1;
@@ -18,9 +18,15 @@ function cleanAndParseJson(text) {
   
   if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
     cleaned = cleaned.substring(startIdx, endIdx + 1);
+    try {
+      return JSON.parse(cleaned);
+    } catch (e) {
+      throw new Error("大模型回傳了 JSON 格式，但語法不正確：" + e.message);
+    }
   }
   
-  return JSON.parse(cleaned);
+  const snippet = text.length > 50 ? text.substring(0, 50).replace(/\n/g, ' ') + "..." : text.replace(/\n/g, ' ');
+  throw new Error("未能在畫面中辨識到有效的遊戲對戰對手，或大模型未按格式回答。(回傳內容: " + snippet + ")");
 }
 
 export default function ScreenOcr({ onOcrMatchOpponents }) {
