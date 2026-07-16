@@ -2,13 +2,7 @@
 // 星等來源：OpenCV skeleton 分析 (scripts/count_stars_cv.py)
 // ⚠️ 六維數值(hp/attack/defense/spAtk/spDef/speed)仍來自舊 DB，需以實卡背面 OCR 校正
 // ⚠️ 以下卡片的星等為舊值或預設（CV 未成功偵測，需手動/VLM 校正）：
-//   - 2-2-002: 6★
-//   - 2-2-003: 6★
-//   - 2-2-004: 6★
-//   - 2-2-006: 6★
-//   - 2-2-008: 6★
-//   - 2-2-009: 6★
-//   - 2-2-023: 5★
+
 
 export const PRESET_POKEMON_DB = [
   {
@@ -37,7 +31,7 @@ export const PRESET_POKEMON_DB = [
     "diskCode": "2-2-002",
     "name": "藏瑪然特",
     "series": "銀河第二彈",
-    "stars": 6,
+    "stars": 5,
     "type1": "鋼",
     "type2": "格鬥",
     "moveName": "巨獸彈",
@@ -79,7 +73,7 @@ export const PRESET_POKEMON_DB = [
     "diskCode": "2-2-004",
     "name": "噴火龍",
     "series": "銀河第二彈",
-    "stars": 6,
+    "stars": 5,
     "type1": "火",
     "type2": "飛行",
     "moveName": "超極巨地獄滅焰",
@@ -121,7 +115,7 @@ export const PRESET_POKEMON_DB = [
     "diskCode": "2-2-006",
     "name": "路卡利歐",
     "series": "銀河第二彈",
-    "stars": 6,
+    "stars": 5,
     "type1": "格鬥",
     "type2": "鋼",
     "moveName": "真氣彈",
@@ -163,7 +157,7 @@ export const PRESET_POKEMON_DB = [
     "diskCode": "2-2-008",
     "name": "拉帝亞斯",
     "series": "銀河第二彈",
-    "stars": 6,
+    "stars": 4,
     "type1": "龍",
     "type2": "超能力",
     "moveName": "薄霧球",
@@ -352,7 +346,7 @@ export const PRESET_POKEMON_DB = [
     "diskCode": "2-2-017",
     "name": "雷鳥海獸",
     "series": "銀河第二彈",
-    "stars": 1,
+    "stars": 4,
     "type1": "電",
     "type2": "冰",
     "moveName": "電擊光束",
