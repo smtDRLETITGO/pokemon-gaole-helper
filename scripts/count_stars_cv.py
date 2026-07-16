@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
 count_stars_cv.py — 用 OpenCV + Skeleton 分析快速計算 MEZASTAR 星等
-策略：HSV 金色閾值 → 上半區域裁切 → Skeletonize → 分支點/端點計數
+策略：HSV 金色閾值 → 版型偵測(直式/橫式) → 版型專用裁切 → Skeleton 分析
 
 核心洞察（從實驗驗證）：
-- 水平卡（小星）：skeleton 分支點數 = 星數 - 1（線性鏈）
-- 直立卡（大星）：skeleton 端點數 ≈ 星數 × 5（每顆五角星約5個尖端）
-- 星等區域底部可能有非星金色元素（文字/裝飾），需裁掉下半部
+- 直式卡（大星，垂直堆疊）：skeleton 端點數 ≈ 星數 × 5（每顆五角星約5個尖端）
+- 橫式卡（小星，水平排列）：skeleton 分支點數 ≈ 星數 - 1（線性鏈）或輪廓計數
+- 星等區域底部可能有非星金色元素（文字/裝飾），需裁掉
 用法：
   python count_stars_cv.py test              # 測試已知卡片
   python count_stars_cv.py batch             # 批量處理全部 73 張
@@ -26,15 +26,22 @@ PROJECT_ROOT = SCRIPT_DIR.parent
 CARDS_DIR = PROJECT_ROOT / "public" / "cards" / "11_small"
 DEBUG_DIR = PROJECT_ROOT / "_star_debug"
 
-# ── 裁切參數 ──
-STAR_REGION = {"x1": 0.02, "x2": 0.40, "y1": 0.65, "y2": 0.98}
+# ── 裁切參數（依版型分開） ──
+# 直式卡（h > w）：星星在左下角，垂直堆疊
+STAR_REGION_VERTICAL = {"x1": 0.02, "x2": 0.40, "y1": 0.65, "y2": 0.98}
+# 橫式卡（w > h）：星星在左側，但垂直位置因卡面設計而異（可能在上方或下方）
+# 解法：裁切整個左側條帶，讓分析演算法自行找到星等區域
+STAR_REGION_HORIZONTAL = {"x1": 0.01, "x2": 0.38, "y1": 0.08, "y2": 0.88}
+
 # 只分析裁切區的上半部（避免底部非星元素）
-STAR_CROP_UPPER_FRAC = 0.70  # 只用上面 70%
+STAR_CROP_UPPER_FRAC = 0.70  # 直式卡：只用上面 70%
 
 GROUND_TRUTH = {
-    "2-2-001": 6,
-    "2-2-026": 3,
-    "2-2-066": 2,
+    "2-2-001": 6,   # 直式 6★
+    "2-2-002": 5,   # 橫式 5★
+    "2-2-026": 3,   # 直式 3★
+    "2-2-066": 2,   # 直式 2★
+    "2-2-017": 4,   # 橫式 4★
 }
 
 
@@ -48,13 +55,86 @@ def load_image(card_id):
     return None
 
 
-def crop_star_region(img):
+def detect_layout(img):
+    """偵測卡片版型：直式(vertical) 或 橫式(horizontal)，依長寬比判斷"""
     h, w = img.shape[:2]
-    x1 = int(w * STAR_REGION["x1"])
-    x2 = int(w * STAR_REGION["x2"])
-    y1 = int(h * STAR_REGION["y1"])
-    y2 = int(h * STAR_REGION["y2"])
-    return img[y1:y2, x1:x2]
+    aspect = w / h if h > 0 else 1.0
+    # 橫式卡：寬 > 高（aspect > 1.05）；直式卡：高 >= 寬
+    return "horizontal" if aspect > 1.05 else "vertical"
+
+
+def find_horizontal_star_row(img, x2_frac=0.38):
+    """
+    對橫式卡，用 Y 軸投影找到星等所在的水平條帶。
+    
+    策略：在左側 x:[0, x2_frac] 區域內，對每個 Y 做金色像素投影，
+    找到金色密度最高的連續區段（即星星所在行）。
+    回傳最佳裁切後的圖片。
+    """
+    h, w = img.shape[:2]
+    x_max = int(w * x2_frac)
+    left_region = img[:, :x_max]
+    
+    hsv = cv2.cvtColor(left_region, cv2.COLOR_BGR2HSV)
+    # 用較寬鬆的閾值捕捉所有可能的金色
+    loose_mask = cv2.inRange(hsv, np.array([0, 25, 50]), np.array([55, 255, 255]))
+    
+    # Y 軸投影：每行的金色像素數
+    y_proj = np.sum(loose_mask > 0, axis=1)
+    
+    if np.max(y_proj) < 5:
+        # 沒找到足夠金色，fallback 到固定裁切
+        y1 = int(h * 0.42)
+        y2 = int(h * 0.82)
+        return img[y1:y2, :x_max], (y1, y2)
+    
+    # 用 sliding window 找最高密度的行區段
+    # 星星高度約佔圖片高度的 12-20%
+    min_row_h = max(int(h * 0.10), 8)
+    max_row_h = max(int(h * 0.25), 15)
+    
+    best_score = -1
+    best_y1, best_y2 = 0, h
+    
+    for row_h in range(min_row_h, max_row_h + 1, 2):
+        # 用均滑投影避免噪點干擾
+        kernel_size = min(row_h // 2, 5) | 1  # ensure odd
+        if kernel_size >= 3:
+            smoothed = np.convolve(y_proj, np.ones(kernel_size)/kernel_size, mode='same')
+        else:
+            smoothed = y_proj.copy()
+        
+        for y_start in range(0, h - row_h + 1, 2):
+            score = smoothed[y_start:y_start + row_h].sum()
+            if score > best_score:
+                best_score = score
+                best_y1 = y_start
+                best_y2 = y_start + row_h
+    
+    # 加一些 padding
+    pad = max(int(h * 0.03), 3)
+    best_y1 = max(0, best_y1 - pad)
+    best_y2 = min(h, best_y2 + pad)
+    
+    return img[best_y1:best_y2, :x_max], (best_y1, best_y2)
+
+
+def crop_star_region(img, layout=None):
+    """依版型裁切星星區域"""
+    if layout is None:
+        layout = detect_layout(img)
+    
+    if layout == "horizontal":
+        cropped, (y1, y2) = find_horizontal_star_row(img)
+        return cropped, layout
+    
+    # 直式卡：固定左下角區域
+    h, w = img.shape[:2]
+    x1 = int(w * STAR_REGION_VERTICAL["x1"])
+    x2 = int(w * STAR_REGION_VERTICAL["x2"])
+    y1 = int(h * STAR_REGION_VERTICAL["y1"])
+    y2 = int(h * STAR_REGION_VERTICAL["y2"])
+    return img[y1:y2, x1:x2], layout
 
 
 def analyze_skeleton(mask):
@@ -82,30 +162,27 @@ def analyze_skeleton(mask):
             "neighbor_count": neighbor_count, "skel_px": skel_px}
 
 
-def detect_stars(cropped):
+def detect_stars(cropped, layout="vertical"):
     """
-    主策略：多閾值嘗試 → skeleton 分析 → 智能選最佳結果
+    主策略：多閾值嘗試 → skeleton 分析 / 輪廓計數 → 智能選最佳結果
     
-    對每個 HSV 閾值：
-      1. 產生金色 mask
-      2. 裁到上半部（排除底部非星元素）
-      3. Skeletonize → 數 branch/end points
-      4. 估計星數：branch+1 或 round(ends/5)
-    選擇最合理的結果（1~6 範圍，最高信心度）
+    對直式卡：skeleton 端點法為主（每顆五角星約5個尖端）
+    對橫式卡：skeleton 分支點法 + 輔助輪廓計數（小星水平排列）
     """
     if cropped is None or cropped.size == 0:
         return {"count": 0, "confidence": 0, "method": "empty"}
     
     h_full, w = cropped.shape[:2]
     
-    # 只分析上半部（避免底部非星元素）
-    # 自適應：水平卡（矮裁切區）保留更多，直立卡積極裁掉底部
-    if h_full < 120:
-        h_use = int(h_full * 0.90)   # 水平卡：只裁 10%
+    # 自適應上半裁切（排除非星元素）— 橫式卡因已精確裁切可少裁
+    if layout == "horizontal":
+        h_use = int(h_full * 0.95)  # 橫式卡：幾乎全用（精確裁切區內）
+    elif h_full < 120:
+        h_use = int(h_full * 0.90)
     elif h_full < 180:
-        h_use = int(h_full * 0.82)   # 中等：裁 18%
+        h_use = int(h_full * 0.82)
     else:
-        h_use = int(h_full * STAR_CROP_UPPER_FRAC)  # 直立卡：裁 30%
+        h_use = int(h_full * STAR_CROP_UPPER_FRAC)
     cropped_upper = cropped[:h_use, :]
     
     hsv = cv2.cvtColor(cropped_upper, cv2.COLOR_BGR2HSV)
@@ -166,12 +243,58 @@ def detect_stars(cropped):
                 conf_b += 0.10  # 無分支（單一 blob）+ 少量星 → 合理
             local_estimates.append((est_b, conf_b, f"end{ends}/5"))
 
+        # 方法 C：輔廓計數（橫式卡專用 — 數獨立金色 blob）
+        if layout == "horizontal" and px >= 15:
+            contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            # 過濾太小的輪廓（噪點）；不設上限（大星不應被排除）
+            valid_contours = [c for c in contours
+                             if 10 <= cv2.contourArea(c)]
+            n_contours = len(valid_contours)
+            if 1 <= n_contours <= 6:
+                # 輪廓數 ≈ 星數（每顆星是一個 blob）
+                conf_c = 0.70 if 2 <= n_contours <= 6 else 0.45
+                # 輪廓面積均勻性加成（同大小的星面積應接近）
+                if len(valid_contours) >= 2:
+                    areas = sorted([cv2.contourArea(c) for c in valid_contours])
+                    # 去掉最大輪廓（可能是非星元素）後檢查均勻性
+                    areas_no_max = areas[:-1] if len(areas) > 2 else areas
+                    if len(areas_no_max) >= 2:
+                        area_std = np.std(areas_no_max) / (np.mean(areas_no_max) + 1e-6)
+                        if area_std < 0.7:
+                            conf_c += 0.15
+                            n_contours = len(areas_no_max)
+                local_estimates.append((n_contours, conf_c, f"cont{n_contours}"))
+
+        # 方法 D：X軸投影峰值計數（橫式卡 — 星星水平排列，各產生一個 X 峰值）
+        if layout == "horizontal" and px >= 20:
+            x_proj = np.sum(mask > 0, axis=0)
+            if np.max(x_proj) >= 3:
+                try:
+                    from scipy.ndimage import uniform_filter1d
+                    smooth = uniform_filter1d(x_proj.astype(float), size=max(3, w//20))
+                    mean_val = np.mean(smooth[smooth > 0]) if np.any(smooth > 0) else 1
+                    peaks = []
+                    for i in range(1, len(smooth) - 1):
+                        if smooth[i] > smooth[i-1] and smooth[i] > smooth[i+1] and smooth[i] > mean_val * 0.4:
+                            peaks.append(i)
+                    n_peaks = len(peaks)
+                    if 1 <= n_peaks <= 6:
+                        conf_d = 0.65 if 2 <= n_peaks <= 6 else 0.40
+                        if len(peaks) >= 2:
+                            gaps = np.diff(peaks)
+                            gap_cv = np.std(gaps) / (np.mean(gaps) + 1e-6)
+                            if gap_cv < 0.5:
+                                conf_d += 0.15
+                        local_estimates.append((n_peaks, conf_d, f"peak{n_peaks}"))
+                except ImportError:
+                    pass  # scipy 不可用時跳過
+
         for est, conf, reason in local_estimates:
             candidates.append((est, conf, label, reason, px, br, ends))
     
     # 從所有候選中選最佳 — 用訊號品質加權分數（不是單純投票）
     
-    def quality_score(est, conf, thresh_label, px, br, ends):
+    def quality_score(est, conf, thresh_label, px, br, ends, reason=""):
         """計算這個候選的整體品質分數"""
         score = conf * 100  # 基礎分來自信心度
         
@@ -212,7 +335,7 @@ def detect_stars(cropped):
     # 計算每個候選的品質分
     scored = []
     for est, conf, thresh_label, reason, px, br, ends in candidates:
-        qs = quality_score(est, conf, thresh_label, px, br, ends)
+        qs = quality_score(est, conf, thresh_label, px, br, ends, reason)
         scored.append((qs, est, conf, thresh_label, reason, px, br, ends))
     
     # 選最高分
@@ -234,22 +357,25 @@ def detect_stars(cropped):
 
 
 def count_stars(card_id, debug=False):
-    """主入口"""
+    """主入口 — 自動偵測版型並選擇對應策略"""
     img = load_image(card_id)
     if img is None:
         return {"cardId": card_id, "count": -1, "error": "image_not_found"}
     
-    cropped = crop_star_region(img)
-    result = detect_stars(cropped)
+    cropped, layout = crop_star_region(img)
+    result = detect_stars(cropped, layout=layout)
     result["cardId"] = card_id
+    result["layout"] = layout
     
     if debug and DEBUG_DIR:
         DEBUG_DIR.mkdir(exist_ok=True)
         cv2.imwrite(str(DEBUG_DIR / f"{card_id}_crop.png"), cropped)
-        
+
         # 也產出各閾值的 skeleton debug
         h_full_dbg = cropped.shape[0]
-        if h_full_dbg < 120:
+        if layout == "horizontal":
+            h_use_dbg = int(h_full_dbg * 0.95)
+        elif h_full_dbg < 120:
             h_use_dbg = int(h_full_dbg * 0.90)
         elif h_full_dbg < 180:
             h_use_dbg = int(h_full_dbg * 0.82)
