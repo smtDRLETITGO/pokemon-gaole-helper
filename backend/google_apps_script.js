@@ -98,7 +98,7 @@ function handleOcrAnalysis(imageBase64, apiKey, mode) {
   }
 
   var payload = {
-    "model": "qwen/qwen2.5-vl-32b-instruct:free",
+    "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
     "messages": [
       {
         "role": "system",

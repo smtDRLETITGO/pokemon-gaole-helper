@@ -288,7 +288,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
             "X-Title": "MEZASTAR Battle Helper"
           },
           body: JSON.stringify({
-            model: "qwen/qwen2.5-vl-32b-instruct:free",
+            model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
             messages: [
               { role: "system", content: systemPrompt },
               {
