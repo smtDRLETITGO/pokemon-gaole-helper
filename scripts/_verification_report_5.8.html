@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 5.8 — 屬性/招式/攻擊型態 驗證報告（73卡全量比對）</title>
+<style>
+  :root {
+    --ok: #10b981; --err: #ef4444; --warn: #f59e0b;
+    --bg: #0f172a; --card-bg: #1e293b; --text: #e2e8f0; --muted: #94a3b8;
+    --border: #334155; --hdr: #0ea5e9;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, 'Microsoft JhengHei', sans-serif; background:var(--bg); color:var(--text); padding:24px; }
+  h1 { font-size:22px; color:#fff; margin-bottom:4px; }
+  .subtitle { color:var(--muted); font-size:13px; margin-bottom:20px; }
+  .summary { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .stat-card { background:var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:16px 24px; min-width:140px; }
+  .stat-card .num { font-size:32px; font-weight:800; }
+  .stat-card .lbl { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+  .stat-card.ok .num { color:var(--ok); }
+  .stat-card.err .num { color:var(--err); }
+  .stat-card.warn .num { color:var(--warn); }
+  table { width:100%; border-collapse:separate; border-spacing:0; font-size:12.5px; }
+  thead th { position:sticky; top:0; background:#0f172a; z-index:2; padding:10px 6px; border-bottom:2px solid var(--border); white-space:nowrap; font-weight:600; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; }
+  tbody tr { transition:background 0.15s; }
+  tbody tr:hover { background:rgba(255,255,255,0.03); }
+  tbody td { padding:7px 6px; border-bottom:1px solid var(--border); vertical-align:middle; }
+  .cid { font-weight:700; color:var(--hdr); white-space:nowrap; }
+  .name { font-weight:600; }
+  .badge { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600; }
+  .b-ok { background:rgba(16,185,129,0.15); color:var(--ok); }
+  .b-err { background:rgba(239,68,68,0.15); color:var(--err); }
+  .b-warn { background:rgba(245,158,11,0.15); color:var(--warn); }
+  .val { font-family:'Cascadia Code','Consolas',monospace; }
+  .old { text-decoration:line-through; opacity:0.45; }
+  .arrow { color:var(--muted); margin:0 3px; }
+  .diff { background:rgba(239,68,68,0.1); border-radius:3px; padding:1px 3px; }
+  .note { font-size:11px; color:var(--muted); font-style:italic; }
+  section { margin-bottom:32px; }
+  h2 { font-size:16px; color:#fff; margin:16px 0 12px; padding-left:10px; border-left:3px solid var(--hdr); }
+  .legend { display:flex; gap:20px; margin-bottom:16px; font-size:12px; }
+  .legend span { display:flex; align-items:center; gap:6px; }
+  footer { margin-top:40px; padding-top:16px; border-top:1px solid var(--border); font-size:11px; color:var(--muted); }
+  @media(max-width:900px) { body { padding:12px; } table { font-size:11px; } td { padding:5px 4px; } }
+</style>
+</head>
+<body>
+
+<h1>🔍 Phase 5.8 — 屬性 / 招式 / 攻擊型態 全量驗證報告</h1>
+<p class="subtitle">資料來源：官網背面圖 (public/cards/11/back/*.png) 逐一讀取 · cassette/11 全部 73 張卡 · 2026-07-17</p>
+
+<div class="summary">
+  <div class="stat-card ok"><div class="num" id="c-ok">0</div><div class="lbl">完全正確 ✓</div></div>
+  <div class="stat-card err"><div class="num" id="c-err">0</div><div class="lbl">有錯誤 ✗</div></div>
+  <div class="stat-card warn"><div class="num" id="c-warn">0</div><div class="lbl">缺第二招 ⚠</div></div>
+  <div class="stat-card"><div class="num">73</div><div class="lbl">總卡數</div></div>
+</div>
+
+<div class="legend">
+  <span><span class="badge b-ok">✓ 正確</span> DB 與背面圖一致</span>
+  <span><span class="badge b-err">✗ 錯誤</span> DB 值與背面圖不符</span>
+  <span><span class="badge b-warn">⚠ 缺招</span> DB 只存了第一招，實際有兩招</span>
+</div>
+
+<section>
+<h2>A 組：橫版卡（★4~★6 傳說／幻之寶可夢）— 001~016</h2>
+<table>
+<thead><tr><th>#</th><th>CardId</th><th>名稱</th><th>狀態</th><th>DB屬性 → 實際屬性</th><th>DB招式 → 實際招式</th><th>DB類別 → 實際類別</th><th>備註</th></tr></thead>
+<tbody>
+<tr><td>1</td><td class="cid">2-2-001</td><td class="name">蒼響</td><td><span class="badge b-warn">⚠</span></td><td class="val">鋼/妖精 <span class="arrow">→</span> 鋼/妖精 <span class="b-ok">✓</span></td><td class="val"><span class="old">巨獸斬</span> <span class="arrow">→</span> <span class="diff">巨獸斬(鋼/物) + 月亮之力(妖精/特)</span></td><td class="val">物理 <span class="arrow">→</span> 物理+特殊</td><td class="note">缺第2招</td></tr>
+<tr><td>2</td><td class="cid">2-2-002</td><td class="name">藏瑪然特</td><td><span class="badge b-warn">⚠</span></td><td class="val">鋼/格鬥 <span class="arrow">→</span> 鋼/格鬥 <span class="b-ok">✓</span></td><td class="val"><span class="old">巨獸彈</span> <span class="arrow">→</span> <span class="diff">巨獸彈(鋼/物) + 近身戰(格鬥/特)</span></td><td class="val">物理 <span class="arrow">→</span> 物理+特殊</td><td class="note">缺第2招；DB招式名也錯(應為巨獸彈非巨獸斬)</td></tr>
+<tr><td>3</td><td class="cid">2-2-003</td><td class="name">鋁鋼龍</td><td><span class="badge b-warn">⚠</span></td><td class="val">鋼/龍 <span class="arrow">→</span> 鋼/龍 <span class="b-ok">✓</span></td><td class="val"><span class="old">逆鱗</span> <span class="arrow">→</span> <span class="diff">逆鱗(龍/物) + 超極巨岩化衰變(龍?)</span></td><td class="val">物理 <span class="arrow">→</span> 物理+特殊?</td><td class="note">缺第2招</td></tr>
+<tr><td>4</td><td class="cid">2-2-004</td><td class="name">噴火龍</td><td><span class="badge b-err">✗</span></td><td class="val">火/飛行 <span class="arrow">→</span> 火/飛行 <span class="b-ok">✓</span></td><td class="val"><span class="old">超極巨地獄滅焰</span> <span class="arrow">→</span> <span class="diff">噴射火焰(火/特) + 超極巨地獄滅焰(火/特)</span></td><td class="val">特殊 <span class="arrow">→</span> 特殊+特殊</td><td class="note">主招式錯！DB存了第2招当第1招</td></tr>
+<tr><td>5</td><td class="cid">2-2-005</td><td class="name">薩戮德</td><td><span class="badge b-warn">⚠</span></td><td class="val">草/惡 <span class="arrow">→</span> 草/惡 <span class="b-ok">✓</span></td><td class="val"><span class="old">強力鞭打</span> <span class="arrow">→</span> <span class="diff">強力鞭打(草/物) + 極巨草原(草/特)</span></td><td class="val">物理 <span class="arrow">→</span> 物理+特殊</td><td class="note">缺第2招</td></tr>
+<tr><td>6</td><td class="cid">2-2-006</td><td class="name">路卡利歐</td><td><span class="badge b-warn">⚠</span></td><td class="val">格鬥/鋼 <span class="arrow">→</span> 格鬥/鋼 <span class="b-ok">✓</span></td><td class="val"><span class="old">真氣彈</span> <span class="arrow">→</span> <span class="diff">真氣彈(格鬥/特) + 極巨拳門(格鬥/特)</span></td><td class="val">特殊 <span class="arrow">→</span> 特殊+特殊</td><td class="note">缺第2招</td></tr>
+<tr><td>7</td><td class="cid">2-2-007</td><td class="name">烈空坐</td><td><span class="badge b-ok">✓</span></td><td class="val">龍/飛行 <span class="arrow">→</span> 龍/飛行</td><td class="val">畫龍點睛(飛行) <span class="arrow">→</span> 畫龍點睛(飛行)</td><td class="val">物理 <span class="arrow">→</span> 物理</td><td></td></tr>
+<tr><td>8</td><td class="cid">2-2-008</td><td class="name">拉帝亞斯</td><td><span class="badge b-ok">✓</span></td><td class="val">龍/超能力 <span class="arrow">→</span> 龍/超能力</td><td class="val">薄霧球(超能力) <span class="arrow">→</span> 薄霧球(超能力)</td><td class="val">特殊 <span class="arrow">→</span> 特殊</td><td></td></tr>
+<tr><td>9</td><td class="cid">2-2-009</td><td class="name">拉帝歐斯</td><td><span class="badge b-ok">✓</span></td><td class="val">龍/超能力 <span class="arrow">→</span> 龍/超能力</td><td class="val">潔淨光芒(超能力) <span class="arrow">→</span> 潔淨光芒(超能力)</td><td class="val">特殊 <span class="arrow">→</span> 特殊</td><td></td></tr>
+<tr><td>10</td><td class="cid">2-2-010</td><td class="name">四顎針龍</td><td><span class="badge b-ok">✓</span></td><td class="val">毒/龍 <span class="arrow">→</span> 毒/龍</td><td class="val">毒液衝擊(毒) <span class="arrow">→</span> 毒液衝擊(毒)</td><td class="val">特殊 <span class="arrow">→</span> 特殊</td><td></td></tr>
+<tr><td>11</td><td class="cid">2-2-011</td><td class="name">巨金怪</td><td><span class="badge b-ok">✓</span></td><td class="val">鋼/超能力 <span class="arrow">→</span> 鋼/超能力</td><td class="val">彗星拳(鋼) <span class="arrow">→</span> 彗星拳(鋼)</td><td class="val">物理 <span class="arrow">→</span> 物理</td><td></td></tr>
+<tr><td>12</td><td class="cid">2-2-012</td><td class="name">雙斧戰龍</td><td><span class="badge b-err">✗</span></td><td class="val">龍/- <span class="arrow">→</span> 龍/- <span class="b-ok">✓</span></td><td class="val"><span class="old">究極無敵大衝撞</span> <span class="arrow">→</span> <span class="diff">逆鱗(龍/物) + 究極巨龍震天地(龍/物)</span></td><td class="val">物理 <span class="arrow">→</span> 物理+物理</td><td class="note">招式名完全錯誤</td></tr>
+<tr><td>13</td><td class="cid">2-2-013</td><td class="name">化石翼龍</td><td><span class="badge b-err">✗</span></td><td class="val">岩石/飛行 <span class="arrow">→</span> 岩石/飛行 <span class="b-ok">✓</span></td><td class="val"><span class="old">終極非凡空中爆擊</span> <span class="arrow">→</span> <span class="diff">飛翔(飛行/物) + 極速俯衝毒烈撞(毒/物)</span></td><td class="val">物理 <span class="arrow">→</span> 物理+物理</td><td class="note">招式名完全錯誤</td></tr>
+<tr><td>14</td><td class="cid">2-2-014</td><td class="name">雷鳥龍</td><td><span class="badge b-err">✗</span></td><td class="val">電/龍 <span class="arrow">→</span> 電/龍 <span class="b-ok">✓</span></td><td class="val"><span class="old">電擊猛攻</span> <span class="arrow">→</span> <span class="diff">打雷(電/特) + 極巨閃電(電/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊+特殊</span></td><td class="note">招式名錯 + 攻擊型態錯</td></tr>
+<tr><td>15</td><td class="cid">2-2-015</td><td class="name">鰓魚龍</td><td><span class="badge b-err">✗</span></td><td class="val">水/龍 <span class="arrow">→</span> 水/龍 <span class="b-ok">✓</span></td><td class="val"><span class="old">鰓咬</span> <span class="arrow">→</span> <span class="diff">逆鱗(龍/物) + 極巨龍騎(龍/特)</span></td><td class="val">物理 <span class="arrow">→</span> 物理+特殊</td><td class="note">招式名+招式屬性都錯</td></tr>
+<tr><td>16</td><td class="cid">2-2-016</td><td class="name">胡地</td><td><span class="badge b-warn">⚠</span></td><td class="val">超能力/- <span class="arrow">→</span> 超能力/- <span class="b-ok">✓</span></td><td class="val"><span class="old">精神強念</span> <span class="arrow">→</span> <span class="diff">精神強念(超能/特) + 極巨超能(超能/特)</span></td><td class="val">特殊 <span class="arrow">→</span> 特殊+特殊</td><td class="note">缺第2招</td></tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>B 組：直版卡（一般／進化系）— 017~057</h2>
+<table>
+<thead><tr><th>#</th><th>CardId</th><th>名稱</th><th>狀態</th><th>DB屬性 → 實際屬性</th><th>DB招式 → 實際招式</th><th>DB類別 → 實際類別</th></tr></thead>
+<tbody>
+<tr><td>17</td><td class="cid">2-2-017</td><td class="name">雷鳥海獸</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">電/冰</span> <span class="arrow">→</span> <span class="diff">電/冰</span> <span class="b-ok">✓</span></td><td class="val"><span class="old">電擊光束(電)</span> <span class="arrow">→</span> <span class="diff">暴風雪(冰/特)</span></td><td class="val">特殊 <span class="arrow">→</span> 特殊</td></tr>
+<tr><td>18</td><td class="cid">2-2-018</td><td class="name">具甲武者</td><td><span class="badge b-ok">✓</span></td><td class="val">蟲/水 → 蟲/水</td><td class="val">迎頭一擊(蟲) → 迎頭一擊(蟲)</td><td class="val">物理 → 物理</td></tr>
+<!-- 019-021 confirmed OK in prior session -->
+<tr><td>19</td><td class="cid">2-2-019</td><td class="name">君主蛇</td><td><span class="badge b-ok">✓</span></td><td class="val">草/- → 草/-</td><td class="val">飛葉風暴(草) → 飛葉風暴(草)</td><td class="val">特殊 → 特殊</td></tr>
+<tr><td>20</td><td class="cid">2-2-020</td><td class="name">炎武王</td><td><span class="badge b-ok">✓</span></td><td class="val">火/格鬥 → 火/格鬥</td><td class="val">閃焰衝鋒(火) → 閃焰衝鋒(火)</td><td class="val">物理 → 物理</td></tr>
+<tr><td>21</td><td class="cid">2-2-021</td><td class="name">大劍鬼</td><td><span class="badge b-ok">✓</span></td><td class="val">水/- → 水/-</td><td class="val">水炮(水) → 水炮(水)</td><td class="val">特殊 → 特殊</td></tr>
+<tr><td>22</td><td class="cid">2-2-022</td><td class="name">鐵轍跡</td><td><span class="badge b-err">✗</span></td><td class="val">地面/鋼 → 地面/鋼 <span class="b-ok">✓</span></td><td class="val"><span class="old">鐵頭(鋼)</span> <span class="arrow">→</span> <span class="diff">地震(地面/物)</span></td><td class="val">物理 → 物理</td></tr>
+<tr><td>23</td><td class="cid">2-2-023</td><td class="name">毒貝比</td><td><span class="badge b-err">✗</span></td><td class="val">毒/- → 毒/- <span class="b-ok">✓</span></td><td class="val"><span class="old">毒針(毒)</span> <span class="arrow">→</span> <span class="diff">龍之波動(龍/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>24</td><td class="cid">2-2-024</td><td class="name">布莉姆溫</td><td><span class="badge b-ok">✓</span></td><td class="val">超能/妖精 → 超能/妖精</td><td class="val">魔法閃耀(妖精) → 魔法閃耀(妖精)</td><td class="val">特殊 → 特殊</td></tr>
+<tr><td>25</td><td class="cid">2-2-025</td><td class="name">阿勃梭魯</td><td><span class="badge b-err">✗</span></td><td class="val">惡/- → 惡/- <span class="b-ok">✓</span></td><td class="val"><span class="old">暗襲要害(惡)</span> <span class="arrow">→</span> <span class="diff">地獄突刺(惡/物)</span></td><td class="val">物理 → 物理</td></tr>
+<tr><td>26</td><td class="cid">2-2-026</td><td class="name">蒂蕾喵</td><td><span class="badge b-err">✗</span></td><td class="val">草/- → 草/- <span class="b-ok">✓</span></td><td class="val"><span class="old">樹葉(草)</span> <span class="arrow">→</span> <span class="diff">魔法葉(草/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>27</td><td class="cid">2-2-027</td><td class="name">魔幻假面喵</td><td><span class="badge b-err">✗</span></td><td class="val">草/惡 → 草/惡 <span class="b-ok">✓</span></td><td class="val"><span class="old">千變萬花(草)</span> <span class="arrow">→</span> <span class="diff">暗襲要害(惡/物)</span></td><td class="val">物理 → 物理</td></tr>
+<tr><td>28</td><td class="cid">2-2-028</td><td class="name">炙燙鱷</td><td><span class="badge b-err">✗</span></td><td class="val">火/- → 火/- <span class="b-ok">✓</span></td><td class="val"><span class="old">火花(火)</span> <span class="arrow">→</span> <span class="diff">燒盡(火/特)</span></td><td class="val">特殊 → 特殊</td></tr>
+<tr><td>29</td><td class="cid">2-2-029</td><td class="name">骨紋巨聲鱷</td><td><span class="badge b-err">✗</span></td><td class="val">火/幽靈 → 火/幽靈 <span class="b-ok">✓</span></td><td class="val"><span class="old">閃焰歌聲(火)</span> <span class="arrow">→</span> <span class="diff">禍不單行(幽靈/特)</span></td><td class="val">特殊 → 特殊</td></tr>
+<tr><td>30</td><td class="cid">2-2-030</td><td class="name">湧躍鴨</td><td><span class="badge b-err">✗</span></td><td class="val">水/- → 水/- <span class="b-ok">✓</span></td><td class="val"><span class="old">水槍(水)</span> <span class="arrow">→</span> <span class="diff">水之波動(水/特)</span></td><td class="val">特殊 → 特殊</td></tr>
+<tr><td>31</td><td class="cid">2-2-031</td><td class="name">狂歡浪舞鴨</td><td><span class="badge b-ok">✓</span></td><td class="val">水/格鬥 → 水/格鬥</td><td class="val">下盤踢(格鬥) → 下盤踢(格鬥)</td><td class="val">物理 → 物理</td></tr>
+<tr><td>32</td><td class="cid">2-2-032</td><td class="name">藤藤蛇</td><td><span class="badge b-ok">✓</span></td><td class="val">草/- → 草/-</td><td class="val">藤鞭(草) → 藤鞭(草)</td><td class="val">物理 → 物理</td></tr>
+<tr><td>33</td><td class="cid">2-2-033</td><td class="name">青藤蛇</td><td><span class="badge b-err">✗</span></td><td class="val">草/- → 草/- <span class="b-ok">✓</span></td><td class="val"><span class="old">葉刃(草)</span> <span class="arrow">→</span> <span class="diff">超級吸取(草/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>34</td><td class="cid">2-2-034</td><td class="name">君主蛇(重複)</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">火/-</span> <span class="arrow">→</span> <span class="diff">草/-</span></td><td class="val"><span class="old">撞擊(一般)</span> <span class="arrow">→</span> <span class="diff">青草攪拌器(草/特)</span></td><td class="val">物理 → 特殊</td></tr>
+<tr><td>35</td><td class="cid">2-2-035</td><td class="name">暖暖豬</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">火/格鬥</span> <span class="arrow">→</span> <span class="diff">火/-</span></td><td class="val"><span class="old">猛推(格鬥)</span> <span class="arrow">→</span> <span class="diff">火花(火/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>36</td><td class="cid">2-2-036</td><td class="name">炒炒豬</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">水/-</span> <span class="arrow">→</span> <span class="diff">火/-</span></td><td class="val"><span class="old">撞擊(一般)</span> <span class="arrow">→</span> <span class="diff">蓄能烙襲(火/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>37</td><td class="cid">2-2-037</td><td class="name">炎武王(重複)</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">水/-</span> <span class="arrow">→</span> <span class="diff">火/格鬥</span></td><td class="val"><span class="old">貝殼刃(水)</span> <span class="arrow">→</span> <span class="diff">火焰拳(火/物)</span></td><td class="val">物理 → 物理</td></tr>
+<tr><td>38</td><td class="cid">2-2-038</td><td class="name">水水獺</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">電/-</span> <span class="arrow">→</span> <span class="diff">水/-</span></td><td class="val"><span class="old">電光(電)</span> <span class="arrow">→</span> <span class="diff">水流噴射(水/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>39</td><td class="cid">2-2-039</td><td class="name">雙刃丸</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">電/-</span> <span class="arrow">→</span> <span class="diff">水/-</span></td><td class="val"><span class="old">十萬伏特(電)</span> <span class="arrow">→</span> <span class="diff">水之波動(水/特)</span></td><td class="val">特殊 → 特殊</td></tr>
+<tr><td>40</td><td class="cid">2-2-040</td><td class="name">大劍鬼(重複)</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">電/-</span> <span class="arrow">→</span> <span class="diff">水/-</span></td><td class="val"><span class="old">雷電拳(電)</span> <span class="arrow">→</span> <span class="diff">具毅刃(水/物)</span></td><td class="val">物理 → 物理</td></tr>
+<tr><td>41</td><td class="cid">2-2-041</td><td class="name">蚊香蝌蚪</td><td><span class="badge b-err">✗</span></td><td class="val">水/- → water/- <span class="b-ok">✓</span></td><td class="val"><span class="old">撞擊(一般)</span> <span class="arrow">→</span> <span class="diff">水槌(水/物)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">物理</span></td></tr>
+<tr><td>42</td><td class="cid">2-2-042</td><td class="name">蚊香君</td><td><span class="badge b-err">✗</span></td><td class="val">水/- → water/- <span class="b-ok">✓</span></td><td class="val"><span class="old">水流尾(水)</span> <span class="arrow">→</span> <span class="diff">泡沫光線(水/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>43</td><td class="cid">2-2-043</td><td class="name">蚊香泳士</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">電/-</span> <span class="arrow">→</span> <span class="diff">水/-</span></td><td class="val"><span class="old">電擊(電)</span> <span class="arrow">→</span> <span class="diff">地獄翻滾(水?/物)</span></td><td class="val"><span class="old">特殊</span> <span class="arrow">→</span> <span class="diff">物理</span></td></tr>
+<tr><td>44</td><td class="cid">2-2-044</td><td class="name">醜醜魚</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">電/-</span> <span class="arrow">→</span> <span class="diff">水/-</span></td><td class="val"><span class="old">火花(電)</span> <span class="arrow">→</span> <span class="diff">撞擊(一般/物)</span></td><td class="val"><span class="old">特殊</span> <span class="arrow">→</span> <span class="diff">物理</span></td></tr>
+<tr><td>45</td><td class="cid">2-2-045</td><td class="name">美納斯</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">電/-</span> <span class="arrow">→</span> <span class="diff">水/-</span></td><td class="val"><span class="old">野性伏特(電)</span> <span class="arrow">→</span> <span class="diff">攀瀑(水/物)</span></td><td class="val">物理 → 物理</td></tr>
+<tr><td>46</td><td class="cid">2-2-046</td><td class="name">麻麻小魚</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">冰/水</span> <span class="arrow">→</span> <span class="diff">電/-</span></td><td class="val"><span class="old">細雪(冰)</span> <span class="arrow">→</span> <span class="diff">充電光束(電/特)</span></td><td class="val">特殊 → 特殊</td></tr>
+<tr><td>47</td><td class="cid">2-2-047</td><td class="name">麻麻鰻</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">冰/水</span> <span class="arrow">→</span> <span class="diff">電/-</span></td><td class="val"><span class="old">極光束(冰)</span> <span class="arrow">→</span> <span class="diff">電擊波(電/特)</span></td><td class="val">特殊 → 特殊</td></tr>
+<tr><td>48</td><td class="cid">2-2-048</td><td class="name">麻麻鰻魚王</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">冰/水</span> <span class="arrow">→</span> <span class="diff">電/-</span></td><td class="val"><span class="old">暴風雪(冰)</span> <span class="arrow">→</span> <span class="diff">伏特替換(電/物)</span></td><td class="val"><span class="old">特殊</span> <span class="arrow">→</span> <span class="diff">物理</span></td></tr>
+<tr><td>49</td><td class="cid">2-2-049</td><td class="name">拉魯拉絲</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">一般/-</span> <span class="arrow">→</span> <span class="diff">超能/-</span></td><td class="val"><span class="old">撞擊(一般)</span> <span class="arrow">→</span> <span class="diff">念力(超能/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>50</td><td class="cid">2-2-050</td><td class="name">奇魯莉安</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">鋼/-</span> <span class="arrow">→</span> <span class="diff">超能/-</span></td><td class="val"><span class="old">金屬爪(鋼)</span> <span class="arrow">→</span> <span class="diff">幻象光線(超能/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>51</td><td class="cid">2-2-051</td><td class="name">沙奈朵</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">鋼/-</span> <span class="arrow">→</span> <span class="diff">超能/-</span></td><td class="val"><span class="old">鐵頭(鋼)</span> <span class="arrow">→</span> <span class="diff">精神強念(超能/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>52</td><td class="cid">2-2-052</td><td class="name">艾路雷朵</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">妖精/-</span> <span class="arrow">→</span> <span class="diff">超能/-</span></td><td class="val"><span class="old">撞擊(一般)</span> <span class="arrow">→</span> <span class="diff">劈瓦(格鬥/物)</span></td><td class="val">物理 → 物理</td></tr>
+<tr><td>53</td><td class="cid">2-2-053</td><td class="name">百足蜈蚣</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">妖精/-</span> <span class="arrow">→</span> <span class="diff">毒/-</span></td><td class="val"><span class="old">裝飾(妖精)</span> <span class="arrow">→</span> <span class="diff">毒針(毒/物)</span></td><td class="val"><span class="old">特殊</span> <span class="arrow">→</span> <span class="diff">物理</span></td></tr>
+<tr><td>54</td><td class="cid">2-2-054</td><td class="name">車輪毬</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">草/毒</span> <span class="arrow">→</span> <span class="diff">蟲/毒</span></td><td class="val"><span class="old">吸收(草)</span> <span class="arrow">→</span> <span class="diff">蠹咬(蟲/物)</span></td><td class="val"><span class="old">特殊</span> <span class="arrow">→</span> <span class="diff">物理</span></td></tr>
+<tr><td>55</td><td class="cid">2-2-055</td><td class="name">蜈蚣王</td><td><span class="badge b-err">✗</span></td><td class="val">草/毒 → 蟲/毒</td><td class="val"><span class="old">魔法葉(草)</span> <span class="arrow">→</span> <span class="diff">十字毒刃(毒/物)</span></td><td class="val"><span class="old">特殊</span> <span class="arrow">→</span> <span class="diff">物理</span></td></tr>
+<tr><td>56</td><td class="cid">2-2-056</td><td class="name">貪心栗鼠</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">超能/妖精</span> <span class="arrow">→</span> <span class="diff">一般/-</span></td><td class="val"><span class="old">念力(超能)</span> <span class="arrow">→</span> <span class="diff">撞擊(一般/物)</span></td><td class="val"><span class="old">特殊</span> <span class="arrow">→</span> <span class="diff">物理</span></td></tr>
+<tr><td>57</td><td class="cid">2-2-057</td><td class="name">藏飽栗鼠</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">超能/妖精</span> <span class="arrow">→</span> <span class="diff">一般/-</span></td><td class="val"><span class="old">幻象光線(超能)</span> <span class="arrow">→</span> <span class="diff">渴望(一般/物)</span></td><td class="val"><span class="old">特殊</span> <span class="arrow">→</span> <span class="diff">物理</span></td></td></tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>C 組：直版卡（後段）— 058~065 ← 🚨 重災區（屬性完全錯亂）</h2>
+<table>
+<thead><tr><th>#</th><th>CardId</th><th>名稱</th><th>狀態</th><th>DB屬性 → 實際屬性</th><th>DB招式 → 實際招式</th><th>DB類別 → 實際類別</th></tr></thead>
+<tbody>
+<tr><td>58</td><td class="cid">2-2-058</td><td class="name">海豹球</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">超能/妖精</span> <span class="arrow">→</span> <span class="diff">冰/-</span></td><td class="val"><span class="old">精神強念(超能)</span> <span class="arrow">→</span> <span class="diff">細雪(冰/特)</span></td><td class="val">特殊 → 特殊</td></tr>
+<tr><td>59</td><td class="cid">2-2-059</td><td class="name">海魔獅</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">超能/格鬥</span> <span class="arrow">→</span> <span class="diff">冰/-</span></td><td class="val"><span class="old">近身戰(格鬥)</span> <span class="arrow">→</span> <span class="diff">冰凍之風(冰/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>60</td><td class="cid">2-2-060</td><td class="name">帝牙海獅</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">蟲/毒</span> <span class="arrow">→</span> <span class="diff">冰/-</span></td><td class="val"><span class="old">毒針(毒)</span> <span class="arrow">→</span> <span class="diff">極光束(冰/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>61</td><td class="cid">2-2-061</td><td class="name">含羞苞</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">蟲/毒</span> <span class="arrow">→</span> <span class="diff">草/-</span></td><td class="val"><span class="old">十字毒刃(毒)</span> <span class="arrow">→</span> <span class="diff">吸取(草/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>62</td><td class="cid">2-2-062</td><td class="name">毒薔薇</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">蟲/毒</span> <span class="arrow">→</span> <span class="diff">草/毒</span></td><td class="val"><span class="old">撞擊(一般)</span> <span class="arrow">→</span> <span class="diff">超級吸取(草/特)</span></td><td class="val">物理 → 特殊</td></tr>
+<tr><td>63</td><td class="cid">2-2-063</td><td class="name">羅絲雷朵</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">水/-</span> <span class="arrow">→</span> <span class="diff">草/-</span></td><td class="val"><span class="old">水槍(水)</span> <span class="arrow">→</span> <span class="diff">魔法葉(草/特)</span></td><td class="val">特殊 → 特殊</td></tr>
+<tr><td>64</td><td class="cid">2-2-064</td><td class="name">小仙奶</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">水/-</span> <span class="arrow">→</span> <span class="diff">妖精/-</span></td><td class="val"><span class="old">泡沫光線(水)</span> <span class="arrow">→</span> <span class="diff">吸取之吻(妖精/特)</span></td><td class="val">特殊 → 特殊</td></tr>
+<tr><td>65</td><td class="cid">2-2-065</td><td class="name">霜奶仙</td><td><span class="badge b-err">✗</span></td><td class="val"><span class="old">水/格鬥</span> <span class="arrow">→</span> <span class="diff">妖精/-</span></td><td class="val"><span class="old">地獄翻滾(格鬥)</span> <span class="arrow">→</span> <span class="diff">吸取之吻(妖精/特)</span></td><td class="val"><span class="old">物理</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+</tbody>
+</table>
+<div style="margin-top:12px;padding:12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:8px;font-size:13px;">
+<strong style="color:#ef4444;">⚠️ 058–065 分析：</strong>這 8 張卡的 DB 數據呈現<strong>系統性錯位</strong>——屬性和招式全部對不上號。看起來像是建庫時發生了陣列索引偏移或複製貼上錯誤。<br>
+例如：海豹球(DB=超能/妖精/精神強念) 實際是 冰/細雪；霜奶仙(DB=水/格鬥/地獄翻滾) 實際是 妖精/吸取之吻。
+</div>
+</section>
+
+<section>
+<h2>D 組：needsStats=true（待填）— 066~070 + R 卡</h2>
+<table>
+<thead><tr><th>#</th><th>CardId</th><th>名稱</th><th>狀態</th><th>DB屬性 → 實際屬性</th><th>DB招式 → 實際招式</th><th>DB類別 → 實際類別</th></tr></thead>
+<tbody>
+<tr><td>66</td><td class="cid">2-2-066</td><td class="name">電擊怪</td><td><span class="badge b-warn">⚠</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">電/-</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">電擊(電/特)</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>67</td><td class="cid">2-2-067</td><td class="name">電擊獸</td><td><span class="badge b-warn">⚠</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">電/-</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">電擊波(電/特)</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">特殊</span></td></tr>
+<tr><td>68</td><td class="cid">2-2-068</td><td class="name">電擊魔獸</td><td><span class="badge b-warn">⚠</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">電/-</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">雷電拳(電/物)</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">物理</span></td></tr>
+<tr><td>69</td><td class="cid">2-2-069</td><td class="name">伽勒爾喵喵</td><td><span class="badge b-warn">⚠</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">鋼/-</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">金屬爪(鋼/物)</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">物理</span></td></tr>
+<tr><td>70</td><td class="cid">2-2-070</td><td class="name">喵頭目</td><td><span class="badge b-warn">⚠</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">鋼/-</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">鐵頭(鋼/物)</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">物理</span></td></tr>
+<tr><td>R1</td><td class="cid">R-2-1</td><td class="name">皮卡丘(Special)</td><td><span class="badge b-warn">⚠</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">電/-</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">十萬伏特(電/特) + 超極巨萬雷轟頂(電/特)</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">特殊+特殊</span></td></tr>
+<tr><td>R2</td><td class="cid">R-2-2</td><td class="name">噴火龍(Special)</td><td><span class="badge b-warn">⚠</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">火/飛行</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">噴射火焰(火/特) + 超極巨地獄滅焰(火/特)</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">特殊+特殊</span></td></tr>
+<tr><td>R3</td><td class="cid">R-2-3</td><td class="name">耿鬼(Special)</td><td><span class="badge b-warn">⚠</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">幽靈/毒</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">暗影球(幽靈/特) + 超極巨幻影幽魂(幽靈/特)</span></td><td class="val"><span class="old">null</span> <span class="arrow">→</span> <span class="diff">特殊+特殊</span></td></tr>
+</tbody>
+</table>
+</section>
+
+<footer>
+<p><strong>驗證方法：</strong>逐一用多模態模型讀取 public/cards/11/back/*.png（官網原始背面圖），辨識招式名稱、招式屬性圖示、攻擊型態標記。</p>
+<p><strong>判定規則：</strong>紅色徽章 = 背面圖右側有紅色圓點 = 物理攻擊；無紅點 = 特殊攻擊。寶可夢本身屬性採用 canonical Pokédex 數據（因背面圖未明確顯示寶可夢屬性徽章）。</p>
+<p><strong>Schema 問題：</strong>目前 DB 只有 moveName/moveType/moveCategory（單欄位），但 ★4~★6 卡及 Special R 卡有 <strong>2 招式</strong>。需要決定是否擴充 schema（加 move2 欄位或改為 moves 陣列）。</p>
+<p style="color:var(--warn);">⚠️ 本報告僅供審閱，尚未修改任何檔案。請確認後指示是否修正並推送。</p>
+</footer>
+
+<script>
+// Count stats
+const rows = document.querySelectorAll('tbody tr');
+let ok=0, err=0, warn=0;
+rows.forEach(r => {
+  const badge = r.querySelector('.badge');
+  if (!badge) return;
+  if (badge.classList.contains('b-ok')) ok++;
+  else if (badge.classList.contains('b-err')) err++;
+  else if (badge.classList.contains('b-warn')) warn++;
+});
+document.getElementById('c-ok').textContent = ok;
+document.getElementById('c-err').textContent = err;
+document.getElementById('c-warn').textContent = warn;
+</script>
+</body>
+</html>
