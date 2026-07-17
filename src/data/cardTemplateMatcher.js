@@ -1,13 +1,13 @@
 // cardTemplateMatcher.js — 離線感知雜湊（perceptual hash）模板比對。
 // 用途：使用者拍攝自己的卡 → 與 public/cards/<series>/ 的 73 張官網正面圖比對 → 瞬間命中。
 // 不依賴任何外部模型 / 網路，純前端 canvas 計算。
-import { PRESET_POKEMON_DB } from './pokemonDb';
+import { PRESET_POKEMON_DB, getActiveGeneration } from './pokemonDb';
 
-const SERIES_DIR = '11'; // 銀河第二彈 cassette id
 const SIZE = 16;            // 雜湊尺寸 16x16
 const CENTRAL = 0.72;       // 取中央 72% 區域（聚焦寶可夢卡面美術，忽略邊框/背景）
 
 let refHashes = null; // Map<cardId, {name, aHash[], dHash[], imgUrl}>
+let _cachedGen = null; // 目前建立雜湊的代別 cassette，切代時自動重建
 
 function makeGrayCanvas(src, size) {
   const c = document.createElement('canvas');
@@ -56,7 +56,9 @@ function centralCrop(srcCanvas, frac = CENTRAL) {
 }
 
 export async function ensureReferenceHashes() {
-  if (refHashes) return refHashes;
+  const SERIES_DIR = getActiveGeneration().cassette;
+  if (refHashes && _cachedGen === SERIES_DIR) return refHashes;
+  _cachedGen = SERIES_DIR;
   refHashes = new Map();
   const list = PRESET_POKEMON_DB.map(c => ({
     cardId: c.cardId,

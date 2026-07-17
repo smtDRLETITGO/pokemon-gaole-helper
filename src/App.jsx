@@ -5,6 +5,7 @@ import CardAlbum from './components/CardAlbum';
 import CardRegister from './components/CardRegister';
 import ScreenOcr from './components/ScreenOcr';
 import SyncSettings from './components/SyncSettings';
+import { GENERATIONS, setActiveGeneration } from './data/pokemonDb';
 
 // Default starting collection (starts empty as requested)
 const DEFAULT_COLLECTION = [];
@@ -15,6 +16,17 @@ export default function App() {
   const [syncUrl, setSyncUrl] = useState('');
   const [activeTab, setActiveTab] = useState('recommender'); // recommender, album, register, ocr, settings
   const [showRegister, setShowRegister] = useState(false);
+  const [genId, setGenId] = useState(() =>
+    (typeof localStorage !== 'undefined' ? (localStorage.getItem('mezastar_active_gen') || 'galaxy2') : 'galaxy2')
+  );
+
+  // 切換代別：同步 pokemonDb 全域狀態 + 清空跨代對手
+  const handleGenChange = (id) => {
+    setActiveGeneration(id);
+    setGenId(id);
+    setSelectedOpponents([]);
+    setActiveTab('recommender');
+  };
 
   // 1. Initial configuration load (offline-first storage)
   useEffect(() => {
@@ -191,6 +203,24 @@ export default function App() {
           {syncUrl ? '🟢 已連線試算表' : '⚠️ 本地離線模式'}
         </div>
       </header>
+
+      {/* 代別選擇器 */}
+      <div style={{ maxWidth: '500px', margin: '0 auto', padding: '10px 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <label style={{ fontSize: '12px', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>卡匣代別</label>
+        <select
+          value={genId}
+          onChange={(e) => handleGenChange(e.target.value)}
+          style={{
+            flex: 1, fontSize: '14px', padding: '7px 10px', borderRadius: '8px',
+            border: '1px solid var(--border, #ccc)', background: 'var(--bg-card, #fff)',
+            color: 'var(--text, #111)', fontWeight: 600
+          }}
+        >
+          {GENERATIONS.map(g => (
+            <option key={g.id} value={g.id}>{g.label}</option>
+          ))}
+        </select>
+      </div>
 
       {/* Main Content Area */}
       <main style={{ padding: '0 16px 20px 16px', maxWidth: '500px', margin: '0 auto' }}>

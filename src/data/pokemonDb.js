@@ -1,6 +1,30 @@
 import { PRESET_POKEMON_DB } from './pokemonDb.cards.generated.js';
 // 重新匯出，讓 cardTemplateMatcher / ScreenOcr / CardRegister 等仍可直接從本模組取用
 export { PRESET_POKEMON_DB };
+import { GENERATIONS } from './generations.js';
+export { GENERATIONS };
+
+// ============================================================
+// 0. 多代別管理（代別選擇器）
+// ============================================================
+let _activeGenId = (typeof localStorage !== 'undefined')
+  ? (localStorage.getItem('mezastar_active_gen') || GENERATIONS[0].id)
+  : GENERATIONS[0].id;
+
+export function getActiveGeneration() {
+  return GENERATIONS.find(g => g.id === _activeGenId) || GENERATIONS[0];
+}
+
+export function setActiveGeneration(id) {
+  const gen = GENERATIONS.find(g => g.id === id);
+  if (!gen) return;
+  _activeGenId = id;
+  try { localStorage.setItem('mezastar_active_gen', id); } catch (e) {}
+  reloadActiveDb();
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('mezastar:gen-change', { detail: id }));
+  }
+}
 // ============================================================
 // Pokémon MEZASTAR（銀河系列）完整卡匣資料庫
 // 專屬：銀河第二彈 (2-2-xxx TC) - 2026年7月2日上市
@@ -62,9 +86,10 @@ export function reloadActiveDb() {
     console.error("Failed to load DB overrides:", e);
   }
 
-  // 清空並重新組合 merged 資料庫
+  // 清空並重新組合 merged 資料庫（使用當前選定代別的卡牌）
+  const activeCards = getActiveGeneration().cards;
   ACTIVE_PRESET_DB.length = 0;
-  PRESET_POKEMON_DB.forEach(preset => {
+  activeCards.forEach(preset => {
     if (localOverrides[preset.cardId]) {
       ACTIVE_PRESET_DB.push({ ...preset, ...localOverrides[preset.cardId] });
     } else {
@@ -74,7 +99,7 @@ export function reloadActiveDb() {
 
   // 同步也加入自定義新增的卡匣（不在預設裡面的）
   Object.keys(localOverrides).forEach(id => {
-    const exists = PRESET_POKEMON_DB.some(p => p.cardId === id);
+    const exists = activeCards.some(p => p.cardId === id);
     if (!exists) {
       ACTIVE_PRESET_DB.push({ ...localOverrides[id] });
     }
