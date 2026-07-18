@@ -43,14 +43,20 @@ function doPost(e) {
 
 function setupSheetIfNeeded(sheet) {
   if (sheet.getLastColumn() === 0) {
-    // Setup Headers
+    // Setup Headers（含 category 欄：標記 SPECIAL 精選卡匣）
     sheet.appendRow([
-      "cardId", "name", "stars", "type1", "type2", 
-      "moveName", "moveType", "hp", "attack", "defense", 
-      "spAtk", "spDef", "speed", "count", "storageLocation", "lastUpdated"
+      "cardId", "name", "stars", "type1", "type2",
+      "moveName", "moveType", "hp", "attack", "defense",
+      "spAtk", "spDef", "speed", "count", "storageLocation", "lastUpdated", "category"
     ]);
     // Bold headers and add light grey background
-    sheet.getRange(1, 1, 1, 16).setFontWeight("bold").setBackground("#f3f3f3");
+    sheet.getRange(1, 1, 1, 17).setFontWeight("bold").setBackground("#f3f3f3");
+  } else {
+    // 遷移：既有 Sheet 若無 category 欄，補一個 header（不動既有資料列）
+    var headerVals = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    if (headerVals.indexOf("category") === -1) {
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("category");
+    }
   }
 
   // Ensure QR_CACHE sheet exists（FROZEN 後備表，見 doPost 凍結說明；保留建立以免舊部署報錯）
@@ -128,10 +134,11 @@ function syncCollection(sheet, clientCards) {
   
   // Append updated cards
   clientCards.forEach(function(card) {
+    var isSpecial = card.category === 'special';
     sheet.appendRow([
       card.cardId || "",
       card.name || "",
-      card.stars || 1,
+      isSpecial ? "SPECIAL" : (card.stars || 0),
       card.type1 || "",
       card.type2 || "",
       card.moveName || "",
@@ -144,7 +151,8 @@ function syncCollection(sheet, clientCards) {
       card.speed || 0,
       card.count || 1,
       card.storageLocation || "",
-      new Date().toISOString()
+      new Date().toISOString(),
+      isSpecial ? "special" : ""
     ]);
   });
 }

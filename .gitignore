@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local secrets (OpenRouter etc.) — never commit
+.env
+secrets.json
+.openrouter_key

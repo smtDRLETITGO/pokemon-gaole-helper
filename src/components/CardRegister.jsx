@@ -89,7 +89,18 @@ async function ocrCardNumber(canvas) {
   } catch (e) { console.warn('ocrCardNumber failed', e); return null; }
 }
 
-function StarBadge({ stars }) {
+function StarBadge({ stars, category }) {
+  if (category === 'special') {
+    return (
+      <span style={{
+        color: '#fff', fontWeight: 800, fontSize: '0.68rem', letterSpacing: '0.5px',
+        background: 'linear-gradient(135deg,#E91E63,#7E22CE)',
+        padding: '1px 7px', borderRadius: '6px', textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+      }}>
+        SPECIAL
+      </span>
+    );
+  }
   return (
     <span style={{ color: STAR_COLORS[stars] || '#888', fontWeight: 800, fontSize: '0.8rem', letterSpacing: '-1px' }}>
       {'★'.repeat(stars)}
@@ -156,7 +167,7 @@ function MiniCard({ pokemon, onAdd, ownedCount }) {
         {pokemon.name}
       </div>
       {/* 星等 */}
-      <StarBadge stars={pokemon.stars} />
+      <StarBadge stars={pokemon.stars} category={pokemon.category} />
       {/* 屬性 */}
       <div style={{ display:'flex', flexWrap:'wrap', gap:'2px', marginTop:'2px' }}>
         <TypeBadge type={pokemon.type1} />

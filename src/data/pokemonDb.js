@@ -115,7 +115,8 @@ export function updateLocalDbOverride(card) {
     diskCode: card.cardId,
     name: card.name,
     series: card.series || "自定義新增",
-    stars: Number(card.stars) || 3,
+    category: card.category,
+    stars: card.category === 'special' ? 0 : (Number(card.stars) || 3),
     type1: card.type1,
     type2: card.type2 || "",
     moveName: card.moveName,
@@ -191,7 +192,7 @@ export function getRecommendations(collection, opponent) {
     // 智慧傷害計算優化：根據招式類型 (物理/特殊) 動態選取對應的攻擊力參數進行評分
     const activeAttack = card.moveCategory === "特殊" ? (card.spAtk || card.attack) : card.attack;
     const statSum = (Number(card.hp) || 0) + (Number(activeAttack) || 0) + (Number(card.defense) || 0);
-    const starWeight = (Number(card.stars) || 1) * 35;
+    const starWeight = (card.category === 'special' ? 0 : (Number(card.stars) || 1)) * 35;
     
     let score = 0;
     if (offenseMult > 1.0) {

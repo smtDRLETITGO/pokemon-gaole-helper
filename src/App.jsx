@@ -67,17 +67,22 @@ export default function App() {
   const handleFetchCollection = (serverCards) => {
     if (Array.isArray(serverCards) && serverCards.length > 0) {
       // Convert string values to numbers where appropriate
-      const formatted = serverCards.map(c => ({
-        ...c,
-        stars: Number(c.stars) || 1,
-        hp: Number(c.hp) || 0,
-        attack: Number(c.attack) || 0,
-        defense: Number(c.defense) || 0,
-        spAtk: Number(c.spAtk) || 0,
-        spDef: Number(c.spDef) || 0,
-        speed: Number(c.speed) || 0,
-        count: Number(c.count) || 1
-      }));
+      const formatted = serverCards.map(c => {
+        // SPECIAL 精選卡匣：來自 Sheets 的 category 欄 或 stars="SPECIAL" 哨兵字串
+        const isSpecial = c.category === 'special' || c.stars === 'SPECIAL';
+        return {
+          ...c,
+          stars: isSpecial ? 0 : (Number(c.stars) || 1),
+          category: isSpecial ? 'special' : (c.category || undefined),
+          hp: Number(c.hp) || 0,
+          attack: Number(c.attack) || 0,
+          defense: Number(c.defense) || 0,
+          spAtk: Number(c.spAtk) || 0,
+          spDef: Number(c.spDef) || 0,
+          speed: Number(c.speed) || 0,
+          count: Number(c.count) || 1
+        };
+      });
       saveCardsLocal(formatted);
     }
   };

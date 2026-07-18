@@ -156,9 +156,10 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
   const filteredCards = collection.filter(card => {
     const matchesSearch = card.name.includes(searchTerm) || card.moveType.includes(searchTerm);
     if (filterStars === 'all') return matchesSearch;
+    if (filterStars === 'special') return card.category === 'special' && matchesSearch;
     if (filterStars === '5') return card.stars === 5 && matchesSearch;
     if (filterStars === '4') return card.stars === 4 && matchesSearch;
-    if (filterStars === 'low') return card.stars <= 3 && matchesSearch;
+    if (filterStars === 'low') return card.stars <= 3 && card.category !== 'special' && matchesSearch;
     return matchesSearch;
   });
 
@@ -190,8 +191,8 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
           />
 
           <div style={{ display: 'flex', gap: '6px' }}>
-            {['all', '5', '4', 'low'].map((filter) => {
-              const label = filter === 'all' ? '全部' : filter === '5' ? '5★ 傳說' : filter === '4' ? '4★ 主力' : '1-3★ 基礎';
+            {['all', 'special', '5', '4', 'low'].map((filter) => {
+              const label = filter === 'all' ? '全部' : filter === 'special' ? 'SPECIAL' : filter === '5' ? '5★ 傳說' : filter === '4' ? '4★ 主力' : '1-3★ 基礎';
               return (
                 <button
                   key={filter}
@@ -219,14 +220,16 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
         {filteredCards.length > 0 ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {filteredCards.map((card) => {
+              const isSpecial = card.category === 'special';
               const isSuperStar = card.stars === 6;
               const isGold = card.stars === 5;
               const isPurple = card.stars === 4;
               const isBlue = card.stars === 3;
               const isGreen = card.stars === 2;
-              
+
               let diskGradeClass = 'disk-grade-1';
-              if (isSuperStar) diskGradeClass = 'disk-grade-6';
+              if (isSpecial) diskGradeClass = 'disk-grade-special';
+              else if (isSuperStar) diskGradeClass = 'disk-grade-6';
               else if (isGold) diskGradeClass = 'disk-grade-5';
               else if (isPurple) diskGradeClass = 'disk-grade-4';
               else if (isBlue) diskGradeClass = 'disk-grade-3';
@@ -244,9 +247,13 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
                   <div className="disk-qr-section">
                     <div className="disk-qr-mock"></div>
                     <div className="disk-star-container">
-                      {Array.from({ length: card.stars }).map((_, i) => (
-                        <span key={i} className="disk-star">★</span>
-                      ))}
+                      {card.category === 'special' ? (
+                        <span className="disk-star-special">SPECIAL</span>
+                      ) : (
+                        Array.from({ length: card.stars }).map((_, i) => (
+                          <span key={i} className="disk-star">★</span>
+                        ))
+                      )}
                     </div>
                   </div>
 
@@ -308,7 +315,7 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
                   卡匣編號：{selectedCard.cardId}
                 </div>
                 <h4 style={{ fontSize: '24px', fontWeight: '900', color: '#ff9f0a', margin: '4px 0' }}>
-                  {selectedCard.name} ({selectedCard.stars}★)
+                  {selectedCard.name} {selectedCard.category === 'special' ? '(SPECIAL)' : `(${selectedCard.stars}★)`}
                 </h4>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
                   <span className={`type-badge type-${selectedCard.type1}`}>{selectedCard.type1}</span>
