@@ -1,0 +1,440 @@
+[
+  {
+    "id": "2-1-001",
+    "name": "轟擂金剛猩",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/da4f043261cf1f9eec62188a7fa97d0a7c62a87503e510b3fe7ba4b03b53b7ac.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/a5d67fe90883b5906756c57cf6eb1467093c23f9328df53bbebec07160e52cc0.png"
+  },
+  {
+    "id": "2-1-002",
+    "name": "閃焰王牌",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/9c06f5cc7199f82528f346c88255b2d98fd9ebb6e118e0e02dbd6fb845df5143.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/2932014d532d5c9009cb79a5cf8ee32eafff7e98bb657acdbd59cd01907330d0.png"
+  },
+  {
+    "id": "2-1-003",
+    "name": "千面避役",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/40193687e3a3bce1e75a823dfa6787f28457f26af1ba4f8ba4c434727f819637.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/c9917db396f29329287873aac620e0a584dcf87e58096d1b91017f5a470f086f.png"
+  },
+  {
+    "id": "2-1-004",
+    "name": "皮卡丘",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/9a369a6971dcf8c131a20f4a63acbdcbf78d2b98c9b09ac9c82b7bf062872ab1.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/60cbcfe3b4ccd32d17aaa1d5d3ebc7a8c7e523afdcaa4d9de90df7217ac76772.png"
+  },
+  {
+    "id": "2-1-005",
+    "name": "雷公",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/470fa95dbbe64dd155f59149cfc0909faca6ae35e12286106a432a2e8905ff81.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/4f5ee93d5a6650790ba4869dc2812411941b42627138f7de55e19fce62bb6a09.png"
+  },
+  {
+    "id": "2-1-006",
+    "name": "炎帝",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/c8376b12b7f21d5541877e2ebd66208da653ecccf77d65d122bb118960156abf.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/d85a54c1ede07d693963a49905b6c1b3571096747dc173592ff2f91856e8a309.png"
+  },
+  {
+    "id": "2-1-007",
+    "name": "水君",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/c9865b2ee03a366a8899c3f305b96c7dd00c1c8c5aa789095be12647f5653087.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/74e4248a2441f040da0dc57cf2d2e7af6f91120319e32494dfbbc5501e4d5a9d.png"
+  },
+  {
+    "id": "2-1-008",
+    "name": "超夢",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/35af1ac5cef7a4e08d33f1c7006270f1ae3c9a92e8e1b355562e866b32f3cedd.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/04dcc52198410def2276322f83adff2e87f0c663fbfc0b71a3407ff772b60e80.png"
+  },
+  {
+    "id": "2-1-009",
+    "name": "阿爾宙斯",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/8a2207c67be55c875af5ee8c895f4b673122b5ea1c8af24063dceb863e301362.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/65d4012ea091cf15aaaa073c1ce2487120d09049d13dba8ac69902081298685e.png"
+  },
+  {
+    "id": "2-1-010",
+    "name": "洗翠索羅亞克",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/44c3fda8bb0080646d9b4ed0c2289890473377485194753ba74d66262c178586.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/2a1634cbdd1b257148e9c89aee5a7766b468db37e7ca33b1200699067e60117a.png"
+  },
+  {
+    "id": "2-1-011",
+    "name": "凱羅斯",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/4f06a94a15e8e58504b2fd1144d5077c9adba76fdff5233c7b52bb7f9f8d7b23.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/617ca75850f9cedc39ee9b910fe7ed19e3a22b825193106b6e9157ee5adda3e1.png"
+  },
+  {
+    "id": "2-1-012",
+    "name": "赫拉克羅斯",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/a978ca5efcc92e5ef2ebc25c37de5336660951c12b9487ba01de83e390c20146.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/015c0a684f399d298fb761cbbd3f5dbb2a8863792807510fa032c439a84fd223.png"
+  },
+  {
+    "id": "2-1-013",
+    "name": "凱路迪歐",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/98a9aea103bec0bcb0bd12beba91f462581534f3713e8f9b28fba12df1063c08.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/65f8ac1c2a7e6c1c7fb8fdefda9e8b23114de5f64fb92240b95a8bdb61f0ee2a.png"
+  },
+  {
+    "id": "2-1-014",
+    "name": "瑪狃拉",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/e04872939028d7d59f509b73c34a58663aab1432128e85552ceea3d08584e45e.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/4df3e276c3eb59f65eea902df9adf03f76afcfceb4e6ecedfa1adab329adba01.png"
+  },
+  {
+    "id": "2-1-015",
+    "name": "蔥遊兵",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/04cee7aa2a15aa40b225334328ff1f82fb43a6d3d82b9207c70f5ac629d58118.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/a5f579afd2bd2b138fda7e47c139a0f3e6762fb024ab328b32cbe42d3ed9dd4f.png"
+  },
+  {
+    "id": "2-1-016",
+    "name": "尼多王",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/c679cff65198a0d00ced94b66be674b3608dbcc59096c8de1940415f0baa49ff.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/663d1264abdec5d706e22d8e653a4dc61b6b6feb53b12aad39e633cc8388fc9e.png"
+  },
+  {
+    "id": "2-1-017",
+    "name": "沙漠蜻蜓",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/0ab56b8d73e8acdbb1c5dac2b204363bd51d5159ef98819131196057e8c7f089.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/f2e923753b57149adf1ea1fd4f0e4c263aafa7c8547258428f87d4212c8f30fe.png"
+  },
+  {
+    "id": "2-1-018",
+    "name": "鰓魚海獸",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/8f901c1517c07948fce2138977fd627e2ac39da960d3a98f489d829c6478e5f5.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/017869c6c3b10fe87c964a2c6cb40d358805ce60504c321ab38d4dad32ff7d73.png"
+  },
+  {
+    "id": "2-1-023",
+    "name": "雄偉牙",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/789eed95528bedcb9df5cf1c25a8f43710f0be8c52690c7d479ccb15f4c953a2.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/8ac2e1120f2028335b44039366f82b295bc7c779f500cdf14a930cfade4bf267.png"
+  },
+  {
+    "id": "2-1-024",
+    "name": "鍬農炮蟲",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/3fb247cfaf853e215dde1a5ead692846fc20758e322d73438021bdb6bea605d3.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/140f0f1ea242ae4fd104b9085d2be1e6f4008c413e0b6dc18529cde1d8edfbad.png"
+  },
+  {
+    "id": "2-1-025",
+    "name": "暴雪王",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/99129a6501972312d36d5c79777372a0602c8a7abbac7a9a2f8b3ac3c75d7edb.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/354683a5ee4a71d5ac01840134c83037417d15577e23c3707d31dff90955639c.png"
+  },
+  {
+    "id": "2-1-019",
+    "name": "電擊魔獸",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/357b1b0272cf6b449f4436c0ae60b33ce7d0455be7ee81cc0b63257944a012ce.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/62bf165724654fa683c292f5e338cf3b8181d8c87ad232597cee04a5f6a48879.png"
+  },
+  {
+    "id": "2-1-020",
+    "name": "鴨嘴炎獸",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/f65cf26446cb4efcdedca51063a016bb3da949f7c93eb169864bce46d57e0b61.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/7d524a690d3e699dc786bffaeb8044fc8886addb413697a26adb3db145666206.png"
+  },
+  {
+    "id": "2-1-021",
+    "name": "顫弦蠑螈",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/cd8ffc73319c5c36761f7a0255e734e5c1207a0c2fd6d83ec084ab57d0d07875.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/e630babc9bcfc0955af145ba93b6d3a37cfc448ce48bd06d256017e682344837.png"
+  },
+  {
+    "id": "2-1-022",
+    "name": "2-1-022",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/9cd4aafa815dcbf2311c505bbdd0badb2ae11289e734b92ff96dace11c1da29f.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/e60d9831bf74b11a007ded18ddf551d272e4cf33f25097463536a3bc882e2723.png"
+  },
+  {
+    "id": "2-1-026",
+    "name": "新葉喵",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/c6f413eb421ec048a7fa86fcb2ad6a43032388c4fe641334da67725632cf27f9.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/733eca46413c6ab5d76bb8913f8cc5d86005343fcac69bcfcb36b980a2a1fcee.png"
+  },
+  {
+    "id": "2-1-027",
+    "name": "呆火鱷",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/f4c049dbb0f0e555ec41297b8181d5c0f26e1057e785e6162f5e6a5e32fe9134.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/14bf7f04abe22e3e4c814d5c36b0af1a8bfd53e6a2c7e0778cc09a48761dc3eb.png"
+  },
+  {
+    "id": "2-1-028",
+    "name": "潤水鴨",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/b75d159f4ae21ec4afba123b7d23980a1d39175c892a0c39bd284c6bc7ea957c.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/42655ed4e1405d7227e8a743054fc26ce49c1aeeb4599018f3b2c448e5d73ca4.png"
+  },
+  {
+    "id": "2-1-029",
+    "name": "炭小侍",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/7db4baec162cdd1936fc46741483a6593af209309d7b69ed38320fac2a04a149.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/af31171e0dbfb5f12ca31e8014c540cc3a96117dd01c203b15e43dc91e8b0bb3.png"
+  },
+  {
+    "id": "2-1-030",
+    "name": "涼脊龍",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/45e41c0b8bdf3ea410eec18a4c48e725b9377358d95f5956e58dbe562f82b951.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/fd592b4b8956bea3711d428eb0cc43fc9e30da346fb3c0e95de655ba30a4dd98.png"
+  },
+  {
+    "id": "2-1-031",
+    "name": "布撥",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/509fb062356f10faba92f7d558275998102af5b0c877488bc2c41c99097d58c8.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/26286d1aac155090aebf451d8fc7a19a355879af32fdf34a2838ae787bbc738e.png"
+  },
+  {
+    "id": "2-1-032",
+    "name": "敲音猴",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/4574938af5085c38a87e4102fbbdf2fa6452a1cfc7895a46b1d253ceced79503.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/81b744f1f6e12f0c576c355e19736f73592aa3a4a869af4370e8bafa5da422b6.png"
+  },
+  {
+    "id": "2-1-033",
+    "name": "啪咚猴",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/abcbe3133092234dbdf79703c552a32f9c1dcb8c09b0a6eaa5d30d4d0e4b817d.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/4e753bc93e7a74c2bc80096f3c6662e4d0acdeb3dba09553456bcf2cbc3d3b9c.png"
+  },
+  {
+    "id": "2-1-034",
+    "name": "2-1-034",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/551d978b02be53f496a52f128fb1ae17dd4001a7a84f9f6fc2752d61f65ea57c.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/2c05be9da8af2a0b39c8e3ecaf1fb040c1e68976d4e3ebc73669e7e393cb9ba1.png"
+  },
+  {
+    "id": "2-1-035",
+    "name": "炎兔兒",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/ddcde455133817c41a9198db614bf1ef3c645d0798904b8e3c42cf2bc8e22662.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/65bc802fc8f8ee9305f4285ee3536a78c47e6ed7ab241b267bd102d039223fe7.png"
+  },
+  {
+    "id": "2-1-036",
+    "name": "騰蹴小將",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/205f159158330c19bc4fe092e8fdc79ba617216802fa94f443aacd1d1c1b62f6.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/a433a0d88ace2a4ea5b06c77bdf22349172dc430934e599aa7cd26f0d8bb6005.png"
+  },
+  {
+    "id": "2-1-037",
+    "name": "2-1-037",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/5973e463709e63e27ad6e5d3cc67caf19ca59c61b4c2f636a4dded6b4486e3c6.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/0be33bf5061253617c9a49215e2017a229072298830fbde1aef682f84d448ea1.png"
+  },
+  {
+    "id": "2-1-038",
+    "name": "淚眼蜥",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/ce32b5032396275611a9422ac16848d7911c3fe97664d8ba7772240b5854b735.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/16327cb3ef9d095e7ee293ee58e4af7846144b156da84d694ac9f72c01e84e34.png"
+  },
+  {
+    "id": "2-1-039",
+    "name": "變澀蜥",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/e043e26d0f666e64a164656fe671cf7cbdd12e0f61e38dd2fbef05a58dd59e36.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/bc01b63c42a673333fa38c752d42339767ed82bbe7212f2bd9e6ba154078da8d.png"
+  },
+  {
+    "id": "2-1-040",
+    "name": "2-1-040",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/6d79f21e5a1833897803ecd9be7d4bcf28802a7d0e30a046a470fbfcbfa49938.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/c61d9bfe98520fc317c532fceef99e9576185671724838c1a9fab24561488a24.png"
+  },
+  {
+    "id": "2-1-041",
+    "name": "雪笠怪",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/5a4e94d424e4255c62f8e2b96d9ad0fa9b75e927bc1c8ba2e75c9eeece306f12.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/43f39f7e5e96f591c27bb1bad1859c08d1ea275b22fff772ec7123f8b73d0ebe.png"
+  },
+  {
+    "id": "2-1-042",
+    "name": "2-1-042",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/955c5f7b5aee2002f1722d141c8a3f6f2e6cc89e1e492eb29e4bc5874bd84af7.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/e25b511d1999875c5719fd83d6e303264063118124c87ce4d09cbebf871384e3.png"
+  },
+  {
+    "id": "2-1-043",
+    "name": "飄飄球",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/86a36f9666eca15d6cbcc11955c9601c489118037b1b1950d114d0762ec7d551.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/f1aa0c5a0e6a3b00eb9e27787d809d39a07b7d2d215aebf21e53c6b60b52a7e5.png"
+  },
+  {
+    "id": "2-1-044",
+    "name": "隨風球",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/2f594169f01749322d6abbf94125504b5ca798120b14376bb7671800c4e30bf4.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/f48a3e334be545ae0a49310ef6c7e70882aa9f42f1e7d5e3018ef581c0286687.png"
+  },
+  {
+    "id": "2-1-045",
+    "name": "洗翠索羅亞",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/173bb80f767bc29f8cdcf1cfbc635c0ec75326285a64a9da96d485b7a175cbf8.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/dafce7a44fcaed383000583a8ba4df09dedf7f9dea9b99c55b6b821ab06ca477.png"
+  },
+  {
+    "id": "2-1-046",
+    "name": "2-1-046",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/28db72bb94c6719fa792d46ce92b6592ef3c8ab9fe43d00f3a5546b330dbc739.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/4283ae9202940a6ffe3629fd98a6e0dd73d74d9c88a502ea69aa4105900e0651.png"
+  },
+  {
+    "id": "2-1-047",
+    "name": "觸手百合",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/55ba854558f70a4cc92b4883d0c2fec8dd7abdffa1758aeb04bd2b3555a03930.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/b6544bcd7904dd0b86aa746071f6740ab5556e91939278d4e5f4513311e3bccb.png"
+  },
+  {
+    "id": "2-1-048",
+    "name": "搖籃百合",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/f5006b26b526cfa4d44a858ec55ab3ea4205599bcf66e110d6b1c649bc748460.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/9cc417e375e72fb4f5ec19e4bf639a61e3ba807c614d5cd1903e619bfcfb43ff.png"
+  },
+  {
+    "id": "2-1-049",
+    "name": "伽勒爾大蔥鴨",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/ef6e55ac5e5e1a0bc3f5cb5ba2696868e8966016d1339c143440a55dbdaa276b.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/f415221e4fbf2abeb66bc6f4f73fcfbe082c03869968c63f311db9a5a0c9653c.png"
+  },
+  {
+    "id": "2-1-050",
+    "name": "2-1-050",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/0c50c7a9177b2a383bc905e18a146af0e3400c21419e8695323c419838fff9fc.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/45c5ea37b072dfb6db093ab63e5f3b4d15cef2d5094c099700ec9eb308e74544.png"
+  },
+  {
+    "id": "2-1-051",
+    "name": "螺釘地鼠",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/3551dd6d5b8128f208dd4841b170f20c1953524ae168366e8672c1d531e670b8.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/4936e6add490ebd9729e2e623c6e2b5dc86c243431bea902039f5a7cf22dd78d.png"
+  },
+  {
+    "id": "2-1-052",
+    "name": "龍頭地鼠",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/8f522c456cd301a40f8f3d4d824aa1cfa1c08593908850d549ab3684eb587cce.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/a674bd0562fd6ef67a100246df7ca539b7fa806c4d80e7a93488b670e8c45636.png"
+  },
+  {
+    "id": "2-1-053",
+    "name": "鴨嘴寶寶",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/06fa4fc267a99a3c3b8f989d0b5ec7521722ecb9a91a6e9c01162167154f2272.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/b97bb39f5f70066e9af1f785c5eaeddf57baa7ca4d2f30dd2ddf8e00def1ce27.png"
+  },
+  {
+    "id": "2-1-054",
+    "name": "鴨嘴火獸",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/9343d48bf1999e1fe33b4317e204acfd1805bf35d87f29e7405fde6d63f6953f.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/f7a8cc42e5ada66916eab7c9df70912e8856ef57237805304a1e5b61226c62b6.png"
+  },
+  {
+    "id": "2-1-055",
+    "name": "2-1-055",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/417dc3393760028efa71b91e7e3f2562fe64b349a50c27ac6bb89be6f012f09b.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/d3b03aca7e9fe436dbc453e143bf20aee5fe0dd65fbaff3aeba1c0a6eea50a69.png"
+  },
+  {
+    "id": "2-1-056",
+    "name": "卡蒂狗",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/f4107fc0287fb367e2532881bfab5736f3ddf9b5d6cd81d343b5fa6ddd54381e.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/acd092a8029920fef5f6fb014809b51d58a6067ee8191640644b2945041fc8ed.png"
+  },
+  {
+    "id": "2-1-057",
+    "name": "風速狗",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/f58e8a0f7bab44b8360fccd9d467d2615c1625f0248c42be18d7a3c4070f785f.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/f0465f259d8c9da65bf4404c1c76873ee0e2c96c018dbff66b537438ef4c5253.png"
+  },
+  {
+    "id": "2-1-058",
+    "name": "毒電嬰",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/62226b89029d60a8c25151eab42a2689cee4a8e4a6a477c116f19094f1d3a75f.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/138e4ecf4755d76bb9b5a2d342d917fe8699a480161aface0ddd92a111c38bab.png"
+  },
+  {
+    "id": "2-1-059",
+    "name": "2-1-059",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/131a8ba7a4102ed4fa9c69868ec19d25fe68aa78f71a46ed186dd91e96e4e864.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/a82b645dcf85caf9a0b6732938fd7d39b9473670606497daf815bbd379490a31.png"
+  },
+  {
+    "id": "2-1-060",
+    "name": "2-1-060",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/d1a99245a8cb36d56fc5ab277796ac4000cd0c760b413746539a82b74a863af8.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/c6d2794b62a2870cf16fad82b1035b0fc42f670dde6c1407e8da17953e191dfa.png"
+  },
+  {
+    "id": "2-1-061",
+    "name": "幼棉棉",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/47ee0fa6dc2b496083a6156e38477137205cb6489321c5f6d545d6b1abeebb78.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/2b5489b8e6ea1b3686f77d8855064d36086b99f560ea3ce4bd379af61a49cd91.png"
+  },
+  {
+    "id": "2-1-062",
+    "name": "白蓬蓬",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/90fb51787e2cfbaa9e05e66646e8b354f14bc51712acc84f9ad10829d5611d73.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/c074b0bc07bddbd7e7e1b44d19ee1f509bce2a3592e8ffbe16a8c1ee031f97ea.png"
+  },
+  {
+    "id": "2-1-063",
+    "name": "狃拉",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/2d93c3ed896511e066d76bcb0b2791259014ab08ada5f279bcd2473b50872add.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/623c9ef3d01a1a3032dcd490a2bd884f73933fb6327bcabe2f6ccb4b9953b435.png"
+  },
+  {
+    "id": "2-1-064",
+    "name": "2-1-064",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/d56ef5e0d4aa1832c9f691837f3252d1f9416f1f6f95a5d3a940f852901b40a6.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/26c43b15bb62d7909a010dc060999e318a172c5ee2e68fa9a8e450e035dc53ed.png"
+  },
+  {
+    "id": "2-1-065",
+    "name": "尼多蘭",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/9e8b4d083efa5282e053a1520443888ed8098345228678045e69b630550a8645.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/2d33cdd17adc08ec2022ae364190e834a76c57fda58f374857250d6afff118c9.png"
+  },
+  {
+    "id": "2-1-066",
+    "name": "尼多娜",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/647ed78cb81663efe10c2871016df3af4b30111e4f7670b72732e0d51b057692.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/6166b95bd1e152695b381514103b03e626a8005d88d05267d79a885bf5e7fc46.png"
+  },
+  {
+    "id": "2-1-067",
+    "name": "尼多后",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/ab19b923137ae89fce9f02d5212e4a80760618d7648cdc6f858dcea1d65c8314.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/73223cce94e5c69af90f365aa79815d896752af4367a69f023178615be07398f.png"
+  },
+  {
+    "id": "2-1-068",
+    "name": "尼多朗",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/651c6de43edb5bc2d55329c834c1e5bd55985b81827b0a6210e7e461fb26b721.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/10bc88b475b7f1df8cd60eaf83ec8487da8b4e9b6cb871318283243b27dc2831.png"
+  },
+  {
+    "id": "2-1-069",
+    "name": "尼多力諾",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/2de4cbbc0227f61e8a8338ed77f9ef6369a63e578f543785fa1077304304f617.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/37306034e1b77207b3133cf1a518713fff33031487c92c54c1d8a53d5b8f1a73.png"
+  },
+  {
+    "id": "2-1-070",
+    "name": "2-1-070",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/9d336ab9c9ee3101d9e956462001519aaadba01ba28176b8d1b5d6bc02f8d019.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/9610d72c346991ef1585ee2268d7fd4303908e1bb3eefef5d29d3cd041d278d4.png"
+  },
+  {
+    "id": "R-2-1",
+    "name": "R-2-1",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/4ab510ba00481844c9a21d04283e99ca2ffc1d7bb343f2e467c696e182240d95.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/20fb50a65a036ab8ccdc7aecbda62bd748eb079e7aa98588ce5b87e61451eb1d.png"
+  },
+  {
+    "id": "R-2-2",
+    "name": "噴火龍",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/c3e3200f372c9a592ba9ea56c1f186d9ba7a29bb657c3c49e15ac4bba4245171.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/24fa77407ade43a8d95873c92b99e3d677678fba7cc8a9e86c253a81c7ad0b52.png"
+  },
+  {
+    "id": "R-2-3",
+    "name": "耿鬼",
+    "front": "https://www.pokemonmezastar.com.tw/uploads/images/8697817013a5673c7f257650bce10b0bfe428f43c79f5bceac2a5bb0cf2088d8.png",
+    "back": "https://www.pokemonmezastar.com.tw/uploads/images/eeaa27d94ce4e80f3ff31873b84d7721da3ffcd19264d095c6becf0f0c5b3596.png"
+  }
+]

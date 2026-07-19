@@ -1,0 +1,659 @@
+[
+ {
+  "hp": 160,
+  "atk": 105,
+  "def_": 95,
+  "spAtk": 155,
+  "spDef": 145,
+  "spd": 95,
+  "cardId": "1-2-001"
+ },
+ {
+  "hp": 160,
+  "atk": 30,
+  "def_": 155,
+  "spAtk": 145,
+  "spDef": 105,
+  "spd": 95,
+  "cardId": "1-2-002"
+ },
+ {
+  "hp": 172,
+  "atk": 172,
+  "def_": 150,
+  "spAtk": 96,
+  "spDef": 96,
+  "spd": 113,
+  "cardId": "1-2-003"
+ },
+ {
+  "hp": 118,
+  "atk": 63,
+  "def_": 75,
+  "spAtk": 56,
+  "spDef": 69,
+  "spd": 69,
+  "cardId": "1-2-004"
+ },
+ {
+  "hp": 253,
+  "atk": 37,
+  "def_": 132,
+  "spAtk": 80,
+  "spDef": 80,
+  "spd": 132,
+  "cardId": "1-2-005"
+ },
+ {
+  "hp": 165,
+  "atk": 17,
+  "def_": 132,
+  "spAtk": 150,
+  "spDef": 121,
+  "spd": 126,
+  "cardId": "1-2-006"
+ },
+ {
+  "hp": 132,
+  "atk": 72,
+  "def_": 72,
+  "spAtk": 135,
+  "spDef": 124,
+  "spd": 88,
+  "cardId": "1-2-007"
+ },
+ {
+  "hp": 200,
+  "atk": 132,
+  "def_": 132,
+  "spAtk": 111,
+  "spDef": 111,
+  "spd": 164,
+  "cardId": "1-2-008"
+ },
+ {
+  "hp": 120,
+  "atk": 38,
+  "def_": 38,
+  "spAtk": 164,
+  "spDef": 164,
+  "spd": 132,
+  "cardId": "1-2-009"
+ },
+ {
+  "hp": 195,
+  "atk": 100,
+  "def_": 142,
+  "spAtk": 142,
+  "spDef": 100,
+  "spd": 105,
+  "cardId": "1-2-010"
+ },
+ {
+  "hp": 111,
+  "atk": 33,
+  "def_": 62,
+  "spAtk": 57,
+  "spDef": 101,
+  "spd": 88,
+  "cardId": "1-2-011"
+ },
+ {
+  "hp": 116,
+  "atk": 15,
+  "def_": 64,
+  "spAtk": 60,
+  "spDef": 124,
+  "spd": 92,
+  "cardId": "1-2-012"
+ },
+ {
+  "hp": 118,
+  "atk": 33,
+  "def_": 63,
+  "spAtk": 127,
+  "spDef": 108,
+  "spd": 61,
+  "cardId": "1-2-013"
+ },
+ {
+  "hp": 63,
+  "atk": 67,
+  "def_": 67,
+  "spAtk": 110,
+  "spDef": 129,
+  "spd": 62,
+  "cardId": "1-2-014"
+ },
+ {
+  "hp": 125,
+  "atk": 110,
+  "def_": 72,
+  "spAtk": 115,
+  "spDef": 72,
+  "spd": 91,
+  "cardId": "1-2-015"
+ },
+ {
+  "hp": 143,
+  "atk": 105,
+  "def_": 101,
+  "spAtk": 74,
+  "spDef": 83,
+  "spd": 56,
+  "cardId": "1-2-016"
+ },
+ {
+  "hp": 125,
+  "atk": 100,
+  "def_": 70,
+  "spAtk": 100,
+  "spDef": 70,
+  "spd": 104,
+  "cardId": "1-2-017"
+ },
+ {
+  "hp": 133,
+  "atk": 84,
+  "def_": 85,
+  "spAtk": 107,
+  "spDef": 97,
+  "spd": 60,
+  "cardId": "1-2-018"
+ },
+ {
+  "hp": 34,
+  "atk": 74,
+  "def_": 83,
+  "spAtk": 89,
+  "spDef": 109,
+  "spd": 118,
+  "cardId": "1-2-019"
+ },
+ {
+  "hp": 20,
+  "atk": 116,
+  "def_": 82,
+  "spAtk": 133,
+  "spDef": 133,
+  "spd": 110,
+  "cardId": "1-2-020"
+ },
+ {
+  "hp": 134,
+  "atk": 134,
+  "def_": 129,
+  "spAtk": 96,
+  "spDef": 91,
+  "spd": 72,
+  "cardId": "1-2-021"
+ },
+ {
+  "hp": 125,
+  "atk": 110,
+  "def_": 81,
+  "spAtk": 96,
+  "spDef": 62,
+  "spd": 72,
+  "cardId": "1-2-022"
+ },
+ {
+  "hp": 163,
+  "atk": 37,
+  "def_": 86,
+  "spAtk": 81,
+  "spDef": 101,
+  "spd": 81,
+  "cardId": "1-2-023"
+ },
+ {
+  "hp": 120,
+  "atk": 67,
+  "def_": 62,
+  "spAtk": 77,
+  "spDef": 110,
+  "spd": 121,
+  "cardId": "1-2-024"
+ },
+ {
+  "hp": 138,
+  "atk": 170,
+  "def_": 87,
+  "spAtk": 48,
+  "spDef": 67,
+  "spd": 73,
+  "cardId": "1-2-025"
+ },
+ {
+  "hp": 202,
+  "atk": 170,
+  "def_": 86,
+  "spAtk": 86,
+  "spDef": 56,
+  "spd": 56,
+  "cardId": "1-2-026"
+ },
+ {
+  "hp": 123,
+  "atk": 10,
+  "def_": 60,
+  "spAtk": 79,
+  "spDef": 86,
+  "spd": 60,
+  "cardId": "1-2-027"
+ },
+ {
+  "hp": 202,
+  "atk": 110,
+  "def_": 93,
+  "spAtk": 93,
+  "spDef": 64,
+  "spd": 64,
+  "cardId": "1-2-028"
+ },
+ {
+  "hp": 60,
+  "atk": 33,
+  "def_": 33,
+  "spAtk": 27,
+  "spDef": 33,
+  "spd": 27,
+  "cardId": "1-2-029"
+ },
+ {
+  "hp": 74,
+  "atk": 10,
+  "def_": 30,
+  "spAtk": 47,
+  "spDef": 24,
+  "spd": 30,
+  "cardId": "1-2-030"
+ },
+ {
+  "hp": 63,
+  "atk": 33,
+  "def_": 63,
+  "spAtk": 33,
+  "spDef": 16,
+  "spd": 27,
+  "cardId": "1-2-031"
+ },
+ {
+  "hp": 62,
+  "atk": 63,
+  "def_": 39,
+  "spAtk": 37,
+  "spDef": 27,
+  "spd": 32,
+  "cardId": "1-2-032"
+ },
+ {
+  "hp": 87,
+  "atk": 60,
+  "def_": 57,
+  "spAtk": 39,
+  "spDef": 45,
+  "spd": 26,
+  "cardId": "1-2-033"
+ },
+ {
+  "hp": 117,
+  "atk": 63,
+  "def_": 85,
+  "spAtk": 82,
+  "spDef": 60,
+  "spd": 67,
+  "cardId": "1-2-034"
+ },
+ {
+  "hp": 57,
+  "atk": 34,
+  "def_": 27,
+  "spAtk": 34,
+  "spDef": 27,
+  "spd": 35,
+  "cardId": "1-2-035"
+ },
+ {
+  "hp": 80,
+  "atk": 15,
+  "def_": 53,
+  "spAtk": 37,
+  "spDef": 53,
+  "spd": 37,
+  "cardId": "1-2-036"
+ },
+ {
+  "hp": 103,
+  "atk": 37,
+  "def_": 81,
+  "spAtk": 57,
+  "spDef": 81,
+  "spd": 57,
+  "cardId": "1-2-037"
+ },
+ {
+  "hp": 61,
+  "atk": 30,
+  "def_": 31,
+  "spAtk": 44,
+  "spDef": 35,
+  "spd": 33,
+  "cardId": "1-2-038"
+ },
+ {
+  "hp": 80,
+  "atk": 47,
+  "def_": 45,
+  "spAtk": 55,
+  "spDef": 52,
+  "spd": 36,
+  "cardId": "1-2-039"
+ },
+ {
+  "hp": 109,
+  "atk": 68,
+  "def_": 70,
+  "spAtk": 87,
+  "spDef": 79,
+  "spd": 49,
+  "cardId": "1-2-040"
+ },
+ {
+  "hp": 120,
+  "atk": 113,
+  "def_": 48,
+  "spAtk": 48,
+  "spDef": 51,
+  "spd": 51,
+  "cardId": "1-2-041"
+ },
+ {
+  "hp": 92,
+  "atk": 99,
+  "def_": 48,
+  "spAtk": 73,
+  "spDef": 84,
+  "spd": 51,
+  "cardId": "1-2-042"
+ },
+ {
+  "hp": 117,
+  "atk": 34,
+  "def_": 53,
+  "spAtk": 86,
+  "spDef": 49,
+  "spd": 101,
+  "cardId": "1-2-043"
+ },
+ {
+  "hp": 97,
+  "atk": 50,
+  "def_": 88,
+  "spAtk": 103,
+  "spDef": 77,
+  "spd": 54,
+  "cardId": "1-2-044"
+ },
+ {
+  "hp": 62,
+  "atk": 26,
+  "def_": 29,
+  "spAtk": 24,
+  "spDef": 29,
+  "spd": 16,
+  "cardId": "1-2-045"
+ },
+ {
+  "hp": 95,
+  "atk": 69,
+  "def_": 48,
+  "spAtk": 69,
+  "spDef": 48,
+  "spd": 93,
+  "cardId": "1-2-046"
+ },
+ {
+  "hp": 53,
+  "atk": 26,
+  "def_": 24,
+  "spAtk": 21,
+  "spDef": 21,
+  "spd": 31,
+  "cardId": "1-2-047"
+ },
+ {
+  "hp": 77,
+  "atk": 65,
+  "def_": 41,
+  "spAtk": 38,
+  "spDef": 33,
+  "spd": 35,
+  "cardId": "1-2-048"
+ },
+ {
+  "hp": 105,
+  "atk": 88,
+  "def_": 62,
+  "spAtk": 59,
+  "spDef": 55,
+  "spd": 55,
+  "cardId": "1-2-049"
+ },
+ {
+  "hp": 58,
+  "atk": 34,
+  "def_": 50,
+  "spAtk": 41,
+  "spDef": 21,
+  "spd": 24,
+  "cardId": "1-2-050"
+ },
+ {
+  "hp": 37,
+  "atk": 92,
+  "def_": 77,
+  "spAtk": 20,
+  "spDef": 51,
+  "spd": 51,
+  "cardId": "1-2-051"
+ },
+ {
+  "hp": 63,
+  "atk": 48,
+  "def_": 17,
+  "spAtk": 17,
+  "spDef": 48,
+  "spd": 16,
+  "cardId": "1-2-052"
+ },
+ {
+  "hp": 82,
+  "atk": 37,
+  "def_": 60,
+  "spAtk": 76,
+  "spDef": 53,
+  "spd": 76,
+  "cardId": "1-2-053"
+ },
+ {
+  "hp": 205,
+  "atk": 58,
+  "def_": 57,
+  "spAtk": 57,
+  "spDef": 55,
+  "spd": 55,
+  "cardId": "1-2-054"
+ },
+ {
+  "hp": 76,
+  "atk": 51,
+  "def_": 38,
+  "spAtk": 38,
+  "spDef": 38,
+  "spd": 51,
+  "cardId": "1-2-055"
+ },
+ {
+  "hp": 111,
+  "atk": 67,
+  "def_": 83,
+  "spAtk": 67,
+  "spDef": 67,
+  "spd": 67,
+  "cardId": "1-2-056"
+ },
+ {
+  "hp": 65,
+  "atk": 38,
+  "def_": 19,
+  "spAtk": 19,
+  "spDef": 34,
+  "spd": 19,
+  "cardId": "1-2-057"
+ },
+ {
+  "hp": 80,
+  "atk": 37,
+  "def_": 69,
+  "spAtk": 65,
+  "spDef": 49,
+  "spd": 46,
+  "cardId": "1-2-058"
+ },
+ {
+  "hp": 79,
+  "atk": 35,
+  "def_": 24,
+  "spAtk": 74,
+  "spDef": 62,
+  "spd": 62,
+  "cardId": "1-2-059"
+ },
+ {
+  "hp": 41,
+  "atk": 37,
+  "def_": 13,
+  "spAtk": 57,
+  "spDef": 32,
+  "spd": 50,
+  "cardId": "1-2-060"
+ },
+ {
+  "hp": 65,
+  "atk": 26,
+  "def_": 22,
+  "spAtk": 79,
+  "spDef": 48,
+  "spd": 70,
+  "cardId": "1-2-061"
+ },
+ {
+  "hp": 87,
+  "atk": 37,
+  "def_": 41,
+  "spAtk": 106,
+  "spDef": 75,
+  "spd": 93,
+  "cardId": "1-2-062"
+ },
+ {
+  "hp": 96,
+  "atk": 30,
+  "def_": 36,
+  "spAtk": 25,
+  "spDef": 42,
+  "spd": 32,
+  "cardId": "1-2-063"
+ },
+ {
+  "hp": 168,
+  "atk": 64,
+  "def_": 37,
+  "spAtk": 71,
+  "spDef": 44,
+  "spd": 64,
+  "cardId": "1-2-064"
+ },
+ {
+  "hp": 76,
+  "atk": 39,
+  "def_": 45,
+  "spAtk": 33,
+  "spDef": 39,
+  "spd": 34,
+  "cardId": "1-2-065"
+ },
+ {
+  "hp": 83,
+  "atk": 38,
+  "def_": 67,
+  "spAtk": 45,
+  "spDef": 30,
+  "spd": 51,
+  "cardId": "1-2-066"
+ },
+ {
+  "hp": 49,
+  "atk": 67,
+  "def_": 17,
+  "spAtk": 17,
+  "spDef": 29,
+  "spd": 22,
+  "cardId": "1-2-067"
+ },
+ {
+  "hp": 68,
+  "atk": 37,
+  "def_": 27,
+  "spAtk": 27,
+  "spDef": 47,
+  "spd": 41,
+  "cardId": "1-2-068"
+ },
+ {
+  "hp": 206,
+  "atk": 103,
+  "def_": 170,
+  "spAtk": 55,
+  "spDef": 55,
+  "spd": 55,
+  "cardId": "1-2-069"
+ },
+ {
+  "hp": 66,
+  "atk": 67,
+  "def_": 34,
+  "spAtk": 110,
+  "spDef": 22,
+  "spd": 34,
+  "cardId": "1-2-070"
+ },
+ {
+  "hp": 112,
+  "atk": 71,
+  "def_": 53,
+  "spAtk": 65,
+  "spDef": 65,
+  "spd": 113,
+  "cardId": "R-1-1"
+ },
+ {
+  "hp": 110,
+  "atk": 97,
+  "def_": 63,
+  "spAtk": 101,
+  "spDef": 63,
+  "spd": 80,
+  "cardId": "R-1-2"
+ },
+ {
+  "hp": 30,
+  "atk": 95,
+  "def_": 58,
+  "spAtk": 58,
+  "spDef": 95,
+  "spd": 29,
+  "cardId": "R-1-3"
+ }
+]

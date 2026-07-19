@@ -1,29 +1,71 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# Debug / temp
+_star_debug/
+_tmp_*
+_tmp_*.py
+_tmp_*.json
+_tmp_*.html
+_tmp_*.pdf
+_tmp_*.png
+_tmp_*.mjs
+nul
+verify_*.html
+OC*.html
+worklog.md
 
-node_modules
-dist
-dist-ssr
-*.local
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Node
+node_modules/
 
-# Local secrets (OpenRouter etc.) — never commit
-.env
-secrets.json
-.openrouter_key
+# Build output
+dist/
+
+# Probe / scratch
+_probe_*
+_probe*.html
+_probe*.py
+_probe*.mjs
+scratch/
+ocr-test/
+
+# VLM intermediate
+scripts/_vlm_results/
+scripts/_vlm_batch_progress.json
+scripts/_vlm_inspect.py
+scripts/_vlm_read.json
+scripts/_vlm_stardust4.json
+scripts/_bak/
+scripts/_poster_bands/
+scripts/_poster_stardust4.png
+scripts/_posters/
+scripts/_pdf_*.png
+scripts/_ref_type_chart.jpg
+
+# agy / VLM test scripts
+scripts/test_vlm_card.py
+scripts/verify_walbertus.py
+scripts/locate_*.py
+scripts/proto_*.py
+scripts/debug_*.py
+scripts/grid_ocr.py
+scripts/final_ocr_try.py
+scripts/build_type_templates.py
+scripts/batch_stardust_core.py
+scripts/_fix_*.py
+scripts/_check_*.py
+
+# Temp HTML probes
+scripts/_live_*.html
+scripts/_probe_*.html
+*.html
+!src/**/*.html
+!verify_gens.mjs
+
+# Mezastags (large 3rd party data)
+scripts/mezatags.json
+
+# Large ML models
+scripts/__pycache__/

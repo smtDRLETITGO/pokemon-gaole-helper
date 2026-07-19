@@ -328,6 +328,12 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
                     {selectedCard.moveCategory || '物理'}
                   </span>）
                 </p>
+                {selectedCard.ability && (
+                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                    特性：<b style={{ color: '#ffd60a' }}>{selectedCard.ability}</b>
+                    {selectedCard._abilityNote && <span style={{ fontSize: '10px', color: '#ff9f0a', marginLeft: '4px' }}>⚠ 請對卡片確認</span>}
+                  </p>
+                )}
               </div>
 
               {/* MEZASTAR 6-Stat Grid */}

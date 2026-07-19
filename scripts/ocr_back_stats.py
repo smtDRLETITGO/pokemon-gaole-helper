@@ -22,8 +22,8 @@ import numpy as np
 # ── 路徑 ──
 SCRIPT_DIR = Path(__file__).parent
 PROJECT_DIR = SCRIPT_DIR.parent
-BACK_DIR = PROJECT_DIR / "public" / "cards" / "11" / "back"
-OUTPUT_FILE = SCRIPT_DIR / "_ocr_stats.json"
+BACK_DIR = PROJECT_DIR / "public" / "cards" / "10" / "back"
+OUTPUT_FILE = SCRIPT_DIR / "_ocr_galaxy1_stats.json"
 
 # ── 已知真值（用於測試）──
 GROUND_TRUTH = {

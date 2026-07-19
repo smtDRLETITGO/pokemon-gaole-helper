@@ -7,6 +7,7 @@
 //   stars       : 背面圖 ★ 數「人工逐一目視」確認 (2026-07-17, 73/73)
 //   hp~speed    : 背面圖 easyocr OCR (73/73)
 //   type*/move* : 背面圖 VLM 直接讀取 + 玩家參考表交叉驗證
+//   ability     : PokeAPI 按物種查特性 zh-hant (確定性來源，非 OCR/VLM)
 // ════════════════════════════════════════════════════════════════
 // Schema: moveName/moveType/moveCategory = 第一招式；move2* = 第二招式(★4~6/特殊卡才有, null=無)
 
@@ -44,7 +45,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 206,
       "hasSuperStar": true,
       "hasGigantamax": false
-    }
+    },
+    "ability": "不撓之劍",
+    "abilityEn": "intrepid-sword"
   },
   {
     "cardId": "2-2-002",
@@ -79,7 +82,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 206,
       "hasSuperStar": true,
       "hasGigantamax": true
-    }
+    },
+    "ability": "不屈之盾",
+    "abilityEn": "dauntless-shield"
   },
   {
     "cardId": "2-2-003",
@@ -114,7 +119,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 158,
       "hasSuperStar": true,
       "hasGigantamax": true
-    }
+    },
+    "ability": "輕金屬",
+    "abilityEn": "light-metal"
   },
   {
     "cardId": "2-2-004",
@@ -149,7 +156,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 150,
       "hasSuperStar": true,
       "hasGigantamax": true
-    }
+    },
+    "ability": "猛火",
+    "abilityEn": "blaze"
   },
   {
     "cardId": "2-2-005",
@@ -184,7 +193,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 166,
       "hasSuperStar": true,
       "hasGigantamax": true
-    }
+    },
+    "ability": "葉子防守",
+    "abilityEn": "leaf-guard"
   },
   {
     "cardId": "2-2-006",
@@ -219,7 +230,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 146,
       "hasSuperStar": true,
       "hasGigantamax": true
-    }
+    },
+    "ability": "不屈之心",
+    "abilityEn": "steadfast"
   },
   {
     "cardId": "2-2-007",
@@ -254,7 +267,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 184,
       "hasSuperStar": true,
       "hasGigantamax": false
-    }
+    },
+    "ability": "氣閘",
+    "abilityEn": "air-lock"
   },
   {
     "cardId": "2-2-008",
@@ -289,7 +304,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 164,
       "hasSuperStar": true,
       "hasGigantamax": false
-    }
+    },
+    "ability": "飄浮",
+    "abilityEn": "levitate"
   },
   {
     "cardId": "2-2-009",
@@ -324,7 +341,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 164,
       "hasSuperStar": true,
       "hasGigantamax": false
-    }
+    },
+    "ability": "飄浮",
+    "abilityEn": "levitate"
   },
   {
     "cardId": "2-2-010",
@@ -359,7 +378,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 150,
       "hasSuperStar": true,
       "hasGigantamax": false
-    }
+    },
+    "ability": "異獸提升",
+    "abilityEn": "beast-boost"
   },
   {
     "cardId": "2-2-011",
@@ -394,7 +415,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 144,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "恆淨之軀",
+    "abilityEn": "clear-body"
   },
   {
     "cardId": "2-2-012",
@@ -429,7 +452,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 132,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "鬥爭心",
+    "abilityEn": "rivalry"
   },
   {
     "cardId": "2-2-013",
@@ -464,7 +489,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 128,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "堅硬腦袋",
+    "abilityEn": "rock-head"
   },
   {
     "cardId": "2-2-014",
@@ -499,7 +526,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 138,
       "hasSuperStar": false,
       "hasGigantamax": true
-    }
+    },
+    "ability": "蓄電",
+    "abilityEn": "volt-absorb"
   },
   {
     "cardId": "2-2-015",
@@ -534,7 +563,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 138,
       "hasSuperStar": false,
       "hasGigantamax": true
-    }
+    },
+    "ability": "儲水",
+    "abilityEn": "water-absorb"
   },
   {
     "cardId": "2-2-016",
@@ -569,7 +600,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 128,
       "hasSuperStar": false,
       "hasGigantamax": true
-    }
+    },
+    "ability": "同步",
+    "abilityEn": "synchronize"
   },
   {
     "cardId": "2-2-017",
@@ -604,7 +637,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 136,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "蓄電",
+    "abilityEn": "volt-absorb"
   },
   {
     "cardId": "2-2-018",
@@ -639,7 +674,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 132,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "不屈之心",
+    "abilityEn": "steadfast"
   },
   {
     "cardId": "2-2-019",
@@ -674,7 +711,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 144,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "茂盛",
+    "abilityEn": "overgrow"
   },
   {
     "cardId": "2-2-020",
@@ -709,7 +748,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 144,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "猛火",
+    "abilityEn": "blaze"
   },
   {
     "cardId": "2-2-021",
@@ -744,7 +785,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 144,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "激流",
+    "abilityEn": "torrent"
   },
   {
     "cardId": "2-2-022",
@@ -779,7 +822,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 148,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "夸克充能",
+    "abilityEn": "quark-drive"
   },
   {
     "cardId": "2-2-023",
@@ -814,7 +859,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 110,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "異獸提升",
+    "abilityEn": "beast-boost"
   },
   {
     "cardId": "2-2-024",
@@ -849,7 +896,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 128,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "治癒之心",
+    "abilityEn": "healer"
   },
   {
     "cardId": "2-2-025",
@@ -884,7 +933,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 130,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "壓迫感",
+    "abilityEn": "pressure"
   },
   {
     "cardId": "2-2-026",
@@ -919,7 +970,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 84,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "茂盛",
+    "abilityEn": "overgrow"
   },
   {
     "cardId": "2-2-027",
@@ -954,7 +1007,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 118,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "茂盛",
+    "abilityEn": "overgrow"
   },
   {
     "cardId": "2-2-028",
@@ -989,7 +1044,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 84,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "猛火",
+    "abilityEn": "blaze"
   },
   {
     "cardId": "2-2-029",
@@ -1024,7 +1081,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 118,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "龐克搖滾",
+    "abilityEn": "punk-rock"
   },
   {
     "cardId": "2-2-030",
@@ -1059,7 +1118,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 84,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "激流",
+    "abilityEn": "torrent"
   },
   {
     "cardId": "2-2-031",
@@ -1094,7 +1155,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 118,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "激流",
+    "abilityEn": "torrent"
   },
   {
     "cardId": "2-2-032",
@@ -1129,7 +1192,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 46,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "茂盛",
+    "abilityEn": "overgrow"
   },
   {
     "cardId": "2-2-033",
@@ -1164,7 +1229,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 84,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "茂盛",
+    "abilityEn": "overgrow"
   },
   {
     "cardId": "2-2-034",
@@ -1199,7 +1266,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 118,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "茂盛",
+    "abilityEn": "overgrow"
   },
   {
     "cardId": "2-2-035",
@@ -1234,7 +1303,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 46,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "猛火",
+    "abilityEn": "blaze"
   },
   {
     "cardId": "2-2-036",
@@ -1269,7 +1340,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 86,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "猛火",
+    "abilityEn": "blaze"
   },
   {
     "cardId": "2-2-037",
@@ -1304,7 +1377,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 118,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "猛火",
+    "abilityEn": "blaze"
   },
   {
     "cardId": "2-2-038",
@@ -1339,7 +1414,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 46,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "激流",
+    "abilityEn": "torrent"
   },
   {
     "cardId": "2-2-039",
@@ -1374,7 +1451,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 84,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "激流",
+    "abilityEn": "torrent"
   },
   {
     "cardId": "2-2-040",
@@ -1409,7 +1488,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 118,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "激流",
+    "abilityEn": "torrent"
   },
   {
     "cardId": "2-2-041",
@@ -1444,7 +1525,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 42,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "儲水",
+    "abilityEn": "water-absorb"
   },
   {
     "cardId": "2-2-042",
@@ -1479,7 +1562,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 74,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "儲水",
+    "abilityEn": "water-absorb"
   },
   {
     "cardId": "2-2-043",
@@ -1514,7 +1599,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 108,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "儲水",
+    "abilityEn": "water-absorb"
   },
   {
     "cardId": "2-2-044",
@@ -1549,7 +1636,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 32,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "悠游自如",
+    "abilityEn": "swift-swim"
   },
   {
     "cardId": "2-2-045",
@@ -1584,7 +1673,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 112,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "神奇鱗片",
+    "abilityEn": "marvel-scale"
   },
   {
     "cardId": "2-2-046",
@@ -1619,7 +1710,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 42,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "飄浮",
+    "abilityEn": "levitate"
   },
   {
     "cardId": "2-2-047",
@@ -1654,7 +1747,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 82,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "飄浮",
+    "abilityEn": "levitate"
   },
   {
     "cardId": "2-2-048",
@@ -1689,7 +1784,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 112,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "飄浮",
+    "abilityEn": "levitate"
   },
   {
     "cardId": "2-2-049",
@@ -1724,7 +1821,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 34,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "同步",
+    "abilityEn": "synchronize"
   },
   {
     "cardId": "2-2-050",
@@ -1759,7 +1858,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 60,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "同步",
+    "abilityEn": "synchronize"
   },
   {
     "cardId": "2-2-051",
@@ -1794,7 +1895,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 114,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "同步",
+    "abilityEn": "synchronize"
   },
   {
     "cardId": "2-2-052",
@@ -1829,7 +1932,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 114,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "不屈之心",
+    "abilityEn": "steadfast"
   },
   {
     "cardId": "2-2-053",
@@ -1864,7 +1969,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 40,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "毒刺",
+    "abilityEn": "poison-point"
   },
   {
     "cardId": "2-2-054",
@@ -1899,7 +2006,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 76,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "毒刺",
+    "abilityEn": "poison-point"
   },
   {
     "cardId": "2-2-055",
@@ -1934,7 +2043,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 110,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "毒刺",
+    "abilityEn": "poison-point"
   },
   {
     "cardId": "2-2-056",
@@ -1969,7 +2080,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 40,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "頰囊",
+    "abilityEn": "cheek-pouch"
   },
   {
     "cardId": "2-2-057",
@@ -2004,7 +2117,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 98,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "頰囊",
+    "abilityEn": "cheek-pouch"
   },
   {
     "cardId": "2-2-058",
@@ -2039,7 +2154,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 44,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "厚脂肪",
+    "abilityEn": "thick-fat"
   },
   {
     "cardId": "2-2-059",
@@ -2074,7 +2191,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 82,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "厚脂肪",
+    "abilityEn": "thick-fat"
   },
   {
     "cardId": "2-2-060",
@@ -2109,7 +2228,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 116,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "厚脂肪",
+    "abilityEn": "thick-fat"
   },
   {
     "cardId": "2-2-061",
@@ -2144,7 +2265,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 40,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "自然回復",
+    "abilityEn": "natural-cure"
   },
   {
     "cardId": "2-2-062",
@@ -2179,7 +2302,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 76,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "自然回復",
+    "abilityEn": "natural-cure"
   },
   {
     "cardId": "2-2-063",
@@ -2214,7 +2339,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 108,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "自然回復",
+    "abilityEn": "natural-cure"
   },
   {
     "cardId": "2-2-064",
@@ -2249,7 +2376,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 42,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "甜幕",
+    "abilityEn": "sweet-veil"
   },
   {
     "cardId": "2-2-065",
@@ -2284,7 +2413,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 112,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "甜幕",
+    "abilityEn": "sweet-veil"
   },
   {
     "cardId": "2-2-066",
@@ -2319,7 +2450,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 50,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "靜電",
+    "abilityEn": "static"
   },
   {
     "cardId": "2-2-067",
@@ -2354,7 +2487,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 96,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "靜電",
+    "abilityEn": "static"
   },
   {
     "cardId": "2-2-068",
@@ -2389,7 +2524,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 118,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "電氣引擎",
+    "abilityEn": "motor-drive"
   },
   {
     "cardId": "2-2-069",
@@ -2424,7 +2561,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 42,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "撿拾",
+    "abilityEn": "pickup"
   },
   {
     "cardId": "2-2-070",
@@ -2459,7 +2598,9 @@ export const PRESET_POKEMON_DB = [
       "hp_front": 82,
       "hasSuperStar": false,
       "hasGigantamax": false
-    }
+    },
+    "ability": "戰鬥盔甲",
+    "abilityEn": "battle-armor"
   },
   {
     "cardId": "R-2-1",
@@ -2495,7 +2636,9 @@ export const PRESET_POKEMON_DB = [
       "hasSuperStar": false,
       "hasGigantamax": true
     },
-    "category": "special"
+    "category": "special",
+    "ability": "靜電",
+    "abilityEn": "static"
   },
   {
     "cardId": "R-2-2",
@@ -2531,7 +2674,9 @@ export const PRESET_POKEMON_DB = [
       "hasSuperStar": false,
       "hasGigantamax": true
     },
-    "category": "special"
+    "category": "special",
+    "ability": "猛火",
+    "abilityEn": "blaze"
   },
   {
     "cardId": "R-2-3",
@@ -2567,6 +2712,8 @@ export const PRESET_POKEMON_DB = [
       "hasSuperStar": false,
       "hasGigantamax": true
     },
-    "category": "special"
+    "category": "special",
+    "ability": "詛咒之軀",
+    "abilityEn": "cursed-body"
   }
 ];

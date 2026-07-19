@@ -1,0 +1,367 @@
+[
+  {
+    "cardId": "2-2-001",
+    "stars": 2,
+    "method": "contour_3cand_2"
+  },
+  {
+    "cardId": "2-2-002",
+    "stars": 2,
+    "method": "contour_3cand_2"
+  },
+  {
+    "cardId": "2-2-003",
+    "stars": 2,
+    "method": "contour_3cand_2"
+  },
+  {
+    "cardId": "2-2-004",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-005",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-006",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-007",
+    "stars": 1,
+    "method": "contour_2cand_1"
+  },
+  {
+    "cardId": "2-2-008",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-009",
+    "stars": 1,
+    "method": "contour_2cand_1"
+  },
+  {
+    "cardId": "2-2-010",
+    "stars": 1,
+    "method": "contour_2cand_1"
+  },
+  {
+    "cardId": "2-2-011",
+    "stars": 2,
+    "method": "contour_4cand_2"
+  },
+  {
+    "cardId": "2-2-012",
+    "stars": 3,
+    "method": "contour_4cand_3"
+  },
+  {
+    "cardId": "2-2-013",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-014",
+    "stars": 3,
+    "method": "contour_3cand_3"
+  },
+  {
+    "cardId": "2-2-015",
+    "stars": 3,
+    "method": "contour_3cand_3"
+  },
+  {
+    "cardId": "2-2-016",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-017",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-018",
+    "stars": 3,
+    "method": "contour_3cand_3"
+  },
+  {
+    "cardId": "2-2-019",
+    "stars": 2,
+    "method": "contour_3cand_2"
+  },
+  {
+    "cardId": "2-2-020",
+    "stars": 3,
+    "method": "contour_4cand_3"
+  },
+  {
+    "cardId": "2-2-021",
+    "stars": 2,
+    "method": "contour_3cand_2"
+  },
+  {
+    "cardId": "2-2-022",
+    "stars": 3,
+    "method": "contour_3cand_3"
+  },
+  {
+    "cardId": "2-2-023",
+    "stars": 3,
+    "method": "contour_3cand_3"
+  },
+  {
+    "cardId": "2-2-024",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-025",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-026",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-027",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-028",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-029",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-030",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-031",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-032",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-033",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-034",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-035",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-036",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-037",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-038",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-039",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-040",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-041",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-042",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-043",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-044",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-045",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-046",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-047",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-048",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-049",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-050",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-051",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-052",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-053",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-054",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-055",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-056",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-057",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-058",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-059",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-060",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-061",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-062",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-063",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-064",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-065",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-066",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-067",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-068",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "2-2-069",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "2-2-070",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  },
+  {
+    "cardId": "R-2-1",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "R-2-2",
+    "stars": 2,
+    "method": "contour_2cand_2"
+  },
+  {
+    "cardId": "R-2-3",
+    "stars": 1,
+    "method": "contour_1cand_1"
+  }
+]

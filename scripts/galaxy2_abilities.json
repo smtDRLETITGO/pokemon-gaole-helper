@@ -1,0 +1,521 @@
+{
+  "2-2-001": {
+    "name": "蒼響",
+    "speciesEn": "zacian",
+    "abilityEn": "intrepid-sword",
+    "abilityZh": "不撓之劍",
+    "isHidden": false
+  },
+  "2-2-002": {
+    "name": "藏瑪然特",
+    "speciesEn": "zamazenta",
+    "abilityEn": "dauntless-shield",
+    "abilityZh": "不屈之盾",
+    "isHidden": false
+  },
+  "2-2-003": {
+    "name": "鋁鋼龍",
+    "speciesEn": "duraludon",
+    "abilityEn": "light-metal",
+    "abilityZh": "輕金屬",
+    "isHidden": false
+  },
+  "2-2-004": {
+    "name": "噴火龍",
+    "speciesEn": "charizard",
+    "abilityEn": "blaze",
+    "abilityZh": "猛火",
+    "isHidden": false
+  },
+  "2-2-005": {
+    "name": "薩戮德",
+    "speciesEn": "zarude",
+    "abilityEn": "leaf-guard",
+    "abilityZh": "葉子防守",
+    "isHidden": false
+  },
+  "2-2-006": {
+    "name": "路卡利歐",
+    "speciesEn": "lucario",
+    "abilityEn": "steadfast",
+    "abilityZh": "不屈之心",
+    "isHidden": false
+  },
+  "2-2-007": {
+    "name": "烈空坐",
+    "speciesEn": "rayquaza",
+    "abilityEn": "air-lock",
+    "abilityZh": "氣閘",
+    "isHidden": false
+  },
+  "2-2-008": {
+    "name": "拉帝亞斯",
+    "speciesEn": "latias",
+    "abilityEn": "levitate",
+    "abilityZh": "飄浮",
+    "isHidden": false
+  },
+  "2-2-009": {
+    "name": "拉帝歐斯",
+    "speciesEn": "latios",
+    "abilityEn": "levitate",
+    "abilityZh": "飄浮",
+    "isHidden": false
+  },
+  "2-2-010": {
+    "name": "四顎針龍",
+    "speciesEn": "naganadel",
+    "abilityEn": "beast-boost",
+    "abilityZh": "異獸提升",
+    "isHidden": false
+  },
+  "2-2-011": {
+    "name": "巨金怪",
+    "speciesEn": "metagross",
+    "abilityEn": "clear-body",
+    "abilityZh": "恆淨之軀",
+    "isHidden": false
+  },
+  "2-2-012": {
+    "name": "雙斧戰龍",
+    "speciesEn": "haxorus",
+    "abilityEn": "rivalry",
+    "abilityZh": "鬥爭心",
+    "isHidden": false
+  },
+  "2-2-013": {
+    "name": "化石翼龍",
+    "speciesEn": "aerodactyl",
+    "abilityEn": "rock-head",
+    "abilityZh": "堅硬腦袋",
+    "isHidden": false
+  },
+  "2-2-014": {
+    "name": "雷鳥龍",
+    "speciesEn": "arctozolt",
+    "abilityEn": "volt-absorb",
+    "abilityZh": "蓄電",
+    "isHidden": false
+  },
+  "2-2-015": {
+    "name": "鰓魚龍",
+    "speciesEn": "arctovish",
+    "abilityEn": "water-absorb",
+    "abilityZh": "儲水",
+    "isHidden": false
+  },
+  "2-2-016": {
+    "name": "胡地",
+    "speciesEn": "alakazam",
+    "abilityEn": "synchronize",
+    "abilityZh": "同步",
+    "isHidden": false
+  },
+  "2-2-017": {
+    "name": "雷鳥海獸",
+    "speciesEn": "dracozolt",
+    "abilityEn": "volt-absorb",
+    "abilityZh": "蓄電",
+    "isHidden": false
+  },
+  "2-2-018": {
+    "name": "具甲武者",
+    "speciesEn": "sirfetchd",
+    "abilityEn": "steadfast",
+    "abilityZh": "不屈之心",
+    "isHidden": false
+  },
+  "2-2-019": {
+    "name": "君主蛇",
+    "speciesEn": "serperior",
+    "abilityEn": "overgrow",
+    "abilityZh": "茂盛",
+    "isHidden": false
+  },
+  "2-2-020": {
+    "name": "炎武王",
+    "speciesEn": "emboar",
+    "abilityEn": "blaze",
+    "abilityZh": "猛火",
+    "isHidden": false
+  },
+  "2-2-021": {
+    "name": "大劍鬼",
+    "speciesEn": "samurott",
+    "abilityEn": "torrent",
+    "abilityZh": "激流",
+    "isHidden": false
+  },
+  "2-2-022": {
+    "name": "鐵轍跡",
+    "speciesEn": "iron-treads",
+    "abilityEn": "quark-drive",
+    "abilityZh": "夸克充能",
+    "isHidden": false
+  },
+  "2-2-023": {
+    "name": "毒貝比",
+    "speciesEn": "poipole",
+    "abilityEn": "beast-boost",
+    "abilityZh": "異獸提升",
+    "isHidden": false
+  },
+  "2-2-024": {
+    "name": "布莉姆溫",
+    "speciesEn": "hatterene",
+    "abilityEn": "healer",
+    "abilityZh": "治癒之心",
+    "isHidden": false
+  },
+  "2-2-025": {
+    "name": "阿勃梭魯",
+    "speciesEn": "absol",
+    "abilityEn": "pressure",
+    "abilityZh": "壓迫感",
+    "isHidden": false
+  },
+  "2-2-026": {
+    "name": "蒂蕾喵",
+    "speciesEn": "sprigatito",
+    "abilityEn": "overgrow",
+    "abilityZh": "茂盛",
+    "isHidden": false
+  },
+  "2-2-027": {
+    "name": "魔幻假面喵",
+    "speciesEn": "meowscarada",
+    "abilityEn": "overgrow",
+    "abilityZh": "茂盛",
+    "isHidden": false
+  },
+  "2-2-028": {
+    "name": "炙燙鱷",
+    "speciesEn": "skeledirge",
+    "abilityEn": "blaze",
+    "abilityZh": "猛火",
+    "isHidden": false
+  },
+  "2-2-029": {
+    "name": "骨紋巨聲鱷",
+    "speciesEn": "toxtricity-amped",
+    "abilityEn": "punk-rock",
+    "abilityZh": "龐克搖滾",
+    "isHidden": false
+  },
+  "2-2-030": {
+    "name": "湧躍鴨",
+    "speciesEn": "quaxly",
+    "abilityEn": "torrent",
+    "abilityZh": "激流",
+    "isHidden": false
+  },
+  "2-2-031": {
+    "name": "狂歡浪舞鴨",
+    "speciesEn": "quaquaval",
+    "abilityEn": "torrent",
+    "abilityZh": "激流",
+    "isHidden": false
+  },
+  "2-2-032": {
+    "name": "藤藤蛇",
+    "speciesEn": "snivy",
+    "abilityEn": "overgrow",
+    "abilityZh": "茂盛",
+    "isHidden": false
+  },
+  "2-2-033": {
+    "name": "青藤蛇",
+    "speciesEn": "servine",
+    "abilityEn": "overgrow",
+    "abilityZh": "茂盛",
+    "isHidden": false
+  },
+  "2-2-034": {
+    "name": "君主蛇",
+    "speciesEn": "serperior",
+    "abilityEn": "overgrow",
+    "abilityZh": "茂盛",
+    "isHidden": false
+  },
+  "2-2-035": {
+    "name": "暖暖豬",
+    "speciesEn": "tepig",
+    "abilityEn": "blaze",
+    "abilityZh": "猛火",
+    "isHidden": false
+  },
+  "2-2-036": {
+    "name": "炒炒豬",
+    "speciesEn": "pignite",
+    "abilityEn": "blaze",
+    "abilityZh": "猛火",
+    "isHidden": false
+  },
+  "2-2-037": {
+    "name": "炎武王",
+    "speciesEn": "emboar",
+    "abilityEn": "blaze",
+    "abilityZh": "猛火",
+    "isHidden": false
+  },
+  "2-2-038": {
+    "name": "水水獺",
+    "speciesEn": "oshawott",
+    "abilityEn": "torrent",
+    "abilityZh": "激流",
+    "isHidden": false
+  },
+  "2-2-039": {
+    "name": "雙刃丸",
+    "speciesEn": "dewott",
+    "abilityEn": "torrent",
+    "abilityZh": "激流",
+    "isHidden": false
+  },
+  "2-2-040": {
+    "name": "大劍鬼",
+    "speciesEn": "samurott",
+    "abilityEn": "torrent",
+    "abilityZh": "激流",
+    "isHidden": false
+  },
+  "2-2-041": {
+    "name": "蚊香蝌蚪",
+    "speciesEn": "poliwag",
+    "abilityEn": "water-absorb",
+    "abilityZh": "儲水",
+    "isHidden": false
+  },
+  "2-2-042": {
+    "name": "蚊香君",
+    "speciesEn": "poliwhirl",
+    "abilityEn": "water-absorb",
+    "abilityZh": "儲水",
+    "isHidden": false
+  },
+  "2-2-043": {
+    "name": "蚊香泳士",
+    "speciesEn": "poliwrath",
+    "abilityEn": "water-absorb",
+    "abilityZh": "儲水",
+    "isHidden": false
+  },
+  "2-2-044": {
+    "name": "醜醜魚",
+    "speciesEn": "feebas",
+    "abilityEn": "swift-swim",
+    "abilityZh": "悠游自如",
+    "isHidden": false
+  },
+  "2-2-045": {
+    "name": "美納斯",
+    "speciesEn": "milotic",
+    "abilityEn": "marvel-scale",
+    "abilityZh": "神奇鱗片",
+    "isHidden": false
+  },
+  "2-2-046": {
+    "name": "麻麻小魚",
+    "speciesEn": "tynamo",
+    "abilityEn": "levitate",
+    "abilityZh": "飄浮",
+    "isHidden": false
+  },
+  "2-2-047": {
+    "name": "麻麻鰻",
+    "speciesEn": "eelektrik",
+    "abilityEn": "levitate",
+    "abilityZh": "飄浮",
+    "isHidden": false
+  },
+  "2-2-048": {
+    "name": "麻麻鰻魚王",
+    "speciesEn": "eelektross",
+    "abilityEn": "levitate",
+    "abilityZh": "飄浮",
+    "isHidden": false
+  },
+  "2-2-049": {
+    "name": "拉魯拉絲",
+    "speciesEn": "ralts",
+    "abilityEn": "synchronize",
+    "abilityZh": "同步",
+    "isHidden": false
+  },
+  "2-2-050": {
+    "name": "奇魯莉安",
+    "speciesEn": "kirlia",
+    "abilityEn": "synchronize",
+    "abilityZh": "同步",
+    "isHidden": false
+  },
+  "2-2-051": {
+    "name": "沙奈朵",
+    "speciesEn": "gardevoir",
+    "abilityEn": "synchronize",
+    "abilityZh": "同步",
+    "isHidden": false
+  },
+  "2-2-052": {
+    "name": "艾路雷朵",
+    "speciesEn": "gallade",
+    "abilityEn": "steadfast",
+    "abilityZh": "不屈之心",
+    "isHidden": false
+  },
+  "2-2-053": {
+    "name": "百足蜈蚣",
+    "speciesEn": "venipede",
+    "abilityEn": "poison-point",
+    "abilityZh": "毒刺",
+    "isHidden": false
+  },
+  "2-2-054": {
+    "name": "車輪毬",
+    "speciesEn": "whirlipede",
+    "abilityEn": "poison-point",
+    "abilityZh": "毒刺",
+    "isHidden": false
+  },
+  "2-2-055": {
+    "name": "蜈蚣王",
+    "speciesEn": "scolipede",
+    "abilityEn": "poison-point",
+    "abilityZh": "毒刺",
+    "isHidden": false
+  },
+  "2-2-056": {
+    "name": "貪心栗鼠",
+    "speciesEn": "skwovet",
+    "abilityEn": "cheek-pouch",
+    "abilityZh": "頰囊",
+    "isHidden": false
+  },
+  "2-2-057": {
+    "name": "藏飽栗鼠",
+    "speciesEn": "greedent",
+    "abilityEn": "cheek-pouch",
+    "abilityZh": "頰囊",
+    "isHidden": false
+  },
+  "2-2-058": {
+    "name": "海豹球",
+    "speciesEn": "spheal",
+    "abilityEn": "thick-fat",
+    "abilityZh": "厚脂肪",
+    "isHidden": false
+  },
+  "2-2-059": {
+    "name": "海魔獅",
+    "speciesEn": "sealeo",
+    "abilityEn": "thick-fat",
+    "abilityZh": "厚脂肪",
+    "isHidden": false
+  },
+  "2-2-060": {
+    "name": "帝牙海獅",
+    "speciesEn": "walrein",
+    "abilityEn": "thick-fat",
+    "abilityZh": "厚脂肪",
+    "isHidden": false
+  },
+  "2-2-061": {
+    "name": "含羞苞",
+    "speciesEn": "budew",
+    "abilityEn": "natural-cure",
+    "abilityZh": "自然回復",
+    "isHidden": false
+  },
+  "2-2-062": {
+    "name": "毒薔薇",
+    "speciesEn": "roselia",
+    "abilityEn": "natural-cure",
+    "abilityZh": "自然回復",
+    "isHidden": false
+  },
+  "2-2-063": {
+    "name": "羅絲雷朵",
+    "speciesEn": "roserade",
+    "abilityEn": "natural-cure",
+    "abilityZh": "自然回復",
+    "isHidden": false
+  },
+  "2-2-064": {
+    "name": "小仙奶",
+    "speciesEn": "milcery",
+    "abilityEn": "sweet-veil",
+    "abilityZh": "甜幕",
+    "isHidden": false
+  },
+  "2-2-065": {
+    "name": "霜奶仙",
+    "speciesEn": "alcremie",
+    "abilityEn": "sweet-veil",
+    "abilityZh": "甜幕",
+    "isHidden": false
+  },
+  "2-2-066": {
+    "name": "電擊怪",
+    "speciesEn": "elekid",
+    "abilityEn": "static",
+    "abilityZh": "靜電",
+    "isHidden": false
+  },
+  "2-2-067": {
+    "name": "電擊獸",
+    "speciesEn": "electabuzz",
+    "abilityEn": "static",
+    "abilityZh": "靜電",
+    "isHidden": false
+  },
+  "2-2-068": {
+    "name": "電擊魔獸",
+    "speciesEn": "electivire",
+    "abilityEn": "motor-drive",
+    "abilityZh": "電氣引擎",
+    "isHidden": false
+  },
+  "2-2-069": {
+    "name": "伽勒爾喵喵",
+    "speciesEn": "meowth-galar",
+    "abilityEn": "pickup",
+    "abilityZh": "撿拾",
+    "isHidden": false
+  },
+  "2-2-070": {
+    "name": "喵頭目",
+    "speciesEn": "perrserker",
+    "abilityEn": "battle-armor",
+    "abilityZh": "戰鬥盔甲",
+    "isHidden": false
+  },
+  "R-2-1": {
+    "name": "皮卡丘",
+    "speciesEn": "pikachu",
+    "abilityEn": "static",
+    "abilityZh": "靜電",
+    "isHidden": false
+  },
+  "R-2-2": {
+    "name": "噴火龍",
+    "speciesEn": "charizard",
+    "abilityEn": "blaze",
+    "abilityZh": "猛火",
+    "isHidden": false
+  },
+  "R-2-3": {
+    "name": "耿鬼",
+    "speciesEn": "gengar",
+    "abilityEn": "cursed-body",
+    "abilityZh": "詛咒之軀",
+    "isHidden": false
+  },
+  "_meta": {
+    "source": "pokeapi.co",
+    "method": "CH2EN map -> pokemon/{en}/abilities (primary) -> ability/{id} zh-hant",
+    "total": 73,
+    "resolved": 73,
+    "misses": [],
+    "note": "多型態物種取基礎型態 primary ability；若與卡片不符請人工覆寫"
+  }
+}
