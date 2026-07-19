@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { PRESET_POKEMON_DB, ACTIVE_PRESET_DB } from '../data/pokemonDb';
+import { getAllCards } from '../data/pokemonDb';
 
 function cleanAndParseJson(text) {
   var cleaned = text.replace(/^```json\s*/i, '').replace(/```$/i, '').trim();
@@ -206,12 +206,12 @@ export default function ScreenOcr({ onOcrMatchOpponents }) {
 
       setOcrResultText(`辨識成功：${opponentNames.join(', ')}`);
 
-      // Match the list of names to ACTIVE_PRESET_DB
+      // Match the list of names to the cross-generation card pool
       const matchedCards = [];
       opponentNames.forEach(name => {
         const cleanName = name.trim();
         // Look up by exact name or substring
-        const match = ACTIVE_PRESET_DB.find(p => p.name === cleanName || p.name.includes(cleanName) || cleanName.includes(p.name));
+        const match = getAllCards().find(p => p.name === cleanName || p.name.includes(cleanName) || cleanName.includes(p.name));
         if (match) {
           matchedCards.push(match);
         } else {

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useCallback } from 'react';
 import jsQR from "jsqr";
-import { PRESET_POKEMON_DB, ACTIVE_PRESET_DB, updateLocalDbOverride } from '../data/pokemonDb';
+import { getAllCards, updateLocalDbOverride, GENERATIONS } from '../data/pokemonDb';
 import { matchTemplateCanvas, ensureReferenceHashes, countStarsByTips, cropStarRegion, filterByStars } from '../data/cardTemplateMatcher';
 
 function cleanAndParseJson(text) {
@@ -158,9 +158,16 @@ function MiniCard({ pokemon, onAdd, ownedCount }) {
           {ownedCount > 1 ? ownedCount : '✓'}
         </span>
       )}
-      {/* 卡號 */}
-      <div style={{ color:'rgba(255,255,255,0.4)', fontSize:'0.6rem', fontFamily:'monospace' }}>
-        {pokemon.diskCode}
+      {/* 卡號 + 代別 */}
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', gap:'4px' }}>
+        <span style={{ color:'rgba(255,255,255,0.4)', fontSize:'0.6rem', fontFamily:'monospace' }}>
+          {pokemon.diskCode}
+        </span>
+        {pokemon.generationLabel && (
+          <span style={{ color:'rgba(255,255,255,0.6)', fontSize:'0.55rem', background:'rgba(255,255,255,0.08)', padding:'0px 4px', borderRadius:'4px', whiteSpace:'nowrap' }}>
+            {pokemon.generationLabel}
+          </span>
+        )}
       </div>
       {/* 名稱 */}
       <div style={{ color:'#fff', fontWeight:700, fontSize:'0.85rem', lineHeight:1.2 }}>
@@ -195,7 +202,7 @@ function MiniCard({ pokemon, onAdd, ownedCount }) {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 export default function CardRegister({ collection, onAddCard, onClose }) {
   const [activeTab, setActiveTab] = useState('catalog');     // 'catalog' | 'search' | 'ocr'
-  const [filterSeries, setFilterSeries] = useState('all');
+  const [filterGen, setFilterGen] = useState('all');         // 'all' = 全部卡匣
   const [filterStars, setFilterStars] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
@@ -219,24 +226,25 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
     return map;
   }, [collection]);
 
-  // 篩選後的圖鑑清單
+  // 篩選後的圖鑑清單（跨全代；預設顯示全部卡匣）
   const catalogList = useMemo(() => {
-    return ACTIVE_PRESET_DB.filter(p => {
-      if (filterSeries !== 'all' && p.series !== filterSeries) return false;
+    return getAllCards().filter(p => {
+      if (filterGen !== 'all' && p.generation !== filterGen) return false;
       if (filterStars !== 'all' && String(p.stars) !== filterStars) return false;
       return true;
     });
-  }, [filterSeries, filterStars]);
+  }, [filterGen, filterStars]);
 
   // 搜尋自動完成
   const handleSearchInput = (val) => {
     setSearchQuery(val);
     if (!val.trim()) { setSuggestions([]); return; }
     const q = val.trim().toLowerCase();
-    const matches = ACTIVE_PRESET_DB.filter(p =>
+    const matches = getAllCards().filter(p =>
       p.name.toLowerCase().includes(q) ||
       p.diskCode.toLowerCase().includes(q) ||
-      p.series.toLowerCase().includes(q)
+      (p.series && p.series.toLowerCase().includes(q)) ||
+      (p.generationLabel && p.generationLabel.toLowerCase().includes(q))
     ).slice(0, 8);
     setSuggestions(matches);
   };
@@ -342,7 +350,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
       // 裁切左下角星等區域 → 金黃色閾值 → 數上尖端 → 預範候選集
       // 這步是純 Canvas 計算，零網路、零模型、<5ms
       let detectedStars = { count: 0, confidence: 0 };
-      let starFilteredDb = ACTIVE_PRESET_DB; // 預設 = 全部（星等偵測失敗時不預篩）
+      let starFilteredDb = getAllCards(); // 預設 = 全部（星等偵測失敗時不預篩）
       try {
         const starRegion = cropStarRegion(canvas);
         detectedStars = countStarsByTips(starRegion);
@@ -350,7 +358,7 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
           starFilteredDb = filterByStars(detectedStars.count, detectedStars.confidence);
           setOcrResult(`偵測到 ${detectedStars.count} 顆星（${starFilteredDb.length} 張候選卡），正在比對...`);
         }
-        console.log(`[Pipeline] Stars: ${detectedStars.count} (conf=${detectedStars.confidence.toFixed(2)}), candidates: ${starFilteredDb.length}/${ACTIVE_PRESET_DB.length}`);
+        console.log(`[Pipeline] Stars: ${detectedStars.count} (conf=${detectedStars.confidence.toFixed(2)}), candidates: ${starFilteredDb.length}/${getAllCards().length}`);
       } catch (starErr) {
         console.warn('星等偵測異常，跳過預篩：', starErr);
       }
@@ -359,21 +367,21 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
       //    與官網正面圖感知雜湊比對。參考庫已在進入相機時預熱。
       //    若星等預篩有效，比對範圍已縮小（更快更準）
       try {
-        setOcrResult(starFilteredDb.length < ACTIVE_PRESET_DB.length
+        setOcrResult(starFilteredDb.length < getAllCards().length
           ? '正在比對本地參考庫（星等預篩後）...'
           : '正在比對本地參考庫（模板比對）...');
         const tmpl = await matchTemplateCanvas(canvas);
         if (tmpl && tmpl.confidence >= 0.80) {
           // 高信心 → 直接命中
           const dbCard = starFilteredDb.find(p => normalizeId(p.cardId) === normalizeId(tmpl.cardId))
-                       || ACTIVE_PRESET_DB.find(p => normalizeId(p.cardId) === normalizeId(tmpl.cardId));
+                       || getAllCards().find(p => normalizeId(p.cardId) === normalizeId(tmpl.cardId));
           if (dbCard) {
             resultObj = { ...dbCard, _fromTemplate: true };
             setOcrResult(`模板比對命中：${dbCard.name}（信心 ${(tmpl.confidence * 100 | 0)}%，${detectedStars.count > 0 ? `${detectedStars.count}★` : ''}）`);
           }
         } else if (tmpl && tmpl.confidence >= 0.55) {
           // 中信心 → 驗證星等是否匹配（若星等偵測可信）
-          const tmplCard = ACTIVE_PRESET_DB.find(p => normalizeId(p.cardId) === normalizeId(tmpl.cardId));
+          const tmplCard = getAllCards().find(p => normalizeId(p.cardId) === normalizeId(tmpl.cardId));
           const starMatch = !tmplCard || detectedStars.confidence < 0.25
             ? true // 星等不可信 → 不用星等驗證
             : Math.abs((tmplCard.stars | 0) - detectedStars.count) <= 1;
@@ -517,26 +525,26 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
 
       setOcrResult(`成功分析！寶可夢：${resultObj.name || '未知'}, 編號：${resultObj.cardId || '未知'}`);
 
-      // Match the recognized card with ACTIVE_PRESET_DB if possible
+      // Match the recognized card with getAllCards() if possible
       const matchedCode = resultObj.cardId || '';
       const matchedName = resultObj.name || '';
       
       let finalCard = null;
       
       // 1. Try exact match on BOTH Name and ID
-      let dbMatch = ACTIVE_PRESET_DB.find(p => 
+      let dbMatch = getAllCards().find(p => 
         (matchedCode && p.cardId.trim() === matchedCode.trim()) && 
         (matchedName && p.name.trim() === matchedName.trim())
       );
 
       // 2. If not found, Name is generally much more reliable in OCR than a single digit in ID
       if (!dbMatch && matchedName) {
-        dbMatch = ACTIVE_PRESET_DB.find(p => p.name.trim() === matchedName.trim());
+        dbMatch = getAllCards().find(p => p.name.trim() === matchedName.trim());
       }
 
       // 3. If still not found, fallback to ID match
       if (!dbMatch && matchedCode) {
-        dbMatch = ACTIVE_PRESET_DB.find(p => p.cardId.trim() === matchedCode.trim());
+        dbMatch = getAllCards().find(p => p.cardId.trim() === matchedCode.trim());
       }
 
       if (dbMatch) {
@@ -670,13 +678,13 @@ export default function CardRegister({ collection, onAddCard, onClose }) {
               display: 'flex', gap: '8px', padding: '8px 12px',
               background: 'rgba(0,0,0,0.2)',
             }}>
-              <select value={filterSeries} onChange={e => setFilterSeries(e.target.value)} style={{
+              <select value={filterGen} onChange={e => setFilterGen(e.target.value)} style={{
                 flex: 1, background:'rgba(255,255,255,0.08)', border:'1px solid rgba(255,255,255,0.15)',
                 borderRadius:'8px', color:'#fff', padding:'6px 8px', fontSize:'0.75rem',
               }}>
-                <option value="all">全部彈數</option>
-                {[...new Set(ACTIVE_PRESET_DB.map(p => p.series))].sort().map(s => (
-                  <option key={s} value={s}>⭐ {s}</option>
+                <option value="all">全部卡匣</option>
+                {GENERATIONS.map(g => (
+                  <option key={g.id} value={g.id}>⭐ {g.label}</option>
                 ))}
               </select>
               <select value={filterStars} onChange={e => setFilterStars(e.target.value)} style={{

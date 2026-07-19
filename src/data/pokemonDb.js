@@ -4,6 +4,60 @@ export { PRESET_POKEMON_DB };
 import { GENERATIONS } from './generations.js';
 export { GENERATIONS };
 
+// series 標籤 → 代別 id 對照（供「我的卡匣」收藏卡判定代別）
+const SERIES_TO_GEN = {};
+GENERATIONS.forEach(g => { SERIES_TO_GEN[g.label] = g.id; });
+
+// ═══════════════════════════════════════════════════════
+// 全代別合併卡牌池（跨代登錄 / 掃描 / 收藏歸類用）
+// 每張卡附加 generation (id) 與 generationLabel；套用 localOverrides 熱更新。
+// ═══════════════════════════════════════════════════════
+let ALL_CARDS_CACHE = [];
+
+function buildAllCards() {
+  const all = [];
+  GENERATIONS.forEach(g => {
+    g.cards.forEach(p => {
+      const override = localOverrides[p.cardId];
+      const base = override ? { ...p, ...override } : { ...p };
+      base.generation = g.id;
+      base.generationLabel = g.label;
+      all.push(base);
+    });
+  });
+  // 自定義新增（不在任何官方代別內）也納入
+  Object.keys(localOverrides).forEach(id => {
+    const inAny = GENERATIONS.some(g => g.cards.some(p => p.cardId === id));
+    if (!inAny) {
+      const o = localOverrides[id];
+      all.push({ ...o, generation: o.generation || null, generationLabel: o.generationLabel || null });
+    }
+  });
+  ALL_CARDS_CACHE = all;
+}
+
+export function getAllCards() {
+  if (ALL_CARDS_CACHE.length === 0) buildAllCards();
+  return ALL_CARDS_CACHE;
+}
+
+export function getCardsByGeneration(genId) {
+  return getAllCards().filter(c => c.generation === genId);
+}
+
+export function getGenerationLabel(genId) {
+  const g = GENERATIONS.find(x => x.id === genId);
+  return g ? g.label : null;
+}
+
+// 判定一張卡（含收藏卡）所屬代別：優先 generation 欄位 → 否則 series 對照 → 否則 null
+export function getGenerationOfCard(card) {
+  if (!card) return null;
+  if (card.generation) return card.generation;
+  if (card.series && SERIES_TO_GEN[card.series]) return SERIES_TO_GEN[card.series];
+  return null;
+}
+
 // ============================================================
 // 0. 多代別管理（代別選擇器）
 // ============================================================
@@ -104,6 +158,9 @@ export function reloadActiveDb() {
       ACTIVE_PRESET_DB.push({ ...localOverrides[id] });
     }
   });
+
+  // 同步重建全代別合併快取（供跨代登錄 / 掃描 / 收藏歸類）
+  buildAllCards();
 }
 
 // 供 OCR 及手動登錄呼叫，即時覆蓋/新增卡匣數值到全域 Preset 圖譜中
@@ -144,15 +201,16 @@ export function updateLocalDbOverride(card) {
 reloadActiveDb();
 
 // ============================================================
-// 5. Helper 工具函式 (使用動態 ACTIVE_PRESET_DB)
+// 5. Helper 工具函式 (使用跨代合併池 getAllCards)
 // ============================================================
 
 export function findPokemonByName(name) {
   if (!name) return null;
   const cleanName = name.trim();
-  let found = ACTIVE_PRESET_DB.find(p => p.name === cleanName);
+  const pool = getAllCards();
+  let found = pool.find(p => p.name === cleanName);
   if (found) return found;
-  found = ACTIVE_PRESET_DB.find(p =>
+  found = pool.find(p =>
     cleanName.includes(p.name) || p.name.includes(cleanName)
   );
   return found || null;
@@ -160,7 +218,7 @@ export function findPokemonByName(name) {
 
 export function findPokemonByCode(code) {
   if (!code) return null;
-  return ACTIVE_PRESET_DB.find(p => p.diskCode === code.trim()) || null;
+  return getAllCards().find(p => p.diskCode === code.trim()) || null;
 }
 
 export function getEffectiveness(attackType, defenderTypes) {

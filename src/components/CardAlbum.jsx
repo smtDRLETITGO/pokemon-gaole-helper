@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { POKEMON_TYPES, findPokemonByName, TYPE_MATCHUPS, updateLocalDbOverride } from '../data/pokemonDb';
+import { POKEMON_TYPES, findPokemonByName, TYPE_MATCHUPS, updateLocalDbOverride, getGenerationOfCard, getGenerationLabel, GENERATIONS } from '../data/pokemonDb';
 
 
 export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCard, onAddManualCard }) {
   const [filterStars, setFilterStars] = useState('all');
+  const [filterGen, setFilterGen] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCard, setSelectedCard] = useState(null);
   
@@ -155,12 +156,14 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
   // Filter logic
   const filteredCards = collection.filter(card => {
     const matchesSearch = card.name.includes(searchTerm) || card.moveType.includes(searchTerm);
-    if (filterStars === 'all') return matchesSearch;
-    if (filterStars === 'special') return card.category === 'special' && matchesSearch;
-    if (filterStars === '5') return card.stars === 5 && matchesSearch;
-    if (filterStars === '4') return card.stars === 4 && matchesSearch;
-    if (filterStars === 'low') return card.stars <= 3 && card.category !== 'special' && matchesSearch;
-    return matchesSearch;
+    if (!matchesSearch) return false;
+    if (filterGen !== 'all' && getGenerationOfCard(card) !== filterGen) return false;
+    if (filterStars === 'all') return true;
+    if (filterStars === 'special') return card.category === 'special';
+    if (filterStars === '5') return card.stars === 5;
+    if (filterStars === '4') return card.stars === 4;
+    if (filterStars === 'low') return card.stars <= 3 && card.category !== 'special';
+    return true;
   });
 
   return (
@@ -189,6 +192,22 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{ marginBottom: '10px' }}
           />
+
+          {/* 代別篩選 */}
+          <select
+            value={filterGen}
+            onChange={(e) => setFilterGen(e.target.value)}
+            style={{
+              width: '100%', marginBottom: '10px',
+              background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
+              borderRadius: '8px', color: 'var(--text, #fff)', padding: '7px 8px', fontSize: '0.78rem',
+            }}
+          >
+            <option value="all">全部卡匣代別</option>
+            {GENERATIONS.map(g => (
+              <option key={g.id} value={g.id}>⭐ {g.label}</option>
+            ))}
+          </select>
 
           <div style={{ display: 'flex', gap: '6px' }}>
             {['all', 'special', '5', '4', 'low'].map((filter) => {
@@ -226,6 +245,7 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
               const isPurple = card.stars === 4;
               const isBlue = card.stars === 3;
               const isGreen = card.stars === 2;
+              const genLabel = getGenerationLabel(getGenerationOfCard(card));
 
               let diskGradeClass = 'disk-grade-1';
               if (isSpecial) diskGradeClass = 'disk-grade-special';
@@ -259,9 +279,14 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
 
                   {/* Right Main Stats Side */}
                   <div className="disk-main-section">
-                    <div className="disk-header">
-                      <div className="disk-id">No. {card.cardId}</div>
-                    </div>
+                  <div className="disk-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '6px' }}>
+                    <div className="disk-id">No. {card.cardId}</div>
+                    {genLabel && (
+                      <span style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.7)', background: 'rgba(255,255,255,0.08)', padding: '1px 5px', borderRadius: '5px', whiteSpace: 'nowrap' }}>
+                        {genLabel}
+                      </span>
+                    )}
+                  </div>
 
                     <div>
                       <div className="disk-name">{card.name}</div>
@@ -299,6 +324,7 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
       {/* Card Details & Matchup Modal */}
       {selectedCard && (() => {
         const analysis = getTypeAnalysis(selectedCard);
+        const selGenLabel = getGenerationLabel(getGenerationOfCard(selectedCard));
         return (
           <div className="modal-overlay" onClick={() => setSelectedCard(null)}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ borderTop: '6px solid #ff9f0a' }}>
@@ -317,6 +343,9 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
                 <h4 style={{ fontSize: '24px', fontWeight: '900', color: '#ff9f0a', margin: '4px 0' }}>
                   {selectedCard.name} {selectedCard.category === 'special' ? '(SPECIAL)' : `(${selectedCard.stars}★)`}
                 </h4>
+                {selGenLabel && (
+                  <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.55)', marginBottom: '6px' }}>📦 {selGenLabel}</div>
+                )}
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
                   <span className={`type-badge type-${selectedCard.type1}`}>{selectedCard.type1}</span>
                   {selectedCard.type2 && <span className={`type-badge type-${selectedCard.type2}`}>{selectedCard.type2}</span>}

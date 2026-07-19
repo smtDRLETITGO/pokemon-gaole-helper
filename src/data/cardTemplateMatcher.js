@@ -1,7 +1,7 @@
 // cardTemplateMatcher.js — 離線感知雜湊（perceptual hash）模板比對。
 // 用途：使用者拍攝自己的卡 → 與 public/cards/<series>/ 的 73 張官網正面圖比對 → 瞬間命中。
 // 不依賴任何外部模型 / 網路，純前端 canvas 計算。
-import { PRESET_POKEMON_DB, getActiveGeneration } from './pokemonDb';
+import { PRESET_POKEMON_DB, getActiveGeneration, getAllCards } from './pokemonDb';
 
 const SIZE = 16;            // 雜湊尺寸 16x16
 const CENTRAL = 0.72;       // 取中央 72% 區域（聚焦寶可夢卡面美術，忽略邊框/背景）
@@ -215,7 +215,7 @@ export function countStarsByTips(starCanvas) {
  * @returns {Array} 預範後的候選卡列表；若 confidence 過低則回傳全部（不預篩）
  */
 export function filterByStars(starCount, starConfidence) {
-  const db = PRESET_POKEMON_DB;
+  const db = getAllCards();
   if (!db || db.length === 0) return db;
   // 可信度太低 → 不預篩，交給下游處理
   if (starConfidence < 0.25 || starCount <= 0) return db;
