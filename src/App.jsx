@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import QuickTapPanel from './components/QuickTapPanel';
 import CounterRecommender from './components/CounterRecommender';
 import BattleQuickPick from './components/BattleQuickPick';
+import SupportDeck from './components/SupportDeck';
 import CardAlbum from './components/CardAlbum';
 import CardRegister from './components/CardRegister';
 import ScreenOcr from './components/ScreenOcr';
@@ -14,7 +15,7 @@ export default function App() {
   const [cards, setCards] = useState([]);
   const [selectedOpponents, setSelectedOpponents] = useState([]);
   const [syncUrl, setSyncUrl] = useState('');
-  const [activeTab, setActiveTab] = useState('battle'); // battle, album, register, ocr, settings
+  const [activeTab, setActiveTab] = useState('battle'); // battle, album, support, register, ocr, settings
   const [showRegister, setShowRegister] = useState(false);
 
   // 1. Initial configuration load (offline-first storage)
@@ -235,9 +236,13 @@ export default function App() {
         {/* CardRegister 為全畫面 overlay，不佔用 main 版面 */}
 
         {activeTab === 'ocr' && !showRegister && (
-          <ScreenOcr 
+          <ScreenOcr
             onOcrMatchOpponents={handleOcrMatchMultipleOpponents}
           />
+        )}
+
+        {activeTab === 'support' && !showRegister && (
+          <SupportDeck />
         )}
 
         {activeTab === 'settings' && (
@@ -286,12 +291,20 @@ export default function App() {
           <span>登錄卡匣</span>
         </button>
 
-        <button 
+        <button
           className={`nav-item ${activeTab === 'ocr' ? 'active' : ''}`}
           onClick={() => setActiveTab('ocr')}
         >
           <span className="nav-icon">🔎</span>
           <span>對手掃描</span>
+        </button>
+
+        <button
+          className={`nav-item ${activeTab === 'support' ? 'active' : ''}`}
+          onClick={() => setActiveTab('support')}
+        >
+          <span className="nav-icon">🎟</span>
+          <span>支援牌組</span>
         </button>
 
         <button 
