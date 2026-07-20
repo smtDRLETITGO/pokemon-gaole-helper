@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import QuickTapPanel from './components/QuickTapPanel';
 import CounterRecommender from './components/CounterRecommender';
+import BattleQuickPick from './components/BattleQuickPick';
 import CardAlbum from './components/CardAlbum';
 import CardRegister from './components/CardRegister';
 import ScreenOcr from './components/ScreenOcr';
@@ -13,7 +14,7 @@ export default function App() {
   const [cards, setCards] = useState([]);
   const [selectedOpponents, setSelectedOpponents] = useState([]);
   const [syncUrl, setSyncUrl] = useState('');
-  const [activeTab, setActiveTab] = useState('recommender'); // recommender, album, register, ocr, settings
+  const [activeTab, setActiveTab] = useState('battle'); // battle, album, register, ocr, settings
   const [showRegister, setShowRegister] = useState(false);
 
   // 1. Initial configuration load (offline-first storage)
@@ -170,8 +171,8 @@ export default function App() {
     if (Array.isArray(matchedList) && matchedList.length > 0) {
       setSelectedOpponents(matchedList.slice(0, 3));
     }
-    // Switch back to recommender dashboard to see recommendations
-    setActiveTab('recommender');
+    // Switch back to battle tab to see recommendations
+    setActiveTab('battle');
   };
 
   return (
@@ -199,17 +200,26 @@ export default function App() {
 
       {/* Main Content Area */}
       <main style={{ padding: '0 16px 20px 16px', maxWidth: '500px', margin: '0 auto' }}>
-        {activeTab === 'recommender' && (
+        {activeTab === 'battle' && (
           <>
-            <QuickTapPanel 
-              selectedOpponents={selectedOpponents}
-              onToggleOpponent={handleToggleOpponent}
-              onClearOpponents={handleClearOpponents}
-            />
-            <CounterRecommender 
-              collection={cards}
-              selectedOpponents={selectedOpponents}
-            />
+            {/* 📖 事前研究 — 預設摺疊，非緊急用 */}
+            <details style={{ marginBottom: '12px', color: 'var(--text-muted)' }}>
+              <summary style={{ cursor: 'pointer', fontSize: '13px', fontWeight: 'bold', padding: '6px 0' }}>
+                📖 事前研究（選對手・自動推薦）
+              </summary>
+              <QuickTapPanel 
+                selectedOpponents={selectedOpponents}
+                onToggleOpponent={handleToggleOpponent}
+                onClearOpponents={handleClearOpponents}
+              />
+              <CounterRecommender 
+                collection={cards}
+                selectedOpponents={selectedOpponents}
+              />
+            </details>
+
+            {/* 🗡️ 機台戰鬥快選 — 主力區 */}
+            <BattleQuickPick collection={cards} />
           </>
         )}
 
@@ -253,11 +263,11 @@ export default function App() {
       {/* Floating Bottom Tab Navigation Bar */}
       <nav className="nav-bar">
         <button 
-          className={`nav-item ${activeTab === 'recommender' ? 'active' : ''}`}
-          onClick={() => setActiveTab('recommender')}
+          className={`nav-item ${activeTab === 'battle' ? 'active' : ''}`}
+          onClick={() => setActiveTab('battle')}
         >
-          <span className="nav-icon">⚔️</span>
-          <span>對戰推薦</span>
+          <span className="nav-icon">🗡️</span>
+          <span>機台戰鬥</span>
         </button>
 
         <button 
