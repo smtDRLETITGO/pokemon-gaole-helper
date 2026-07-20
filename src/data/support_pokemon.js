@@ -9,7 +9,7 @@ export const SUPPORT_POKEMON = [
     type: '格鬥',
     move: '流星突擊',
     power: 150,
-    qrPath: '/support_qr/negi.png',
+    qrPath: `support_qr/negi.png`,
     color: '#dc2626',        // 紅
   },
   {
@@ -19,7 +19,7 @@ export const SUPPORT_POKEMON = [
     type: '幽靈',
     move: '暗影爪',
     power: 70,
-    qrPath: '/support_qr/mimikyu.png',
+    qrPath: `support_qr/mimikyu.png`,
     color: '#7c3aed',        // 紫
   },
   {
@@ -29,7 +29,7 @@ export const SUPPORT_POKEMON = [
     type: '冰',
     move: '冷凍光束',
     power: 90,
-    qrPath: '/support_qr/lapras.png',
+    qrPath: `support_qr/lapras.png`,
     color: '#06b6d4',        // 青
   },
   {
@@ -39,7 +39,7 @@ export const SUPPORT_POKEMON = [
     type: '地面',
     move: '地震',
     power: 100,
-    qrPath: '/support_qr/garchomp.png',
+    qrPath: `support_qr/garchomp.png`,
     color: '#ea580c',        // 橘
   },
   {
@@ -49,7 +49,7 @@ export const SUPPORT_POKEMON = [
     type: '地面',
     move: '地震',
     power: 100,
-    qrPath: '/support_qr/flygon.png',
+    qrPath: `support_qr/flygon.png`,
     color: '#ea580c',        // 橘
   },
   {
@@ -59,7 +59,7 @@ export const SUPPORT_POKEMON = [
     type: '鋼',
     move: '加農光炮',
     power: 80,
-    qrPath: '/support_qr/duraludon.png',
+    qrPath: `support_qr/duraludon.png`,
     color: '#16a34a',        // 綠
   },
   {
@@ -69,7 +69,7 @@ export const SUPPORT_POKEMON = [
     type: '岩石',
     move: '雙刃頭錘',
     power: 150,
-    qrPath: '/support_qr/drednaw.png',
+    qrPath: `support_qr/drednaw.png`,
     color: '#ca8a04',        // 黃
   },
   {
@@ -79,7 +79,7 @@ export const SUPPORT_POKEMON = [
     type: '飛行',
     move: '勇鳥猛攻',
     power: 120,
-    qrPath: '/support_qr/corviknight.png',
+    qrPath: `support_qr/corviknight.png`,
     color: '#2563eb',        // 藍
   },
 ];

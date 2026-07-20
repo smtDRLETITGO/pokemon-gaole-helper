@@ -128,7 +128,7 @@ export default function BattleQuickPick({ collection }) {
                           transition: 'all 0.1s',
                           lineHeight: 0,
                         }}>
-                          <TypeIcon type={type} size={20} selected={sel} />
+                          <TypeIcon type={type} size={32} selected={sel} />
                         </button>
                       );
                     })}
