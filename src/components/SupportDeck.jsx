@@ -148,7 +148,7 @@ export default function SupportDeck() {
             <img
               src={import.meta.env.BASE_URL + selected.qrPath}
               alt={`${selected.name} QR`}
-              style={{ display: 'block', width: 260, height: 260, maxWidth: '100%', objectFit: 'contain' }}
+              style={{ display: 'block', width: 200, height: 200, maxWidth: '100%', objectFit: 'contain' }}
             />
           </div>
 
