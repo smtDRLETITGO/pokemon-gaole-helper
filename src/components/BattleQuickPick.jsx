@@ -131,8 +131,6 @@ export default function BattleQuickPick({ collection }) {
                           <TypeIcon type={type} size={20} selected={sel} />
                           <span style={{ fontSize: '10px', fontWeight: sel ? 700 : 400, color: sel ? '#fff' : 'rgba(255,255,255,0.7)' }}>{type}</span>
                         </button>
-                          <TypeIcon type={type} size={32} selected={sel} />
-                        </button>
                       );
                     })}
                   </div>
