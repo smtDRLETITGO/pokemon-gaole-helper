@@ -113,7 +113,7 @@ export default function BattleQuickPick({ collection }) {
               )}
             </div>
 
-            {/* 屬性 chips (icon only) */}
+            {/* 屬性 chips (icon + 中文名稱) */}
             {!isAssigned && (
               <div style={{ marginBottom: opp.types.length > 0 ? '8px' : '2px' }}>
                 {TYPE_ORDER_ROW.map((row, ri) => (
@@ -122,12 +122,15 @@ export default function BattleQuickPick({ collection }) {
                       const sel = opp.types.includes(type);
                       return (
                         <button key={type} onClick={() => toggleType(opp.id, type)} style={{
-                          padding: '2px', border: sel ? `2px solid ${getTypeColor(type)}` : '2px solid transparent',
-                          borderRadius: '6px', cursor: 'pointer', background: 'transparent',
-                          opacity: sel ? 1 : 0.4,
+                          display: 'flex', alignItems: 'center', gap: '3px',
+                          padding: '2px 5px', border: sel ? `2px solid ${getTypeColor(type)}` : '2px solid rgba(255,255,255,0.06)',
+                          borderRadius: '6px', cursor: 'pointer', background: sel ? `${getTypeColor(type)}22` : 'transparent',
+                          opacity: sel ? 1 : 0.5,
                           transition: 'all 0.1s',
-                          lineHeight: 0,
                         }}>
+                          <TypeIcon type={type} size={20} selected={sel} />
+                          <span style={{ fontSize: '10px', fontWeight: sel ? 700 : 400, color: sel ? '#fff' : 'rgba(255,255,255,0.7)' }}>{type}</span>
+                        </button>
                           <TypeIcon type={type} size={32} selected={sel} />
                         </button>
                       );
