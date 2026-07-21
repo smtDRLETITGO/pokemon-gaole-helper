@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1"
+   width="100%"
+   height="100%"
+   viewBox="0 0 14.756234 12.721333"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+  </defs>
+  <g
+     id="g1"
+     transform="translate(-310.62935,-80.445601)">
+    <path
+       id="path815"
+       d="m 0,0 c -0.915,0.182 -1.464,1.024 -1.278,1.958 l 1.159,5.825 C 0.073,8.749 0.995,9.506 1.98,9.506 H 8.082 C 8.203,9.506 8.323,9.495 8.439,9.472 9.354,9.29 9.903,8.448 9.717,7.513 L 8.559,1.688 C 8.367,0.722 7.445,-0.035 6.46,-0.035 H 0.357 C 0.236,-0.035 0.116,-0.023 0,0"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,312.38147,93.120267)" />
+    <path
+       id="path816"
+       d="m 0,0 c -0.127,-0.641 -0.766,-1.165 -1.42,-1.165 h -6.102 c -0.653,0 -1.083,0.524 -0.956,1.165 l 1.159,5.825 C -7.192,6.466 -6.553,6.99 -5.9,6.99 h 6.103 c 0.653,0 1.083,-0.524 0.956,-1.165 z"
+       style="fill:#e6ae40;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,322.88693,90.689333)" />
+    <path
+       id="path817"
+       d="m 0,0 c -0.213,0.042 -0.21,0.224 -0.189,0.329 l 1.158,5.825 c 0.064,0.318 0.416,0.607 0.74,0.607 H 7.811 C 7.842,6.761 7.872,6.759 7.899,6.753 8.112,6.711 8.109,6.529 8.088,6.424 L 6.929,0.599 C 6.866,0.281 6.513,-0.008 6.189,-0.008 H 0.087 C 0.056,-0.008 0.027,-0.005 0,0"
+       style="fill:#c1842d;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,312.74187,91.308)" />
+    <path
+       id="path818"
+       d="m 0,0 -1.906,-0.208 0.503,2.707 -2.646,-4.013 2.294,0.275 -0.359,-1.99 z"
+       style="fill:#f6e66a;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       transform="matrix(1.3333333,0,0,-1.3333333,320.708,86.2496)" />
+  </g>
+</svg>

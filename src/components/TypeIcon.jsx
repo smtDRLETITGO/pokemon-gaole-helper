@@ -22,47 +22,47 @@ export const TYPE_COLORS = {
   '妖精':   '#EE99AC',
 };
 
-// 中文→英文（用於對應官方 SVG 檔名）
-const TYPE_TO_EN = {
-  '一般':   'normal',
-  '火':     'fire',
-  '水':     'water',
-  '草':     'grass',
-  '電':     'electric',
-  '冰':     'ice',
-  '格鬥':   'fighting',
-  '毒':     'poison',
-  '地面':   'ground',
-  '飛行':   'flying',
-  '超能力': 'psychic',
-  '蟲':     'bug',
-  '岩石':   'rock',
-  '幽靈':   'ghost',
-  '龍':     'dragon',
-  '惡':     'dark',
-  '鋼':     'steel',
-  '妖精':   'fairy',
+// 中文→檔名（MEZASTAR 系列 SVG 採中文命名）
+const TYPE_TO_FILE = {
+  '一般':   '一般',
+  '火':     '火',
+  '水':     '水',
+  '草':     '草',
+  '電':     '電',
+  '冰':     '冰',
+  '格鬥':   '格鬥',
+  '毒':     '毒',
+  '地面':   '地面',
+  '飛行':   '飛行',
+  '超能力': '超能力',
+  '蟲':     '蟲',
+  '岩石':   '岩石',
+  '幽靈':   '幽靈',
+  '龍':     '龍',
+  '惡':     '惡',
+  '鋼':     '鋼',
+  '妖精':   '妖精',
 };
 
 export function getTypeColor(type) {
   return TYPE_COLORS[type] || '#A8A878';
 }
 
-export function getTypeEn(type) {
-  return TYPE_TO_EN[type] || 'normal';
+export function getTypeFile(type) {
+  return TYPE_TO_FILE[type] || '一般';
 }
 
 /**
  * TypeIcon — 官方 Pokémon 屬性符號
- * 使用 public/types/{en}.svg（duiker101/pokemon-type-svg-icons 開源）
+ * 使用 public/types/{zh}.svg（MEZASTAR 系列官方風格）
  * @param {string} type - 屬性名（中文，如「火」「水」）
  * @param {number} size - 圖示尺寸 px（預設 40）
  * @param {boolean} selected - 是否選中狀態
  */
 export default function TypeIcon({ type, size = 40, selected = false }) {
   const color = TYPE_COLORS[type] || '#A8A878';
-  const en = TYPE_TO_EN[type] || 'normal';
-  const src = `${import.meta.env.BASE_URL}types/${en}.svg`;
+  const file = TYPE_TO_FILE[type] || '一般';
+  const src = `${import.meta.env.BASE_URL}types/${file}.svg`;
 
   // icon 內部佔 76% 大小，留些 padding
   const iconPx = Math.round(size * 0.72);
