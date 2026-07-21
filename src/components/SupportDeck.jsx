@@ -146,7 +146,7 @@ export default function SupportDeck() {
             marginBottom: '14px',
           }}>
             <img
-              src={import.meta.env.BASE_URL + selected.qrPath}
+              src={import.meta.env.BASE_URL + selected.qrPath + '?v=20260721-qr'}
               alt={`${selected.name} QR`}
               style={{ display: 'block', width: 150, height: 150, maxWidth: '100%', objectFit: 'contain' }}
             />
