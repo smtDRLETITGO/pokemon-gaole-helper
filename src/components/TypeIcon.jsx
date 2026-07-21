@@ -62,7 +62,8 @@ export function getTypeFile(type) {
 export default function TypeIcon({ type, size = 40, selected = false }) {
   const color = TYPE_COLORS[type] || '#A8A878';
   const file = TYPE_TO_FILE[type] || '一般';
-  const src = `${import.meta.env.BASE_URL}types/${file}.svg`;
+  const version = '20260721-final';
+  const src = `${import.meta.env.BASE_URL}types/${file}.svg?v=${version}`;
 
   // icon 內部佔 76% 大小，留些 padding
   const iconPx = Math.round(size * 0.72);
