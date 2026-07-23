@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { POKEMON_TYPES, findPokemonByName, TYPE_MATCHUPS, updateLocalDbOverride, getGenerationOfCard, getGenerationLabel, GENERATIONS } from '../data/pokemonDb';
+import SpecialMechanicBadge from './SpecialMechanicBadge';
 
 
 export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCard, onAddManualCard }) {
@@ -296,9 +297,12 @@ export default function CardAlbum({ collection, onUpdateCardLocation, onDeleteCa
                       </div>
                     </div>
 
-                    <div className="disk-move-box">
-                      <span>{card.moveName}</span>
-                      <span className={`disk-move-type type-${card.moveType}`}>{card.moveType}</span>
+                    <div className="disk-move-box" style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span>{card.moveName}</span>
+                        <span className={`disk-move-type type-${card.moveType}`}>{card.moveType}</span>
+                      </div>
+                      <SpecialMechanicBadge mechanic={card.specialMechanic} />
                     </div>
 
                     <div className="disk-stats-grid">

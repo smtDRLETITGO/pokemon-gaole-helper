@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import TypeIcon, { getTypeColor } from './TypeIcon';
+import SpecialMechanicBadge from './SpecialMechanicBadge';
 
 const ALL_TYPES = ['火','水','草','電','冰','格鬥','毒','地面','飛行','超能力','蟲','岩石','幽靈','龍','惡','鋼','妖精','一般'];
 
@@ -54,7 +55,7 @@ export default function BattleQuickPick({ collection }) {
     return opponents.map(opp => {
       if (opp.types.length === 0) return { oppId: opp.id, cards: [] };
       const cards = collection
-        .filter(c => c.moveType && opp.types.includes(c.moveType))
+        .filter(c => (c.moveType && opp.types.includes(c.moveType)) || (c.moveType2 && opp.types.includes(c.moveType2)))
         .sort((a, b) => ((b.stars || 0) - (a.stars || 0)) || ((b.hp || 0) - (a.hp || 0)));
       return { oppId: opp.id, cards };
     });
@@ -207,6 +208,7 @@ export default function BattleQuickPick({ collection }) {
                         <span style={{ color: '#aaa' }}>{card.moveName}</span>
                         <span> HP {card.hp || '?'}</span>
                       </div>
+                      <SpecialMechanicBadge mechanic={card.specialMechanic} />
                       <button
                         onClick={() => assignCard(opp.id, card)}
                         disabled={alreadyAssigned}
