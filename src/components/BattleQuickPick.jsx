@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import TypeIcon, { getTypeColor } from './TypeIcon';
-import { getWeaknesses } from '../data/typeMatchup';
+import { getWeaknesses, getAttackMultiplier } from '../data/typeMatchup';
 
 const ALL_TYPES = ['火','水','草','電','冰','格鬥','毒','地面','飛行','超能力','蟲','岩石','幽靈','龍','惡','鋼','妖精','一般'];
 
@@ -54,33 +54,37 @@ export default function BattleQuickPick({ collection }) {
   // ── 每個對手的篩選卡 ──
   const filteredCards = useMemo(() => {
     return opponents.map(opp => {
-      if (opp.types.length === 0) return { oppId: opp.id, cards: [], weaknesses: [] };
+      if (opp.types.length === 0) return { oppId: opp.id, cards: [], weaknesses: [], multipliers: [] };
       
-      let targetTypes = opp.types;
       let weaknesses = [];
       
       if (mode === 'auto') {
         weaknesses = getWeaknesses(opp.types);
-        targetTypes = weaknesses; // 找剋制對手的屬性
-      }
-
-      const cards = collection
-        .filter(c => {
-          if (targetTypes.length === 0) return false;
-          
-          if (mode === 'auto') {
-            // 自動模式：優先看招式屬性，沒有招式屬性時退而求其次看本體屬性 (Fallback)
-            if (c.moveType) {
-              return targetTypes.includes(c.moveType);
-            }
-            return targetTypes.includes(c.type1) || (c.type2 && targetTypes.includes(c.type2));
+        const mapped = collection.map(c => {
+          let mult = 1;
+          if (c.moveType) {
+            mult = getAttackMultiplier(c.moveType, opp.types);
           } else {
-            // 手動模式：直接找該招式屬性的卡牌
-            return c.moveType && targetTypes.includes(c.moveType);
+            const m1 = getAttackMultiplier(c.type1, opp.types);
+            const m2 = c.type2 ? getAttackMultiplier(c.type2, opp.types) : 0;
+            mult = Math.max(m1, m2);
           }
-        })
-        .sort((a, b) => ((b.stars || 0) - (a.stars || 0)) || ((b.hp || 0) - (a.hp || 0)));
-      return { oppId: opp.id, cards, weaknesses };
+          return { card: c, mult };
+        }).filter(item => item.mult >= 2)
+          .sort((a, b) => (b.mult - a.mult) || ((b.card.stars || 0) - (a.card.stars || 0)) || ((b.card.hp || 0) - (a.card.hp || 0)));
+        
+        return { 
+          oppId: opp.id, 
+          cards: mapped.map(i => i.card), 
+          multipliers: mapped.map(i => i.mult), 
+          weaknesses 
+        };
+      } else {
+        const cards = collection
+          .filter(c => c.moveType && opp.types.includes(c.moveType))
+          .sort((a, b) => ((b.stars || 0) - (a.stars || 0)) || ((b.hp || 0) - (a.hp || 0)));
+        return { oppId: opp.id, cards, multipliers: cards.map(() => 0), weaknesses: [] };
+      }
     });
   }, [collection, opponents, mode]);
 
@@ -225,8 +229,9 @@ export default function BattleQuickPick({ collection }) {
               </div>
             ) : isAssigned ? null : opp.types.length === 0 ? null : (
               <div style={{ display: 'flex', gap: '4px', overflowX: 'auto', paddingBottom: '4px' }}>
-                {oppCards.slice(0, 6).map(card => {
+                {oppCards.slice(0, mode === 'auto' ? 3 : 6).map((card, index) => {
                   const alreadyAssigned = lineupCards.some(c => c.cardId === card.cardId);
+                  const mult = oppData.multipliers ? oppData.multipliers[index] : 0;
                   return (
                     <div key={card.cardId} style={{
                       flexShrink: 0, width: 120,
@@ -237,9 +242,13 @@ export default function BattleQuickPick({ collection }) {
                         <span style={{ fontSize: '10px', fontWeight: '800', color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 70 }}>
                           {card.name}
                         </span>
-                        <span style={{ fontSize: '8px', color: card.stars >= 6 ? '#a21caf' : card.stars >= 5 ? '#f59e0b' : '#9ca3af' }}>
-                          {card.stars}★
-                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          {mult >= 4 && <span style={{ background: '#ff3b30', color: '#fff', fontSize: '8px', fontWeight: '900', padding: '1px 4px', borderRadius: '4px' }}>x4</span>}
+                          {mult > 0 && mult < 4 && mult >= 2 && <span style={{ background: '#ff9f0a', color: '#fff', fontSize: '8px', fontWeight: '900', padding: '1px 4px', borderRadius: '4px' }}>x2</span>}
+                          <span style={{ fontSize: '8px', color: card.stars >= 6 ? '#a21caf' : card.stars >= 5 ? '#f59e0b' : '#9ca3af' }}>
+                            {card.stars}★
+                          </span>
+                        </div>
                       </div>
                       <div style={{ display: 'flex', gap: '2px', marginTop: '2px' }}>
                         <span className={`type-badge type-${card.type1}`} style={{ fontSize: '7px', padding: '0 2px', borderRadius: '2px' }}>{card.type1}</span>

@@ -35,13 +35,7 @@ export function getWeaknesses(defendingTypes) {
   const weaknesses = [];
 
   for (const attacker of ALL_TYPES) {
-    let multiplier = 1;
-    for (const defender of defendingTypes) {
-      const match = TYPE_MATCHUP[attacker][defender];
-      if (match !== undefined) {
-        multiplier *= match;
-      }
-    }
+    const multiplier = getAttackMultiplier(attacker, defendingTypes);
     // 倍率 >= 2 視為效果絕佳
     if (multiplier >= 2) {
       weaknesses.push(attacker);
@@ -49,4 +43,22 @@ export function getWeaknesses(defendingTypes) {
   }
 
   return weaknesses;
+}
+
+/**
+ * 計算攻擊方對防守方屬性的總傷害倍率
+ * @param {string} attackType - 攻擊方屬性
+ * @param {string[]} defendingTypes - 防守方屬性陣列
+ * @returns {number} 傷害倍率 (例如: 4, 2, 1, 0.5, 0)
+ */
+export function getAttackMultiplier(attackType, defendingTypes) {
+  if (!defendingTypes || defendingTypes.length === 0) return 1;
+  let multiplier = 1;
+  for (const defender of defendingTypes) {
+    const match = TYPE_MATCHUP[attackType]?.[defender];
+    if (match !== undefined) {
+      multiplier *= match;
+    }
+  }
+  return multiplier;
 }
