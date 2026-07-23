@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import TypeIcon, { getTypeColor } from './TypeIcon';
-import { getWeaknesses, getAttackMultiplier } from '../data/typeMatchup';
 
 const ALL_TYPES = ['火','水','草','電','冰','格鬥','毒','地面','飛行','超能力','蟲','岩石','幽靈','龍','惡','鋼','妖精','一般'];
 
@@ -19,7 +18,6 @@ const makeOpponents = () => [
 
 export default function BattleQuickPick({ collection }) {
   const [opponents, setOpponents] = useState(makeOpponents);
-  const [mode, setMode] = useState('auto'); // 'auto' | 'manual'
 
   // ── 切換某個對手的屬性 ──
   const toggleType = (oppId, type) => {
@@ -54,39 +52,13 @@ export default function BattleQuickPick({ collection }) {
   // ── 每個對手的篩選卡 ──
   const filteredCards = useMemo(() => {
     return opponents.map(opp => {
-      if (opp.types.length === 0) return { oppId: opp.id, cards: [], weaknesses: [], multipliers: [] };
-      
-      let weaknesses = [];
-      
-      if (mode === 'auto') {
-        weaknesses = getWeaknesses(opp.types);
-        const mapped = collection.map(c => {
-          let mult = 1;
-          if (c.moveType) {
-            mult = getAttackMultiplier(c.moveType, opp.types);
-          } else {
-            const m1 = getAttackMultiplier(c.type1, opp.types);
-            const m2 = c.type2 ? getAttackMultiplier(c.type2, opp.types) : 0;
-            mult = Math.max(m1, m2);
-          }
-          return { card: c, mult };
-        }).filter(item => item.mult >= 2)
-          .sort((a, b) => (b.mult - a.mult) || ((b.card.stars || 0) - (a.card.stars || 0)) || ((b.card.hp || 0) - (a.card.hp || 0)));
-        
-        return { 
-          oppId: opp.id, 
-          cards: mapped.map(i => i.card), 
-          multipliers: mapped.map(i => i.mult), 
-          weaknesses 
-        };
-      } else {
-        const cards = collection
-          .filter(c => c.moveType && opp.types.includes(c.moveType))
-          .sort((a, b) => ((b.stars || 0) - (a.stars || 0)) || ((b.hp || 0) - (a.hp || 0)));
-        return { oppId: opp.id, cards, multipliers: cards.map(() => 0), weaknesses: [] };
-      }
+      if (opp.types.length === 0) return { oppId: opp.id, cards: [] };
+      const cards = collection
+        .filter(c => c.moveType && opp.types.includes(c.moveType))
+        .sort((a, b) => ((b.stars || 0) - (a.stars || 0)) || ((b.hp || 0) - (a.hp || 0)));
+      return { oppId: opp.id, cards };
     });
-  }, [collection, opponents, mode]);
+  }, [collection, opponents]);
 
   const lineupCards = opponents.filter(o => o.assigned).map(o => o.assigned);
 
@@ -98,22 +70,10 @@ export default function BattleQuickPick({ collection }) {
         <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#ff9f0a', margin: 0 }}>
           ⚔️ 機台戰鬥
         </h2>
-        <div style={{ display: 'flex', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', padding: '2px', marginLeft: 'auto' }}>
-          <button onClick={() => setMode('auto')} style={{
-            background: mode === 'auto' ? '#ff9f0a' : 'transparent',
-            color: mode === 'auto' ? '#fff' : 'rgba(255,255,255,0.5)',
-            border: 'none', borderRadius: '6px', padding: '4px 10px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s'
-          }}>🎯 自動查弱點</button>
-          <button onClick={() => setMode('manual')} style={{
-            background: mode === 'manual' ? '#ff9f0a' : 'transparent',
-            color: mode === 'manual' ? '#fff' : 'rgba(255,255,255,0.5)',
-            border: 'none', borderRadius: '6px', padding: '4px 10px', fontSize: '11px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s'
-          }}>💪 手動挑招式</button>
-        </div>
         {lineupCards.length > 0 && (
           <button onClick={resetAll} style={{
             background: 'rgba(255,69,58,0.12)', border: '1px solid rgba(255,69,58,0.25)',
-            borderRadius: '6px', padding: '3px 10px', color: '#ff453a',
+            borderRadius: '6px', padding: '3px 10px', color: '#ff453a', marginLeft: 'auto',
             fontSize: '11px', fontWeight: 'bold', cursor: 'pointer',
           }}>重設全部</button>
         )}
@@ -121,9 +81,7 @@ export default function BattleQuickPick({ collection }) {
 
       {/* ═══════ 3 個對手 ─ 垂直排列 ═══════ */}
       {opponents.map((opp, idx) => {
-        const oppData = filteredCards.find(f => f.oppId === opp.id) || { cards: [], weaknesses: [] };
-        const oppCards = oppData.cards;
-        const oppWeaknesses = oppData.weaknesses;
+        const oppCards = filteredCards.find(f => f.oppId === opp.id)?.cards || [];
         const isAssigned = opp.assigned !== null;
 
         return (
@@ -140,7 +98,7 @@ export default function BattleQuickPick({ collection }) {
                 background: idx === 0 ? 'rgba(255,69,58,0.2)' : idx === 1 ? 'rgba(100,210,255,0.2)' : 'rgba(255,200,50,0.2)',
                 color: idx === 0 ? '#ff453a' : idx === 1 ? '#64d2ff' : '#ffc832',
               }}>
-                對手 {idx + 1} {mode === 'auto' && opp.types.length === 0 ? '(請點選對手屬性)' : mode === 'manual' && opp.types.length === 0 ? '(請點選招式屬性)' : ''}
+                對手 {idx + 1}
               </span>
               {isAssigned && (
                 <span style={{ fontSize: '10px', color: '#34c759', fontWeight: 'bold' }}>
@@ -182,18 +140,8 @@ export default function BattleQuickPick({ collection }) {
 
             {/* 已選屬性文字標籤 */}
             {opp.types.length > 0 && !isAssigned && (
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px', padding: '6px', background: 'rgba(0,0,0,0.2)', borderRadius: '6px' }}>
-                {mode === 'auto' ? (
-                  <>
-                    <span style={{ color: '#fff' }}>🛡️ 對手屬性：{opp.types.join('、')}</span>
-                    <br/>
-                    <span style={{ color: '#ff9f0a', marginTop: '4px', display: 'inline-block' }}>
-                      🔥 推薦打擊：{oppWeaknesses.length > 0 ? oppWeaknesses.join('、') : '無明顯弱點'}
-                    </span>
-                  </>
-                ) : (
-                  <span style={{ color: '#fff' }}>🎯 尋找招式：{opp.types.join('、')}</span>
-                )}
+              <div style={{ fontSize: '10px', color: 'var(--text-muted)', marginBottom: '6px' }}>
+                🎯 尋找招式：{opp.types.join('、')}
               </div>
             )}
 
@@ -225,13 +173,16 @@ export default function BattleQuickPick({ collection }) {
               </div>
             ) : opp.types.length > 0 && oppCards.length === 0 ? (
               <div style={{ fontSize: '11px', color: 'var(--text-muted)', textAlign: 'center', padding: '8px' }}>
-                😅 沒有符合條件的卡牌
+                😅 沒有 <b>{opp.types.join('、')}</b> 的招式卡
               </div>
-            ) : isAssigned ? null : opp.types.length === 0 ? null : (
+            ) : isAssigned ? null : opp.types.length === 0 ? (
+              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.15)', textAlign: 'center', padding: '12px' }}>
+                點選上方屬性選擇卡牌
+              </div>
+            ) : (
               <div style={{ display: 'flex', gap: '4px', overflowX: 'auto', paddingBottom: '4px' }}>
-                {oppCards.slice(0, mode === 'auto' ? 3 : 6).map((card, index) => {
+                {oppCards.slice(0, 3).map((card) => {
                   const alreadyAssigned = lineupCards.some(c => c.cardId === card.cardId);
-                  const mult = oppData.multipliers ? oppData.multipliers[index] : 0;
                   return (
                     <div key={card.cardId} style={{
                       flexShrink: 0, width: 120,
@@ -243,8 +194,6 @@ export default function BattleQuickPick({ collection }) {
                           {card.name}
                         </span>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          {mult >= 4 && <span style={{ background: '#ff3b30', color: '#fff', fontSize: '8px', fontWeight: '900', padding: '1px 4px', borderRadius: '4px' }}>x4</span>}
-                          {mult > 0 && mult < 4 && mult >= 2 && <span style={{ background: '#ff9f0a', color: '#fff', fontSize: '8px', fontWeight: '900', padding: '1px 4px', borderRadius: '4px' }}>x2</span>}
                           <span style={{ fontSize: '8px', color: card.stars >= 6 ? '#a21caf' : card.stars >= 5 ? '#f59e0b' : '#9ca3af' }}>
                             {card.stars}★
                           </span>
