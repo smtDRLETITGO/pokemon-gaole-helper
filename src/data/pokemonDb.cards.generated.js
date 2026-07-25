@@ -47,7 +47,8 @@ export const PRESET_POKEMON_DB = [
       "hasGigantamax": false
     },
     "ability": "不撓之劍",
-    "abilityEn": "intrepid-sword"
+    "abilityEn": "intrepid-sword",
+    "specialMechanic": "chain_attack"
   },
   {
     "cardId": "2-2-002",
@@ -84,7 +85,8 @@ export const PRESET_POKEMON_DB = [
       "hasGigantamax": true
     },
     "ability": "不屈之盾",
-    "abilityEn": "dauntless-shield"
+    "abilityEn": "dauntless-shield",
+    "specialMechanic": "chain_attack"
   },
   {
     "cardId": "2-2-003",
@@ -121,7 +123,8 @@ export const PRESET_POKEMON_DB = [
       "hasGigantamax": true
     },
     "ability": "輕金屬",
-    "abilityEn": "light-metal"
+    "abilityEn": "light-metal",
+    "specialMechanic": "giantmax"
   },
   {
     "cardId": "2-2-004",
@@ -158,7 +161,8 @@ export const PRESET_POKEMON_DB = [
       "hasGigantamax": true
     },
     "ability": "猛火",
-    "abilityEn": "blaze"
+    "abilityEn": "blaze",
+    "specialMechanic": "giantmax"
   },
   {
     "cardId": "2-2-005",
@@ -195,7 +199,8 @@ export const PRESET_POKEMON_DB = [
       "hasGigantamax": true
     },
     "ability": "葉子防守",
-    "abilityEn": "leaf-guard"
+    "abilityEn": "leaf-guard",
+    "specialMechanic": "chain_attack"
   },
   {
     "cardId": "2-2-006",
@@ -232,7 +237,8 @@ export const PRESET_POKEMON_DB = [
       "hasGigantamax": true
     },
     "ability": "不屈之心",
-    "abilityEn": "steadfast"
+    "abilityEn": "steadfast",
+    "specialMechanic": "mega"
   },
   {
     "cardId": "2-2-007",
@@ -269,7 +275,8 @@ export const PRESET_POKEMON_DB = [
       "hasGigantamax": false
     },
     "ability": "氣閘",
-    "abilityEn": "air-lock"
+    "abilityEn": "air-lock",
+    "specialMechanic": "mega"
   },
   {
     "cardId": "2-2-008",
@@ -306,7 +313,8 @@ export const PRESET_POKEMON_DB = [
       "hasGigantamax": false
     },
     "ability": "飄浮",
-    "abilityEn": "levitate"
+    "abilityEn": "levitate",
+    "specialMechanic": "mega"
   },
   {
     "cardId": "2-2-009",
@@ -343,7 +351,8 @@ export const PRESET_POKEMON_DB = [
       "hasGigantamax": false
     },
     "ability": "飄浮",
-    "abilityEn": "levitate"
+    "abilityEn": "levitate",
+    "specialMechanic": "mega"
   },
   {
     "cardId": "2-2-010",
@@ -380,7 +389,8 @@ export const PRESET_POKEMON_DB = [
       "hasGigantamax": false
     },
     "ability": "異獸提升",
-    "abilityEn": "beast-boost"
+    "abilityEn": "beast-boost",
+    "specialMechanic": "zmove"
   },
   {
     "cardId": "2-2-011",
@@ -528,7 +538,8 @@ export const PRESET_POKEMON_DB = [
       "hasGigantamax": true
     },
     "ability": "蓄電",
-    "abilityEn": "volt-absorb"
+    "abilityEn": "volt-absorb",
+    "specialMechanic": "dynamax"
   },
   {
     "cardId": "2-2-015",
@@ -565,7 +576,8 @@ export const PRESET_POKEMON_DB = [
       "hasGigantamax": true
     },
     "ability": "儲水",
-    "abilityEn": "water-absorb"
+    "abilityEn": "water-absorb",
+    "specialMechanic": "dynamax"
   },
   {
     "cardId": "2-2-016",
@@ -602,7 +614,8 @@ export const PRESET_POKEMON_DB = [
       "hasGigantamax": true
     },
     "ability": "同步",
-    "abilityEn": "synchronize"
+    "abilityEn": "synchronize",
+    "specialMechanic": "dynamax"
   },
   {
     "cardId": "2-2-017",
@@ -2638,7 +2651,8 @@ export const PRESET_POKEMON_DB = [
     },
     "category": "special",
     "ability": "靜電",
-    "abilityEn": "static"
+    "abilityEn": "static",
+    "specialMechanic": "dynamax"
   },
   {
     "cardId": "R-2-2",
@@ -2676,7 +2690,8 @@ export const PRESET_POKEMON_DB = [
     },
     "category": "special",
     "ability": "猛火",
-    "abilityEn": "blaze"
+    "abilityEn": "blaze",
+    "specialMechanic": "dynamax"
   },
   {
     "cardId": "R-2-3",
@@ -2714,6 +2729,7 @@ export const PRESET_POKEMON_DB = [
     },
     "category": "special",
     "ability": "詛咒之軀",
-    "abilityEn": "cursed-body"
+    "abilityEn": "cursed-body",
+    "specialMechanic": "dynamax"
   }
 ];

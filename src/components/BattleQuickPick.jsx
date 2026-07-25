@@ -54,9 +54,22 @@ export default function BattleQuickPick({ collection }) {
   const filteredCards = useMemo(() => {
     return opponents.map(opp => {
       if (opp.types.length === 0) return { oppId: opp.id, cards: [] };
+
+      const getMechanicScore = (mechanic) => {
+        if (!mechanic) return 0;
+        if (['chain_attack', 'chain', 'super-tag', 'super_tag', 'capsule'].includes(mechanic)) return 300;
+        if (['double_attack', 'double'].includes(mechanic)) return 250;
+        if (['giantmax', 'dynamax', 'mega', 'zmove', 'z-move'].includes(mechanic)) return 200;
+        return 0;
+      };
+
       const cards = collection
         .filter(c => (c.moveType && opp.types.includes(c.moveType)) || (c.moveType2 && opp.types.includes(c.moveType2)))
-        .sort((a, b) => ((b.stars || 0) - (a.stars || 0)) || ((b.hp || 0) - (a.hp || 0)));
+        .sort((a, b) => {
+          const aScore = (a.stars || 0) * 10000 + getMechanicScore(a.specialMechanic) * 10 + (a.hp || 0);
+          const bScore = (b.stars || 0) * 10000 + getMechanicScore(b.specialMechanic) * 10 + (b.hp || 0);
+          return bScore - aScore;
+        });
       return { oppId: opp.id, cards };
     });
   }, [collection, opponents]);

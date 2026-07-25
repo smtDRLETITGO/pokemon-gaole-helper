@@ -252,6 +252,14 @@ export function getRecommendations(collection, opponent) {
     const statSum = (Number(card.hp) || 0) + (Number(activeAttack) || 0) + (Number(card.defense) || 0);
     const starWeight = (card.category === 'special' ? 0 : (Number(card.stars) || 1)) * 35;
     
+    const getMechanicScore = (mechanic) => {
+      if (!mechanic) return 0;
+      if (['chain_attack', 'chain', 'super-tag', 'super_tag', 'capsule'].includes(mechanic)) return 300;
+      if (['double_attack', 'double'].includes(mechanic)) return 250;
+      if (['giantmax', 'dynamax', 'mega', 'zmove', 'z-move'].includes(mechanic)) return 200;
+      return 0;
+    };
+
     let score = 0;
     if (offenseMult > 1.0) {
       score += (offenseMult - 1.0) * 200;
@@ -259,7 +267,7 @@ export function getRecommendations(collection, opponent) {
       score += (offenseMult - 1.0) * 150;
     }
     score += (1.0 - worstDefenseMult) * 80;
-    score += statSum * 0.3 + starWeight;
+    score += statSum * 0.3 + starWeight + getMechanicScore(card.specialMechanic);
 
     return { card, score: Math.round(score), offenseMult, defenseMult: worstDefenseMult };
   });
