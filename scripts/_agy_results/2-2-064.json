@@ -1,0 +1,34 @@
+{
+  "cardId": "2-2-064",
+  "timestamp": "2026-07-18T08:11:16.769615",
+  "front": {
+    "cardId": "2-2-064",
+    "name": "小仙奶",
+    "stars": 2,
+    "type1": "妖精",
+    "type2": null,
+    "hp_front": 42,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "front_fallback": false,
+  "back": {
+    "hp": 61,
+    "attack": 26,
+    "defense": 26,
+    "spAtk": 32,
+    "spDef": 37,
+    "speed": 23,
+    "moveName": "吸取之吻",
+    "moveType": "妖精",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "back_fallback": false,
+  "ok": true
+}

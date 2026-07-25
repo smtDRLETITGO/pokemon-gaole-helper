@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-055",
+  "timestamp": "2026-07-17T23:17:37.567612",
+  "front": {
+    "cardId": "2-2-055",
+    "name": "蜈蚣王",
+    "stars": 4,
+    "type1": "蟲",
+    "type2": "毒",
+    "hp_front": 110,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 115,
+    "attack": 101,
+    "defense": 90,
+    "spAtk": 57,
+    "spDef": 71,
+    "speed": 112,
+    "moveName": "十字毒刃",
+    "moveType": "毒",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

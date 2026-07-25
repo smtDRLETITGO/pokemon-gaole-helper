@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-048",
+  "timestamp": "2026-07-17T23:11:16.276507",
+  "front": {
+    "cardId": "2-2-048",
+    "name": "麻麻鰻魚王",
+    "stars": 4,
+    "type1": "電",
+    "type2": null,
+    "hp_front": 112,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 136,
+    "attack": 113,
+    "defense": 80,
+    "spAtk": 103,
+    "spDef": 80,
+    "speed": 52,
+    "moveName": "伏特替換",
+    "moveType": "電",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

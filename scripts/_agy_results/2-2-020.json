@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-020",
+  "timestamp": "2026-07-17T22:42:29.744022",
+  "front": {
+    "cardId": "2-2-020",
+    "name": "炎武王",
+    "stars": 4,
+    "type1": "火",
+    "type2": "格鬥",
+    "hp_front": 144,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 198,
+    "attack": 150,
+    "defense": 81,
+    "spAtk": 123,
+    "spDef": 81,
+    "speed": 81,
+    "moveName": "閃焰衝鋒",
+    "moveType": "火",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

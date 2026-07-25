@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-004",
+  "timestamp": "2026-07-17T22:21:57.250691",
+  "front": {
+    "cardId": "2-2-004",
+    "name": "噴火龍",
+    "stars": 6,
+    "type1": "火",
+    "type2": "飛行",
+    "hp_front": 150,
+    "layout": "horizontal",
+    "hasSuperStar": true,
+    "hasGigantamax": true
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 166,
+    "attack": 107,
+    "defense": 100,
+    "spAtk": 137,
+    "spDef": 108,
+    "speed": 127,
+    "moveName": "噴射火焰",
+    "moveType": "火",
+    "moveCategory": "X",
+    "move2Name": "超極巨地獄滅焰",
+    "move2Type": "火",
+    "move2Category": "X"
+  },
+  "back_model": "flash",
+  "ok": true
+}

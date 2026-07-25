@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-008",
+  "timestamp": "2026-07-17T22:27:31.381851",
+  "front": {
+    "cardId": "2-2-008",
+    "name": "拉帝亞斯",
+    "stars": 6,
+    "type1": "龍",
+    "type2": "超能力",
+    "hp_front": 164,
+    "layout": "horizontal",
+    "hasSuperStar": true,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 166,
+    "attack": 101,
+    "defense": 113,
+    "spAtk": 137,
+    "spDef": 161,
+    "speed": 137,
+    "moveName": "薄霧球",
+    "moveType": "超能力",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-029",
+  "timestamp": "2026-07-17T22:51:11.390296",
+  "front": {
+    "cardId": "2-2-029",
+    "name": "骨紋巨聲鱷",
+    "stars": 4,
+    "type1": "火",
+    "type2": "幽靈",
+    "hp_front": 118,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 157,
+    "attack": 77,
+    "defense": 101,
+    "spAtk": 110,
+    "spDef": 77,
+    "speed": 68,
+    "moveName": "禍不單行",
+    "moveType": "幽靈",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

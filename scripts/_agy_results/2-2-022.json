@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-022",
+  "timestamp": "2026-07-17T22:45:20.793054",
+  "front": {
+    "cardId": "2-2-022",
+    "name": "鐵轍跡",
+    "stars": 5,
+    "type1": "地面",
+    "type2": "鋼",
+    "hp_front": 148,
+    "layout": "horizontal",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 169,
+    "attack": 132,
+    "defense": 141,
+    "spAtk": 87,
+    "spDef": 84,
+    "speed": 125,
+    "moveName": "地震",
+    "moveType": "地面",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

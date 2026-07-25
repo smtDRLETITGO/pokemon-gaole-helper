@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-049",
+  "timestamp": "2026-07-17T23:12:35.931500",
+  "front": {
+    "cardId": "2-2-049",
+    "name": "拉魯拉絲",
+    "stars": 2,
+    "type1": "超能力",
+    "type2": "妖精",
+    "hp_front": 34,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 52,
+    "attack": 18,
+    "defense": 18,
+    "spAtk": 29,
+    "spDef": 23,
+    "speed": 26,
+    "moveName": "念力",
+    "moveType": "超能力",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

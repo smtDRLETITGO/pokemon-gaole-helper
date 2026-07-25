@@ -1,0 +1,34 @@
+{
+  "cardId": "R-2-3",
+  "timestamp": "2026-07-18T08:22:39.550325",
+  "front": {
+    "cardId": "R-2-3",
+    "name": "耿鬼",
+    "stars": 1,
+    "type1": "幽靈",
+    "type2": "毒",
+    "hp_front": 118,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": true
+  },
+  "front_model": "flash",
+  "front_fallback": false,
+  "back": {
+    "hp": 122,
+    "attack": 71,
+    "defense": 66,
+    "spAtk": 137,
+    "spDef": 81,
+    "speed": 117,
+    "moveName": "暗影球",
+    "moveType": "幽靈",
+    "moveCategory": "X",
+    "move2Name": "超極巨幻影幽魂",
+    "move2Type": "幽靈",
+    "move2Category": "X"
+  },
+  "back_model": "flash",
+  "back_fallback": false,
+  "ok": true
+}

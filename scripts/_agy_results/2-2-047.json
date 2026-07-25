@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-047",
+  "timestamp": "2026-07-17T23:10:32.957181",
+  "front": {
+    "cardId": "2-2-047",
+    "name": "麻麻鰻",
+    "stars": 3,
+    "type1": "電",
+    "type2": null,
+    "hp_front": 82,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 104,
+    "attack": 74,
+    "defense": 62,
+    "spAtk": 66,
+    "spDef": 62,
+    "speed": 37,
+    "moveName": "電擊波",
+    "moveType": "電",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

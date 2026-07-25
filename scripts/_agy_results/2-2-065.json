@@ -1,0 +1,34 @@
+{
+  "cardId": "2-2-065",
+  "timestamp": "2026-07-18T08:11:48.410320",
+  "front": {
+    "cardId": "2-2-065",
+    "name": "霜奶仙",
+    "stars": 4,
+    "type1": "妖精",
+    "type2": null,
+    "hp_front": 112,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "front_fallback": false,
+  "back": {
+    "hp": 120,
+    "attack": 62,
+    "defense": 77,
+    "spAtk": 110,
+    "spDef": 121,
+    "speed": 66,
+    "moveName": "吸取之吻",
+    "moveType": "妖精",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "back_fallback": false,
+  "ok": true
+}

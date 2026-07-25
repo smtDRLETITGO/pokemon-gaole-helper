@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-019",
+  "timestamp": "2026-07-17T22:41:47.324937",
+  "front": {
+    "cardId": "2-2-019",
+    "name": "君主蛇",
+    "stars": 5,
+    "type1": "草",
+    "type2": null,
+    "hp_front": 144,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 157,
+    "attack": 93,
+    "defense": 117,
+    "spAtk": 93,
+    "spDef": 117,
+    "speed": 138,
+    "moveName": "飛葉風暴",
+    "moveType": "草",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

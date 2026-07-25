@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-041",
+  "timestamp": "2026-07-17T23:04:09.809274",
+  "front": {
+    "cardId": "2-2-041",
+    "name": "蚊香蝌蚪",
+    "stars": 2,
+    "type1": "水",
+    "type2": null,
+    "hp_front": 42,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 56,
+    "attack": 31,
+    "defense": 25,
+    "spAtk": 25,
+    "spDef": 25,
+    "speed": 51,
+    "moveName": "水槍",
+    "moveType": "水",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

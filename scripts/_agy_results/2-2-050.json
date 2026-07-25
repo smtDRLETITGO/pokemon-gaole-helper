@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-050",
+  "timestamp": "2026-07-17T23:13:19.114713",
+  "front": {
+    "cardId": "2-2-050",
+    "name": "奇魯莉安",
+    "stars": 3,
+    "type1": "超能力",
+    "type2": "妖精",
+    "hp_front": 60,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 82,
+    "attack": 33,
+    "defense": 33,
+    "spAtk": 58,
+    "spDef": 50,
+    "speed": 46,
+    "moveName": "幻象光線",
+    "moveType": "超能力",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

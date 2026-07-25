@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-014",
+  "timestamp": "2026-07-17T22:34:42.513466",
+  "front": {
+    "cardId": "2-2-014",
+    "name": "雷鳥龍",
+    "stars": 5,
+    "type1": "電",
+    "type2": "龍",
+    "hp_front": 138,
+    "layout": "horizontal",
+    "hasSuperStar": false,
+    "hasGigantamax": true
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 175,
+    "attack": 123,
+    "defense": 111,
+    "spAtk": 99,
+    "spDef": 87,
+    "speed": 93,
+    "moveName": "打雷",
+    "moveType": "電",
+    "moveCategory": "X",
+    "move2Name": "極巨閃電",
+    "move2Type": "電",
+    "move2Category": "X"
+  },
+  "back_model": "flash",
+  "ok": true
+}

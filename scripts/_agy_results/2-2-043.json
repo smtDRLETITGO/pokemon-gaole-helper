@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-043",
+  "timestamp": "2026-07-17T23:05:53.638098",
+  "front": {
+    "cardId": "2-2-043",
+    "name": "蚊香泳士",
+    "stars": 4,
+    "type1": "水",
+    "type2": "格鬥",
+    "hp_front": 108,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 136,
+    "attack": 90,
+    "defense": 90,
+    "spAtk": 68,
+    "spDef": 86,
+    "speed": 68,
+    "moveName": "地獄翻滾",
+    "moveType": "格鬥",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

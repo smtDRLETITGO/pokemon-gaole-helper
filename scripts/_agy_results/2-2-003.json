@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-003",
+  "timestamp": "2026-07-17T22:19:29.281441",
+  "front": {
+    "cardId": "2-2-003",
+    "name": "鋁鋼龍",
+    "stars": 6,
+    "type1": "鋼",
+    "type2": "龍",
+    "hp_front": 158,
+    "layout": "horizontal",
+    "hasSuperStar": true,
+    "hasGigantamax": true
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 166,
+    "attack": 128,
+    "defense": 154,
+    "spAtk": 161,
+    "spDef": 70,
+    "speed": 115,
+    "moveName": "逆鱗",
+    "moveType": "龍",
+    "moveCategory": "D",
+    "move2Name": "超極巨劣化衰變",
+    "move2Type": "龍",
+    "move2Category": "X"
+  },
+  "back_model": "flash",
+  "ok": true
+}

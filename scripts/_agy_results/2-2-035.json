@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-035",
+  "timestamp": "2026-07-17T22:57:01.707803",
+  "front": {
+    "cardId": "2-2-035",
+    "name": "暖暖豬",
+    "stars": 2,
+    "type1": "火",
+    "type2": null,
+    "hp_front": 46,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 72,
+    "attack": 39,
+    "defense": 29,
+    "spAtk": 29,
+    "spDef": 29,
+    "speed": 29,
+    "moveName": "火花",
+    "moveType": "火",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

@@ -1,0 +1,34 @@
+{
+  "cardId": "R-2-1",
+  "timestamp": "2026-07-18T08:18:22.652087",
+  "front": {
+    "cardId": "R-2-1",
+    "name": "皮卡丘",
+    "stars": 1,
+    "type1": "電",
+    "type2": null,
+    "hp_front": 102,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": true
+  },
+  "front_model": "flash",
+  "front_fallback": false,
+  "back": {
+    "hp": 118,
+    "attack": 75,
+    "defense": 56,
+    "spAtk": 69,
+    "spDef": 69,
+    "speed": 120,
+    "moveName": "十萬伏特",
+    "moveType": "電",
+    "moveCategory": "X",
+    "move2Name": "超極巨萬雷轟頂",
+    "move2Type": "電",
+    "move2Category": "X"
+  },
+  "back_model": "flash",
+  "back_fallback": false,
+  "ok": true
+}

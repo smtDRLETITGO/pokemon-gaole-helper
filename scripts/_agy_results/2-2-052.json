@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-052",
+  "timestamp": "2026-07-17T23:14:36.928327",
+  "front": {
+    "cardId": "2-2-052",
+    "name": "艾路雷朵",
+    "stars": 4,
+    "type1": "超能力",
+    "type2": "格鬥",
+    "hp_front": 114,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 120,
+    "attack": 122,
+    "defense": 66,
+    "spAtk": 66,
+    "spDef": 113,
+    "speed": 80,
+    "moveName": "劈瓦",
+    "moveType": "格鬥",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

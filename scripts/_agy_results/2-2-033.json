@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-033",
+  "timestamp": "2026-07-17T22:55:00.312349",
+  "front": {
+    "cardId": "2-2-033",
+    "name": "青藤蛇",
+    "stars": 3,
+    "type1": "草",
+    "type2": null,
+    "hp_front": 84,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 102,
+    "attack": 55,
+    "defense": 68,
+    "spAtk": 55,
+    "spDef": 68,
+    "speed": 74,
+    "moveName": "超級吸取",
+    "moveType": "草",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

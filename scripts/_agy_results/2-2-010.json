@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-010",
+  "timestamp": "2026-07-17T22:29:47.848348",
+  "front": {
+    "cardId": "2-2-010",
+    "name": "四顎針龍",
+    "stars": 5,
+    "type1": "毒",
+    "type2": "龍",
+    "hp_front": 150,
+    "layout": "horizontal",
+    "hasSuperStar": true,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 160,
+    "attack": 94,
+    "defense": 94,
+    "spAtk": 159,
+    "spDef": 94,
+    "speed": 152,
+    "moveName": "毒液衝擊",
+    "moveType": "毒",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

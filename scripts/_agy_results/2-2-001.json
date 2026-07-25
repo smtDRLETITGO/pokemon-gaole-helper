@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-001",
+  "timestamp": "2026-07-17T22:10:36.051277",
+  "front": {
+    "cardId": "2-2-001",
+    "name": "蒼響",
+    "stars": 6,
+    "type1": "妖精",
+    "type2": "鋼",
+    "hp_front": 206,
+    "layout": "horizontal",
+    "hasSuperStar": true,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 194,
+    "attack": 226,
+    "defense": 154,
+    "spAtk": 109,
+    "spDef": 154,
+    "speed": 197,
+    "moveName": "巨獸斬",
+    "moveType": "鋼",
+    "moveCategory": "D",
+    "move2Name": "月亮之力",
+    "move2Type": "妖精",
+    "move2Category": "X"
+  },
+  "back_model": "flash",
+  "ok": true
+}

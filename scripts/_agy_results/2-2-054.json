@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-054",
+  "timestamp": "2026-07-17T23:16:39.716599",
+  "front": {
+    "cardId": "2-2-054",
+    "name": "車輪毬",
+    "stars": 3,
+    "type1": "蟲",
+    "type2": "毒",
+    "hp_front": 76,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 85,
+    "attack": 51,
+    "defense": 88,
+    "spAtk": 38,
+    "spDef": 71,
+    "speed": 44,
+    "moveName": "蟲咬",
+    "moveType": "蟲",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

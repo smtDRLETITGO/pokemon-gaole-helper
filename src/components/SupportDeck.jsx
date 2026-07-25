@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SUPPORT_POKEMON } from '../data/support_pokemon';
+import TypeIcon from './TypeIcon';
 
 /**
  * SupportDeck — 8 隻官方支援寶可夢券
@@ -52,6 +53,17 @@ export default function SupportDeck() {
       <clipPath id={`clip-${pokemon.id}`}>
         <path d="M 2 90 L 94 90 L 94 138 C 94 138 78 138 48 138 C 18 138 2 138 2 138 Z" />
       </clipPath>
+      <clipPath id={`clip-photo-${pokemon.id}`}>
+        <path d="M 48 2 C 78 2 94 30 94 70 C 94 110 78 138 48 138 C 18 138 2 110 2 70 C 2 30 18 2 48 2 Z" />
+      </clipPath>
+      {pokemon.photoPath && (
+        <image
+          href={`${import.meta.env.BASE_URL}${pokemon.photoPath}`}
+          x="2" y="2" width="92" height="136"
+          preserveAspectRatio="xMidYMid slice"
+          clipPath={`url(#clip-photo-${pokemon.id})`}
+        />
+      )}
       <rect
         x="0" y="90" width="96" height="50"
         fill={pokemon.color}
@@ -141,14 +153,22 @@ export default function SupportDeck() {
             display: 'inline-block',
             padding: '12px',
             background: 'white',
-            borderRadius: '12px',
+            borderRadius: '16px',
             boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
             marginBottom: '14px',
+            overflow: 'hidden'
           }}>
             <img
               src={import.meta.env.BASE_URL + selected.qrPath + '?v=20260721-qr'}
               alt={`${selected.name} QR`}
-              style={{ display: 'block', width: 150, height: 150, maxWidth: '100%', objectFit: 'contain' }}
+              style={{ 
+                display: 'block', 
+                width: 220, 
+                height: 220, 
+                maxWidth: '100%', 
+                objectFit: 'cover',
+                objectPosition: 'top' 
+              }}
             />
           </div>
 
@@ -168,9 +188,12 @@ export default function SupportDeck() {
             display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px',
             marginBottom: '12px', flexWrap: 'wrap',
           }}>
-            <span className={`type-badge type-${selected.type}`} style={{ fontSize: '14px', padding: '4px 12px' }}>
-              {selected.type}
-            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(255,255,255,0.1)', padding: '4px 12px', borderRadius: '20px' }}>
+              <TypeIcon type={selected.type} size={20} />
+              <span style={{ fontSize: '15px', fontWeight: 'bold', color: '#fff' }}>
+                {selected.type}
+              </span>
+            </div>
             <span style={{ fontSize: '20px', color: 'rgba(255,255,255,0.4)' }}>·</span>
             <span style={{ fontSize: '18px', fontWeight: '700', color: '#fff' }}>
               {selected.move}

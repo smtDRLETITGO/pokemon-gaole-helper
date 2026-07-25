@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-018",
+  "timestamp": "2026-07-17T22:40:58.351126",
+  "front": {
+    "cardId": "2-2-018",
+    "name": "具甲武者",
+    "stars": 5,
+    "type1": "蟲",
+    "type2": "水",
+    "hp_front": 132,
+    "layout": "horizontal",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 145,
+    "attack": 140,
+    "defense": 156,
+    "spAtk": 69,
+    "spDef": 102,
+    "speed": 48,
+    "moveName": "迎頭一擊",
+    "moveType": "蟲",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

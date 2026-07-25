@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-045",
+  "timestamp": "2026-07-17T23:07:53.571207",
+  "front": {
+    "cardId": "2-2-045",
+    "name": "美納斯",
+    "stars": 4,
+    "type1": "水",
+    "type2": null,
+    "hp_front": 112,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 140,
+    "attack": 59,
+    "defense": 76,
+    "spAtk": 95,
+    "spDef": 117,
+    "speed": 77,
+    "moveName": "攀瀑",
+    "moveType": "水",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

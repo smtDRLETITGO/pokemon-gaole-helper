@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-046",
+  "timestamp": "2026-07-17T23:09:48.723455",
+  "front": {
+    "cardId": "2-2-046",
+    "name": "麻麻小魚",
+    "stars": 2,
+    "type1": "電",
+    "type2": null,
+    "hp_front": 42,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 55,
+    "attack": 34,
+    "defense": 26,
+    "spAtk": 29,
+    "spDef": 26,
+    "speed": 37,
+    "moveName": "充電光束",
+    "moveType": "電",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

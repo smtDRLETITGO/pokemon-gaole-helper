@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-012",
+  "timestamp": "2026-07-17T22:31:54.670264",
+  "front": {
+    "cardId": "2-2-012",
+    "name": "雙斧戰龍",
+    "stars": 5,
+    "type1": "龍",
+    "type2": null,
+    "hp_front": 132,
+    "layout": "horizontal",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 143,
+    "attack": 160,
+    "defense": 100,
+    "spAtk": 68,
+    "spDef": 79,
+    "speed": 107,
+    "moveName": "逆鱗",
+    "moveType": "龍",
+    "moveCategory": "D",
+    "move2Name": "究極巨龍震天地",
+    "move2Type": "龍",
+    "move2Category": "D"
+  },
+  "back_model": "flash",
+  "ok": true
+}

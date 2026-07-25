@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-034",
+  "timestamp": "2026-07-17T22:56:23.629079",
+  "front": {
+    "cardId": "2-2-034",
+    "name": "君主蛇",
+    "stars": 4,
+    "type1": "草",
+    "type2": null,
+    "hp_front": 118,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 130,
+    "attack": 77,
+    "defense": 96,
+    "spAtk": 77,
+    "spDef": 96,
+    "speed": 113,
+    "moveName": "青草攪拌器",
+    "moveType": "草",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

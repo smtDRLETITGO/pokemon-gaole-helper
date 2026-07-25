@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-042",
+  "timestamp": "2026-07-17T23:05:14.834361",
+  "front": {
+    "cardId": "2-2-042",
+    "name": "蚊香君",
+    "stars": 3,
+    "type1": "水",
+    "type2": null,
+    "hp_front": 74,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 99,
+    "attack": 55,
+    "defense": 55,
+    "spAtk": 44,
+    "spDef": 44,
+    "speed": 75,
+    "moveName": "泡沫光線",
+    "moveType": "水",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

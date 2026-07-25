@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-040",
+  "timestamp": "2026-07-17T23:02:56.781882",
+  "front": {
+    "cardId": "2-2-040",
+    "name": "大劍鬼",
+    "stars": 4,
+    "type1": "水",
+    "type2": null,
+    "hp_front": 118,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 149,
+    "attack": 101,
+    "defense": 86,
+    "spAtk": 108,
+    "spDef": 72,
+    "speed": 72,
+    "moveName": "貝殼刃",
+    "moveType": "水",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

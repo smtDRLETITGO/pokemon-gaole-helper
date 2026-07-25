@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-009",
+  "timestamp": "2026-07-17T22:28:45.733379",
+  "front": {
+    "cardId": "2-2-009",
+    "name": "拉帝歐斯",
+    "stars": 6,
+    "type1": "龍",
+    "type2": "超能力",
+    "hp_front": 164,
+    "layout": "horizontal",
+    "hasSuperStar": true,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 166,
+    "attack": 113,
+    "defense": 101,
+    "spAtk": 161,
+    "spDef": 137,
+    "speed": 137,
+    "moveName": "潔淨光芒",
+    "moveType": "超能力",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

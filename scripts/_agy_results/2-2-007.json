@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-007",
+  "timestamp": "2026-07-17T22:26:17.477614",
+  "front": {
+    "cardId": "2-2-007",
+    "name": "烈空坐",
+    "stars": 6,
+    "type1": "龍",
+    "type2": "飛行",
+    "hp_front": 184,
+    "layout": "horizontal",
+    "hasSuperStar": true,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 199,
+    "attack": 188,
+    "defense": 114,
+    "spAtk": 188,
+    "spDef": 114,
+    "speed": 120,
+    "moveName": "畫龍點睛",
+    "moveType": "飛行",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-038",
+  "timestamp": "2026-07-17T23:00:51.624689",
+  "front": {
+    "cardId": "2-2-038",
+    "name": "水水獺",
+    "stars": 2,
+    "type1": "水",
+    "type2": null,
+    "hp_front": 46,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 66,
+    "attack": 34,
+    "defense": 29,
+    "spAtk": 39,
+    "spDef": 29,
+    "speed": 29,
+    "moveName": "水流噴射",
+    "moveType": "水",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

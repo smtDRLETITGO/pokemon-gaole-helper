@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-017",
+  "timestamp": "2026-07-17T22:40:07.238955",
+  "front": {
+    "cardId": "2-2-017",
+    "name": "雷鳥海獸",
+    "stars": 5,
+    "type1": "電",
+    "type2": "冰",
+    "hp_front": 136,
+    "layout": "horizontal",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 172,
+    "attack": 121,
+    "defense": 109,
+    "spAtk": 109,
+    "spDef": 97,
+    "speed": 68,
+    "moveName": "暴風雪",
+    "moveType": "冰",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

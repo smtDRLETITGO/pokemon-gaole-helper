@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-031",
+  "timestamp": "2026-07-17T22:52:31.406980",
+  "front": {
+    "cardId": "2-2-031",
+    "name": "狂歡浪舞鴨",
+    "stars": 4,
+    "type1": "水",
+    "type2": "格鬥",
+    "hp_front": 118,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 139,
+    "attack": 120,
+    "defense": 81,
+    "spAtk": 86,
+    "spDef": 77,
+    "speed": 86,
+    "moveName": "下盤踢",
+    "moveType": "格鬥",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

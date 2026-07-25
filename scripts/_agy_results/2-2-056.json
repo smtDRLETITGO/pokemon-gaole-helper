@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-056",
+  "timestamp": "2026-07-17T23:18:33.776645",
+  "front": {
+    "cardId": "2-2-056",
+    "name": "貪心栗鼠",
+    "stars": 2,
+    "type1": "一般",
+    "type2": null,
+    "hp_front": 40,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 72,
+    "attack": 33,
+    "defense": 33,
+    "spAtk": 23,
+    "spDef": 23,
+    "speed": 18,
+    "moveName": "撞擊",
+    "moveType": "一般",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-002",
+  "timestamp": "2026-07-17T22:16:54.529259",
+  "front": {
+    "cardId": "2-2-002",
+    "name": "藏瑪然特",
+    "stars": 6,
+    "type1": "格鬥",
+    "type2": "鋼",
+    "hp_front": 206,
+    "layout": "horizontal",
+    "hasSuperStar": true,
+    "hasGigantamax": true
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 194,
+    "attack": 174,
+    "defense": 193,
+    "spAtk": 109,
+    "spDef": 193,
+    "speed": 171,
+    "moveName": "巨獸彈",
+    "moveType": "鋼",
+    "moveCategory": "D",
+    "move2Name": "近身戰",
+    "move2Type": "格鬥",
+    "move2Category": "D"
+  },
+  "back_model": "flash",
+  "ok": true
+}

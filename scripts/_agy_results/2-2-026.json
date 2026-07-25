@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-026",
+  "timestamp": "2026-07-17T22:48:43.094131",
+  "front": {
+    "cardId": "2-2-026",
+    "name": "蒂蕾喵",
+    "stars": 3,
+    "type1": "草",
+    "type2": null,
+    "hp_front": 84,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 103,
+    "attack": 72,
+    "defense": 57,
+    "spAtk": 55,
+    "spDef": 57,
+    "speed": 74,
+    "moveName": "魔法葉",
+    "moveType": "草",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

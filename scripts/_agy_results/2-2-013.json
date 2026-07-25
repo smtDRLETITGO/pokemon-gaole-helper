@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-013",
+  "timestamp": "2026-07-17T22:33:14.113911",
+  "front": {
+    "cardId": "2-2-013",
+    "name": "化石翼龍",
+    "stars": 5,
+    "type1": "岩石",
+    "type2": "飛行",
+    "hp_front": 128,
+    "layout": "horizontal",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 150,
+    "attack": 118,
+    "defense": 75,
+    "spAtk": 69,
+    "spDef": 86,
+    "speed": 145,
+    "moveName": "飛翔",
+    "moveType": "飛行",
+    "moveCategory": "D",
+    "move2Name": "極速俯衝轟烈撞",
+    "move2Type": "飛行",
+    "move2Category": "D"
+  },
+  "back_model": "flash",
+  "ok": true
+}

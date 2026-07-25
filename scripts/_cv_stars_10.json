@@ -1,0 +1,440 @@
+[
+  {
+    "cardId": "2-1-001",
+    "stars": 2,
+    "confidence": 0.8,
+    "method": "skeleton(tight,peak2,Q=113)"
+  },
+  {
+    "cardId": "2-1-002",
+    "stars": 5,
+    "confidence": 0.65,
+    "method": "skeleton(tight,peak5,Q=98)"
+  },
+  {
+    "cardId": "2-1-003",
+    "stars": 2,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(normal,end10/5,Q=135)"
+  },
+  {
+    "cardId": "2-1-004",
+    "stars": 4,
+    "confidence": 0.95,
+    "method": "skeleton(wide,cont4,Q=133)"
+  },
+  {
+    "cardId": "2-1-005",
+    "stars": 3,
+    "confidence": 0.8,
+    "method": "skeleton(tight,peak3,Q=106)"
+  },
+  {
+    "cardId": "2-1-006",
+    "stars": 2,
+    "confidence": 0.95,
+    "method": "skeleton(wide,cont2,Q=108)"
+  },
+  {
+    "cardId": "2-1-007",
+    "stars": 5,
+    "confidence": 0.85,
+    "method": "skeleton(tight,cont5,Q=118)"
+  },
+  {
+    "cardId": "2-1-008",
+    "stars": 5,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(loose,end24/5,Q=115)"
+  },
+  {
+    "cardId": "2-1-009",
+    "stars": 3,
+    "confidence": 0.9000000000000001,
+    "method": "skeleton(normal,end15/5,Q=120)"
+  },
+  {
+    "cardId": "2-1-010",
+    "stars": 5,
+    "confidence": 1.0,
+    "method": "skeleton(wide,br4+1,Q=163)"
+  },
+  {
+    "cardId": "2-1-011",
+    "stars": 5,
+    "confidence": 0.9,
+    "method": "skeleton(wide,peak5,Q=108)"
+  },
+  {
+    "cardId": "2-1-012",
+    "stars": 3,
+    "confidence": 0.8,
+    "method": "skeleton(wide,peak3,Q=111)"
+  },
+  {
+    "cardId": "2-1-013",
+    "stars": 6,
+    "confidence": 0.9,
+    "method": "skeleton(wide,peak6,Q=111)"
+  },
+  {
+    "cardId": "2-1-014",
+    "stars": 5,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(tight,end24/5,Q=118)"
+  },
+  {
+    "cardId": "2-1-015",
+    "stars": 5,
+    "confidence": 0.9000000000000001,
+    "method": "skeleton(tight,end24/5,Q=118)"
+  },
+  {
+    "cardId": "2-1-016",
+    "stars": 5,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(tight,end25/5,Q=128)"
+  },
+  {
+    "cardId": "2-1-017",
+    "stars": 4,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(tight,end19/5,Q=118)"
+  },
+  {
+    "cardId": "2-1-018",
+    "stars": 5,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(normal,end25/5,Q=135)"
+  },
+  {
+    "cardId": "2-1-019",
+    "stars": 3,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(normal,end15/5,Q=120)"
+  },
+  {
+    "cardId": "2-1-020",
+    "stars": 3,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(wide,end16/5,Q=113)"
+  },
+  {
+    "cardId": "2-1-021",
+    "stars": 2,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(wide,end11/5,Q=123)"
+  },
+  {
+    "cardId": "2-1-022",
+    "stars": 4,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(normal,end20/5,Q=135)"
+  },
+  {
+    "cardId": "2-1-023",
+    "stars": 6,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(normal,end31/5,Q=120)"
+  },
+  {
+    "cardId": "2-1-024",
+    "stars": 5,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(tight,end25/5,Q=128)"
+  },
+  {
+    "cardId": "2-1-025",
+    "stars": 5,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(normal,end25/5,Q=135)"
+  },
+  {
+    "cardId": "2-1-026",
+    "stars": 3,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(wide,peak3,Q=128)"
+  },
+  {
+    "cardId": "2-1-027",
+    "stars": 2,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(tight,end10/5,Q=128)"
+  },
+  {
+    "cardId": "2-1-028",
+    "stars": 2,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(normal,end9/5,Q=125)"
+  },
+  {
+    "cardId": "2-1-029",
+    "stars": 4,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(wide,end20/5,Q=133)"
+  },
+  {
+    "cardId": "2-1-030",
+    "stars": 3,
+    "confidence": 0.9000000000000001,
+    "method": "skeleton(normal,end15/5,Q=135)"
+  },
+  {
+    "cardId": "2-1-031",
+    "stars": 2,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(xloose,end9/5,Q=105)"
+  },
+  {
+    "cardId": "2-1-032",
+    "stars": 6,
+    "confidence": 0.85,
+    "method": "skeleton(normal,br5+1,Q=150)"
+  },
+  {
+    "cardId": "2-1-033",
+    "stars": 2,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(wide,end10/5,Q=133)"
+  },
+  {
+    "cardId": "2-1-034",
+    "stars": 6,
+    "confidence": 0.75,
+    "method": "skeleton(normal,cont6,Q=93)"
+  },
+  {
+    "cardId": "2-1-035",
+    "stars": 3,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(normal,end16/5,Q=125)"
+  },
+  {
+    "cardId": "2-1-036",
+    "stars": 1,
+    "confidence": 1.0,
+    "method": "skeleton(wide,end4/5,Q=118)"
+  },
+  {
+    "cardId": "2-1-037",
+    "stars": 3,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(xloose,end15/5,Q=110)"
+  },
+  {
+    "cardId": "2-1-038",
+    "stars": 2,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(normal,end9/5,Q=125)"
+  },
+  {
+    "cardId": "2-1-039",
+    "stars": 5,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(normal,end26/5,Q=125)"
+  },
+  {
+    "cardId": "2-1-040",
+    "stars": 4,
+    "confidence": 0.9000000000000001,
+    "method": "skeleton(normal,end20/5,Q=120)"
+  },
+  {
+    "cardId": "2-1-041",
+    "stars": 2,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(tight,end11/5,Q=118)"
+  },
+  {
+    "cardId": "2-1-042",
+    "stars": 5,
+    "confidence": 0.9000000000000001,
+    "method": "skeleton(tight,end25/5,Q=128)"
+  },
+  {
+    "cardId": "2-1-043",
+    "stars": 2,
+    "confidence": 0.95,
+    "method": "skeleton(normal,br1+1,Q=125)"
+  },
+  {
+    "cardId": "2-1-044",
+    "stars": 5,
+    "confidence": 0.9,
+    "method": "skeleton(tight,peak5,Q=103)"
+  },
+  {
+    "cardId": "2-1-045",
+    "stars": 3,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(wide,end15/5,Q=133)"
+  },
+  {
+    "cardId": "2-1-046",
+    "stars": 3,
+    "confidence": 1.0,
+    "method": "skeleton(tight,end16/5,Q=133)"
+  },
+  {
+    "cardId": "2-1-047",
+    "stars": 2,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(wide,end11/5,Q=123)"
+  },
+  {
+    "cardId": "2-1-048",
+    "stars": 6,
+    "confidence": 0.8,
+    "method": "skeleton(tight,end29/5,Q=113)"
+  },
+  {
+    "cardId": "2-1-049",
+    "stars": 4,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(loose,peak4,Q=120)"
+  },
+  {
+    "cardId": "2-1-050",
+    "stars": 5,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(wide,peak5,Q=96)"
+  },
+  {
+    "cardId": "2-1-051",
+    "stars": 3,
+    "confidence": 0.65,
+    "method": "skeleton(normal,peak3,Q=103)"
+  },
+  {
+    "cardId": "2-1-052",
+    "stars": 2,
+    "confidence": 0.95,
+    "method": "skeleton(normal,cont2,Q=108)"
+  },
+  {
+    "cardId": "2-1-053",
+    "stars": 5,
+    "confidence": 0.95,
+    "method": "skeleton(tight,br4+1,Q=118)"
+  },
+  {
+    "cardId": "2-1-054",
+    "stars": 2,
+    "confidence": 0.95,
+    "method": "skeleton(normal,cont2,Q=118)"
+  },
+  {
+    "cardId": "2-1-055",
+    "stars": 6,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(tight,end30/5,Q=113)"
+  },
+  {
+    "cardId": "2-1-056",
+    "stars": 2,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(tight,end11/5,Q=118)"
+  },
+  {
+    "cardId": "2-1-057",
+    "stars": 5,
+    "confidence": 0.9,
+    "method": "skeleton(normal,cont5,Q=103)"
+  },
+  {
+    "cardId": "2-1-058",
+    "stars": 5,
+    "confidence": 0.9000000000000001,
+    "method": "skeleton(wide,end25/5,Q=133)"
+  },
+  {
+    "cardId": "2-1-059",
+    "stars": 4,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(normal,end20/5,Q=120)"
+  },
+  {
+    "cardId": "2-1-060",
+    "stars": 3,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(normal,end15/5,Q=120)"
+  },
+  {
+    "cardId": "2-1-061",
+    "stars": 3,
+    "confidence": 0.9000000000000001,
+    "method": "skeleton(wide,end15/5,Q=138)"
+  },
+  {
+    "cardId": "2-1-062",
+    "stars": 2,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(tight,peak2,Q=113)"
+  },
+  {
+    "cardId": "2-1-063",
+    "stars": 2,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(normal,end10/5,Q=135)"
+  },
+  {
+    "cardId": "2-1-064",
+    "stars": 5,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(tight,end26/5,Q=118)"
+  },
+  {
+    "cardId": "2-1-065",
+    "stars": 4,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(loose,peak4,Q=120)"
+  },
+  {
+    "cardId": "2-1-066",
+    "stars": 2,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(normal,end10/5,Q=135)"
+  },
+  {
+    "cardId": "2-1-067",
+    "stars": 4,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(tight,end20/5,Q=118)"
+  },
+  {
+    "cardId": "2-1-068",
+    "stars": 2,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(normal,end9/5,Q=125)"
+  },
+  {
+    "cardId": "2-1-069",
+    "stars": 2,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(normal,end10/5,Q=135)"
+  },
+  {
+    "cardId": "2-1-070",
+    "stars": 6,
+    "confidence": 0.8500000000000001,
+    "method": "skeleton(tight,end30/5,Q=123)"
+  },
+  {
+    "cardId": "R-2-1",
+    "stars": 4,
+    "confidence": 0.85,
+    "method": "skeleton(normal,br3+1,Q=120)"
+  },
+  {
+    "cardId": "R-2-2",
+    "stars": 5,
+    "confidence": 0.9500000000000001,
+    "method": "skeleton(normal,end24/5,Q=115)"
+  },
+  {
+    "cardId": "R-2-3",
+    "stars": 5,
+    "confidence": 0.95,
+    "method": "skeleton(tight,cont5,Q=128)"
+  }
+]

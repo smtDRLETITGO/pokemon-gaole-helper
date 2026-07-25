@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-032",
+  "timestamp": "2026-07-17T22:53:30.902384",
+  "front": {
+    "cardId": "2-2-032",
+    "name": "藤藤蛇",
+    "stars": 2,
+    "type1": "草",
+    "type2": null,
+    "hp_front": 46,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 61,
+    "attack": 29,
+    "defense": 34,
+    "spAtk": 29,
+    "spDef": 34,
+    "speed": 39,
+    "moveName": "藤鞭",
+    "moveType": "草",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

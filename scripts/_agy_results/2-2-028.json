@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-028",
+  "timestamp": "2026-07-17T22:50:10.867529",
+  "front": {
+    "cardId": "2-2-028",
+    "name": "炙燙鱷",
+    "stars": 3,
+    "type1": "火",
+    "type2": null,
+    "hp_front": 84,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 120,
+    "attack": 51,
+    "defense": 70,
+    "spAtk": 80,
+    "spDef": 53,
+    "speed": 46,
+    "moveName": "燒盡",
+    "moveType": "火",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

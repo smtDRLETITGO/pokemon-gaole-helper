@@ -1,0 +1,34 @@
+{
+  "cardId": "2-2-067",
+  "timestamp": "2026-07-18T08:14:32.094268",
+  "front": {
+    "cardId": "2-2-067",
+    "name": "電擊獸",
+    "stars": 3,
+    "type1": "電",
+    "type2": null,
+    "hp_front": 96,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "front_fallback": false,
+  "back": {
+    "hp": 104,
+    "attack": 152,
+    "defense": 73,
+    "spAtk": 51,
+    "spDef": 74,
+    "speed": 82,
+    "moveName": "電擊波",
+    "moveType": "電",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "back_fallback": false,
+  "ok": true
+}

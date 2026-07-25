@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-025",
+  "timestamp": "2026-07-17T22:47:47.692541",
+  "front": {
+    "cardId": "2-2-025",
+    "name": "阿勃梭魯",
+    "stars": 5,
+    "type1": "惡",
+    "type2": null,
+    "hp_front": 130,
+    "layout": "horizontal",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 148,
+    "attack": 161,
+    "defense": 77,
+    "spAtk": 95,
+    "spDef": 77,
+    "speed": 95,
+    "moveName": "地獄突刺",
+    "moveType": "惡",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

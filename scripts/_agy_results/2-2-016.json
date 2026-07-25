@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-016",
+  "timestamp": "2026-07-17T22:38:31.032963",
+  "front": {
+    "cardId": "2-2-016",
+    "name": "胡地",
+    "stars": 5,
+    "type1": "超能力",
+    "type2": null,
+    "hp_front": 128,
+    "layout": "horizontal",
+    "hasSuperStar": false,
+    "hasGigantamax": true
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 125,
+    "attack": 60,
+    "defense": 54,
+    "spAtk": 153,
+    "spDef": 109,
+    "speed": 137,
+    "moveName": "精神強念",
+    "moveType": "超能力",
+    "moveCategory": "X",
+    "move2Name": "極巨超能",
+    "move2Type": "超能力",
+    "move2Category": "X"
+  },
+  "back_model": "flash",
+  "ok": true
+}

@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-036",
+  "timestamp": "2026-07-17T22:58:22.625333",
+  "front": {
+    "cardId": "2-2-036",
+    "name": "炒炒豬",
+    "stars": 3,
+    "type1": "火",
+    "type2": "格鬥",
+    "hp_front": 86,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 127,
+    "attack": 83,
+    "defense": 51,
+    "spAtk": 63,
+    "spDef": 51,
+    "speed": 51,
+    "moveName": "蓄能焰襲",
+    "moveType": "火",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

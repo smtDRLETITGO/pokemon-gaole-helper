@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-027",
+  "timestamp": "2026-07-17T22:49:29.631175",
+  "front": {
+    "cardId": "2-2-027",
+    "name": "魔幻假面喵",
+    "stars": 4,
+    "type1": "草",
+    "type2": "惡",
+    "hp_front": 118,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 130,
+    "attack": 110,
+    "defense": 72,
+    "spAtk": 82,
+    "spDef": 72,
+    "speed": 123,
+    "moveName": "暗襲要害",
+    "moveType": "惡",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

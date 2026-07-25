@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-015",
+  "timestamp": "2026-07-17T22:36:15.091546",
+  "front": {
+    "cardId": "2-2-015",
+    "name": "鰓魚龍",
+    "stars": 5,
+    "type1": "水",
+    "type2": "龍",
+    "hp_front": 138,
+    "layout": "horizontal",
+    "hasSuperStar": false,
+    "hasGigantamax": true
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 175,
+    "attack": 111,
+    "defense": 123,
+    "spAtk": 87,
+    "spDef": 99,
+    "speed": 93,
+    "moveName": "逆鱗",
+    "moveType": "龍",
+    "moveCategory": "D",
+    "move2Name": "極巨龍騎",
+    "move2Type": "龍",
+    "move2Category": "D"
+  },
+  "back_model": "flash",
+  "ok": true
+}

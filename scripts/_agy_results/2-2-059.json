@@ -1,0 +1,34 @@
+{
+  "cardId": "2-2-059",
+  "timestamp": "2026-07-18T08:07:48.774560",
+  "front": {
+    "cardId": "2-2-059",
+    "name": "海魔獅",
+    "stars": 3,
+    "type1": "冰",
+    "type2": "水",
+    "hp_front": 82,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "front_fallback": false,
+  "back": {
+    "hp": 124,
+    "attack": 54,
+    "defense": 62,
+    "spAtk": 66,
+    "spDef": 62,
+    "speed": 41,
+    "moveName": "冰凍之風",
+    "moveType": "冰",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "back_fallback": false,
+  "ok": true
+}

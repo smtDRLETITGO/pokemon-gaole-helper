@@ -1,0 +1,34 @@
+{
+  "cardId": "2-2-068",
+  "timestamp": "2026-07-18T08:15:28.467627",
+  "front": {
+    "cardId": "2-2-068",
+    "name": "電擊魔獸",
+    "stars": 4,
+    "type1": "電",
+    "type2": null,
+    "hp_front": 118,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "front_fallback": false,
+  "back": {
+    "hp": 127,
+    "attack": 120,
+    "defense": 67,
+    "spAtk": 94,
+    "spDef": 84,
+    "speed": 94,
+    "moveName": "雷電拳",
+    "moveType": "電",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "back_fallback": false,
+  "ok": true
+}

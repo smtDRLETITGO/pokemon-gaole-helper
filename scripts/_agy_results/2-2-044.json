@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-044",
+  "timestamp": "2026-07-17T23:06:39.161638",
+  "front": {
+    "cardId": "2-2-044",
+    "name": "醜醜魚",
+    "stars": 2,
+    "type1": "水",
+    "type2": null,
+    "hp_front": 32,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 46,
+    "attack": 12,
+    "defense": 15,
+    "spAtk": 10,
+    "spDef": 33,
+    "speed": 46,
+    "moveName": "撞擊",
+    "moveType": "一般",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

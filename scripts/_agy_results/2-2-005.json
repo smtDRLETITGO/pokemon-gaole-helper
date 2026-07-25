@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-005",
+  "timestamp": "2026-07-17T22:23:06.948169",
+  "front": {
+    "cardId": "2-2-005",
+    "name": "薩戮德",
+    "stars": 6,
+    "type1": "惡",
+    "type2": "草",
+    "hp_front": 166,
+    "layout": "horizontal",
+    "hasSuperStar": true,
+    "hasGigantamax": true
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 199,
+    "attack": 151,
+    "defense": 133,
+    "spAtk": 90,
+    "spDef": 120,
+    "speed": 133,
+    "moveName": "強力鞭打",
+    "moveType": "草",
+    "moveCategory": "D",
+    "move2Name": "極巨草原",
+    "move2Type": "草",
+    "move2Category": "D"
+  },
+  "back_model": "flash",
+  "ok": true
+}

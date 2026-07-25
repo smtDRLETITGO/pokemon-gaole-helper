@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-053",
+  "timestamp": "2026-07-17T23:15:47.710127",
+  "front": {
+    "cardId": "2-2-053",
+    "name": "百足蜈蚣",
+    "stars": 2,
+    "type1": "蟲",
+    "type2": "毒",
+    "hp_front": 40,
+    "layout": "vertical",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 53,
+    "attack": 29,
+    "defense": 36,
+    "spAtk": 21,
+    "spDef": 26,
+    "speed": 35,
+    "moveName": "毒針",
+    "moveType": "毒",
+    "moveCategory": "D",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}

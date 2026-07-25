@@ -1,0 +1,32 @@
+{
+  "cardId": "2-2-023",
+  "timestamp": "2026-07-17T22:46:12.790749",
+  "front": {
+    "cardId": "2-2-023",
+    "name": "毒貝比",
+    "stars": 5,
+    "type1": "毒",
+    "type2": null,
+    "hp_front": 110,
+    "layout": "horizontal",
+    "hasSuperStar": false,
+    "hasGigantamax": false
+  },
+  "front_model": "flash",
+  "back": {
+    "hp": 138,
+    "attack": 85,
+    "defense": 78,
+    "spAtk": 85,
+    "spDef": 78,
+    "speed": 85,
+    "moveName": "龍之波動",
+    "moveType": "龍",
+    "moveCategory": "X",
+    "move2Name": null,
+    "move2Type": null,
+    "move2Category": null
+  },
+  "back_model": "flash",
+  "ok": true
+}
