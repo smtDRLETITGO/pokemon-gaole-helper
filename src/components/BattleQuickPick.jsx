@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import TypeIcon, { getTypeColor } from './TypeIcon';
 import SpecialMechanicBadge from './SpecialMechanicBadge';
+import { GALAXY_2_BOSS_PRESETS } from '../data/bossPresets';
+import { getEffectiveness } from '../data/pokemonDb';
 
 const ALL_TYPES = ['火','水','草','電','冰','格鬥','毒','地面','飛行','超能力','蟲','岩石','幽靈','龍','惡','鋼','妖精','一般'];
 
@@ -19,9 +21,21 @@ const makeOpponents = () => [
 
 export default function BattleQuickPick({ collection }) {
   const [opponents, setOpponents] = useState(makeOpponents);
+  const [activeBossId, setActiveBossId] = useState(null);
+
+  // ── 一鍵帶入首領關卡預設 ──
+  const applyBossPreset = (preset) => {
+    setActiveBossId(preset.id);
+    setOpponents([
+      { id: 0, types: [...preset.bossTypes], assigned: null },
+      { id: 1, types: preset.companions[0] ? [...preset.companions[0]] : [], assigned: null },
+      { id: 2, types: preset.companions[1] ? [...preset.companions[1]] : [], assigned: null },
+    ]);
+  };
 
   // ── 切換某個對手的屬性 ──
   const toggleType = (oppId, type) => {
+    setActiveBossId(null); // 手動微調時取消首領連動標籤
     setOpponents(prev => prev.map(opp =>
       opp.id === oppId
         ? { ...opp, types: opp.types.includes(type) ? opp.types.filter(t => t !== type) : [...opp.types, type] }
@@ -36,7 +50,6 @@ export default function BattleQuickPick({ collection }) {
   // ── 派出卡給某個對手 ──
   const assignCard = (oppId, card) => {
     setOpponents(prev => {
-      // 如果該卡已派出給其他對手，先取消
       const cleared = prev.map(o =>
         o.assigned?.cardId === card.cardId ? { ...o, assigned: null } : o
       );
@@ -48,9 +61,12 @@ export default function BattleQuickPick({ collection }) {
     setOpponents(prev => prev.map(o => o.id === oppId ? { ...o, assigned: null } : o));
   };
 
-  const resetAll = () => setOpponents(makeOpponents());
+  const resetAll = () => {
+    setActiveBossId(null);
+    setOpponents(makeOpponents());
+  };
 
-  // ── 每個對手的篩選卡 ──
+  // ── 每個對手的攻防雙向精算篩選卡 ──
   const filteredCards = useMemo(() => {
     return opponents.map(opp => {
       if (opp.types.length === 0) return { oppId: opp.id, cards: [] };
@@ -63,26 +79,54 @@ export default function BattleQuickPick({ collection }) {
         return 0;
       };
 
-      const cards = collection
+      const oppMainType = opp.types[0];
+
+      const scoredCards = collection
         .filter(c => (c.moveType && opp.types.includes(c.moveType)) || (c.moveType2 && opp.types.includes(c.moveType2)))
-        .sort((a, b) => {
-          const aScore = (a.stars || 0) * 10000 + getMechanicScore(a.specialMechanic) * 10 + (a.hp || 0);
-          const bScore = (b.stars || 0) * 10000 + getMechanicScore(b.specialMechanic) * 10 + (b.hp || 0);
-          return bScore - aScore;
-        });
-      return { oppId: opp.id, cards };
+        .map(card => {
+          // 攻擊絕佳倍率
+          const offenseMult = getEffectiveness(card.moveType, opp.types);
+          
+          // 我方防禦評定 (防範對手招式)
+          const myTypes = [card.type1, card.type2].filter(Boolean);
+          const defMult = oppMainType ? getEffectiveness(oppMainType, myTypes) : 1.0;
+          
+          let defStatus = 'normal'; // normal, resisted (減傷), vulnerable (被剋制)
+          if (defMult < 1.0) defStatus = 'resisted';
+          else if (defMult > 1.0) defStatus = 'vulnerable';
+
+          // 計算綜合推薦總分
+          let score = (card.stars || 0) * 10000;
+          score += (offenseMult - 1.0) * 2000;
+          
+          if (defStatus === 'resisted') score += (1.0 - defMult) * 1500;
+          else if (defStatus === 'vulnerable') score -= (defMult - 1.0) * 2500; // 被剋重罰
+
+          score += getMechanicScore(card.specialMechanic) * 100;
+          score += (card.hp || 0);
+
+          return {
+            ...card,
+            calcScore: score,
+            offenseMult,
+            defMult,
+            defStatus
+          };
+        })
+        .sort((a, b) => b.calcScore - a.calcScore);
+
+      return { oppId: opp.id, cards: scoredCards };
     });
   }, [collection, opponents]);
 
   const lineupCards = opponents.filter(o => o.assigned).map(o => o.assigned);
 
-  // ── 渲染 ── //
-
   return (
     <div className="glass-panel mb-4" style={{ paddingBottom: '16px' }}>
+      {/* 標題 */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
         <h2 style={{ fontSize: '18px', fontWeight: '800', color: '#ff9f0a', margin: 0 }}>
-          ⚔️ 機台戰鬥
+          ⚔️ 機台戰鬥 (攻防雙向精算)
         </h2>
         {lineupCards.length > 0 && (
           <button onClick={resetAll} style={{
@@ -91,6 +135,45 @@ export default function BattleQuickPick({ collection }) {
             fontSize: '11px', fontWeight: 'bold', cursor: 'pointer',
           }}>重設全部</button>
         )}
+      </div>
+
+      {/* 👑 一鍵首領快速帶入列 (銀河第二彈) */}
+      <div style={{
+        marginBottom: '14px', padding: '8px 10px',
+        background: 'rgba(255,159,10,0.06)', border: '1px solid rgba(255,159,10,0.2)',
+        borderRadius: '10px',
+      }}>
+        <div style={{ fontSize: '11px', fontWeight: '800', color: '#ff9f0a', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          👑 一鍵首領帶入 (銀河第二彈 6★)
+          <span style={{ fontSize: '9px', fontWeight: 'normal', color: 'rgba(255,255,255,0.5)' }}>點首領 0.1s 自動組隊</span>
+        </div>
+        <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px', scrollbarWidth: 'none' }}>
+          {GALAXY_2_BOSS_PRESETS.map(b => {
+            const isSel = activeBossId === b.id;
+            return (
+              <button
+                key={b.id}
+                onClick={() => applyBossPreset(b)}
+                style={{
+                  flexShrink: 0,
+                  display: 'flex', alignItems: 'center', gap: '4px',
+                  padding: '4px 10px',
+                  borderRadius: '20px',
+                  border: isSel ? '2px solid #ff9f0a' : '1px solid rgba(255,255,255,0.12)',
+                  background: isSel ? 'rgba(255,159,10,0.25)' : b.avatarBg,
+                  color: '#fff',
+                  fontSize: '11px', fontWeight: 'bold',
+                  cursor: 'pointer',
+                  boxShadow: isSel ? '0 0 10px rgba(255,159,10,0.5)' : 'none',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                <span>{b.name}</span>
+                <span style={{ fontSize: '8px', opacity: 0.8 }}>({b.bossTypes.join('/')})</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* ═══════ 3 個對手 ─ 垂直排列 ═══════ */}
@@ -112,7 +195,7 @@ export default function BattleQuickPick({ collection }) {
                 background: idx === 0 ? 'rgba(255,69,58,0.2)' : idx === 1 ? 'rgba(100,210,255,0.2)' : 'rgba(255,200,50,0.2)',
                 color: idx === 0 ? '#ff453a' : idx === 1 ? '#64d2ff' : '#ffc832',
               }}>
-                對手 {idx + 1}
+                {idx === 0 ? '👑 首領 (對手1)' : `對手 ${idx + 1}`}
               </span>
               {isAssigned && (
                 <span style={{ fontSize: '10px', color: '#34c759', fontWeight: 'bold' }}>
@@ -127,7 +210,7 @@ export default function BattleQuickPick({ collection }) {
               )}
             </div>
 
-            {/* 屬性 chips (icon + 中文名稱) */}
+            {/* 屬性 chips (手動挑屬性功能完全保留) */}
             {!isAssigned && (
               <div style={{ marginBottom: opp.types.length > 0 ? '8px' : '2px' }}>
                 {TYPE_ORDER_ROW.map((row, ri) => (
@@ -191,50 +274,80 @@ export default function BattleQuickPick({ collection }) {
               </div>
             ) : isAssigned ? null : opp.types.length === 0 ? (
               <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.15)', textAlign: 'center', padding: '12px' }}>
-                點選上方屬性選擇卡牌
+                點選上方首領或屬性按鈕進行算牌推薦
               </div>
             ) : (
-              <div style={{ display: 'flex', gap: '4px', overflowX: 'auto', paddingBottom: '4px' }}>
+              <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px' }}>
                 {oppCards.slice(0, 3).map((card) => {
                   const alreadyAssigned = lineupCards.some(c => c.cardId === card.cardId);
                   return (
                     <div key={card.cardId} style={{
-                      flexShrink: 0, width: 120,
-                      padding: '6px', borderRadius: '8px',
-                      background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)',
+                      flexShrink: 0, width: 130,
+                      padding: '8px', borderRadius: '8px',
+                      background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)',
+                      display: 'flex', flexDirection: 'column', justifyContent: 'space-between'
                     }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '10px', fontWeight: '800', color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 70 }}>
-                          {card.name}
-                        </span>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <span style={{ fontSize: '8px', color: card.stars >= 6 ? '#a21caf' : card.stars >= 5 ? '#f59e0b' : '#9ca3af' }}>
+                      <div>
+                        {/* 卡片標題與星等 */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: '11px', fontWeight: '800', color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 80 }}>
+                            {card.name}
+                          </span>
+                          <span style={{ fontSize: '9px', fontWeight: 'bold', color: card.stars >= 6 ? '#a21caf' : card.stars >= 5 ? '#f59e0b' : '#9ca3af' }}>
                             {card.stars}★
                           </span>
                         </div>
+
+                        {/* 屬性與招式 */}
+                        <div style={{ display: 'flex', gap: '2px', marginTop: '3px' }}>
+                          <span className={`type-badge type-${card.type1}`} style={{ fontSize: '7px', padding: '0 3px', borderRadius: '2px' }}>{card.type1}</span>
+                          {card.type2 && <span className={`type-badge type-${card.type2}`} style={{ fontSize: '7px', padding: '0 3px', borderRadius: '2px' }}>{card.type2}</span>}
+                        </div>
+                        <div style={{ fontSize: '8px', color: 'var(--text-muted)', marginTop: '3px' }}>
+                          <span style={{ color: '#fff', fontWeight: 'bold' }}>{card.moveName}</span> ({card.moveType})
+                        </div>
+
+                        {/* ⚔️🛡️ 攻防雙向標示列 */}
+                        <div style={{ display: 'flex', gap: '3px', marginTop: '4px', flexWrap: 'wrap' }}>
+                          <span style={{
+                            fontSize: '8px', fontWeight: 'bold', padding: '1px 4px', borderRadius: '3px',
+                            background: card.offenseMult >= 4 ? 'rgba(234,88,12,0.3)' : 'rgba(52,199,89,0.2)',
+                            color: card.offenseMult >= 4 ? '#ff7849' : '#34c759',
+                            border: '1px solid rgba(255,255,255,0.1)'
+                          }}>
+                            ⚔️ {card.offenseMult}x
+                          </span>
+                          
+                          <span style={{
+                            fontSize: '8px', fontWeight: 'bold', padding: '1px 4px', borderRadius: '3px',
+                            background: card.defStatus === 'resisted' ? 'rgba(52,199,89,0.2)' : card.defStatus === 'vulnerable' ? 'rgba(255,69,58,0.2)' : 'rgba(255,255,255,0.05)',
+                            color: card.defStatus === 'resisted' ? '#34c759' : card.defStatus === 'vulnerable' ? '#ff453a' : '#aaa',
+                            border: '1px solid rgba(255,255,255,0.1)'
+                          }}>
+                            {card.defStatus === 'resisted' ? '🛡️減傷' : card.defStatus === 'vulnerable' ? '⚠️易被剋' : '🛡️正常'}
+                          </span>
+                        </div>
+
+                        {/* 特殊招式圖示徽章 */}
+                        <div style={{ marginTop: '3px' }}>
+                          <SpecialMechanicBadge mechanic={card.specialMechanic} />
+                        </div>
                       </div>
-                      <div style={{ display: 'flex', gap: '2px', marginTop: '2px' }}>
-                        <span className={`type-badge type-${card.type1}`} style={{ fontSize: '7px', padding: '0 2px', borderRadius: '2px' }}>{card.type1}</span>
-                        {card.type2 && <span className={`type-badge type-${card.type2}`} style={{ fontSize: '7px', padding: '0 2px', borderRadius: '2px' }}>{card.type2}</span>}
-                      </div>
-                      <div style={{ fontSize: '8px', color: 'var(--text-muted)', marginTop: '2px' }}>
-                        <span style={{ color: '#aaa' }}>{card.moveName}</span>
-                        <span> HP {card.hp || '?'}</span>
-                      </div>
-                      <SpecialMechanicBadge mechanic={card.specialMechanic} />
+
+                      {/* 派卡按鈕 */}
                       <button
                         onClick={() => assignCard(opp.id, card)}
                         disabled={alreadyAssigned}
                         style={{
-                          width: '100%', marginTop: '4px',
-                          background: alreadyAssigned ? 'rgba(255,255,255,0.05)' : 'rgba(255,159,10,0.15)',
-                          border: '1px solid ' + (alreadyAssigned ? 'rgba(255,255,255,0.1)' : 'rgba(255,159,10,0.3)'),
-                          borderRadius: '5px', padding: '2px 0',
+                          width: '100%', marginTop: '6px',
+                          background: alreadyAssigned ? 'rgba(255,255,255,0.05)' : 'rgba(255,159,10,0.2)',
+                          border: '1px solid ' + (alreadyAssigned ? 'rgba(255,255,255,0.1)' : 'rgba(255,159,10,0.4)'),
+                          borderRadius: '5px', padding: '3px 0',
                           color: alreadyAssigned ? '#666' : '#ff9f0a',
                           fontSize: '10px', fontWeight: 'bold', cursor: 'pointer',
                         }}
                       >
-                        {alreadyAssigned ? '已用它卡' : '＋派'}
+                        {alreadyAssigned ? '已用它卡' : '＋派卡出戰'}
                       </button>
                     </div>
                   );

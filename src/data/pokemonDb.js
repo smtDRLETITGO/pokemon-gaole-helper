@@ -237,21 +237,27 @@ export function getEffectiveness(attackType, defenderTypes) {
 export function getRecommendations(collection, opponent) {
   if (!opponent || !collection || collection.length === 0) return [];
   const opponentTypes = [opponent.type1, opponent.type2].filter(Boolean);
+  const oppMoveType = opponent.moveType || opponent.type1; // 首領主要攻擊屬性
 
   const scored = collection.map(card => {
+    // 1. 攻擊端倍率 (4x / 2x / 1x / <1x)
     const offenseMult = getEffectiveness(card.moveType, opponentTypes);
     const defenderTypes = [card.type1, card.type2].filter(Boolean);
+    
+    // 2. 防禦端承受倍率 (針對首領的主要攻擊屬性)
+    let defMult = oppMoveType ? getEffectiveness(oppMoveType, defenderTypes) : 1.0;
     let worstDefenseMult = 1.0;
     opponentTypes.forEach(oppType => {
       const m = getEffectiveness(oppType, defenderTypes);
       if (m > worstDefenseMult) worstDefenseMult = m;
     });
     
-    // 智慧傷害計算優化：根據招式類型 (物理/特殊) 動態選取對應的攻擊力參數進行評分
-    const activeAttack = card.moveCategory === "特殊" ? (card.spAtk || card.attack) : card.attack;
-    const statSum = (Number(card.hp) || 0) + (Number(activeAttack) || 0) + (Number(card.defense) || 0);
-    const starWeight = (card.category === 'special' ? 0 : (Number(card.stars) || 1)) * 35;
-    
+    // 防禦狀態評定
+    let defenseStatus = 'normal';
+    if (defMult < 1.0) defenseStatus = 'resisted'; // 減傷 (抗性)
+    else if (defMult > 1.0) defenseStatus = 'vulnerable'; // 被剋制 (弱點)
+
+    // 3. 特殊招式加權
     const getMechanicScore = (mechanic) => {
       if (!mechanic) return 0;
       if (['chain_attack', 'chain', 'super-tag', 'super_tag', 'capsule'].includes(mechanic)) return 300;
@@ -260,16 +266,37 @@ export function getRecommendations(collection, opponent) {
       return 0;
     };
 
+    // 4. 攻防雙向精算總分
     let score = 0;
+    // 攻擊加分 (4x 增加 400分, 2x 增加 200分)
     if (offenseMult > 1.0) {
       score += (offenseMult - 1.0) * 200;
     } else if (offenseMult < 1.0) {
       score += (offenseMult - 1.0) * 150;
     }
-    score += (1.0 - worstDefenseMult) * 80;
+
+    // 防禦評分：抵抗(減傷)加分，被剋制重罰扣分
+    if (defenseStatus === 'resisted') {
+      score += (1.0 - defMult) * 150;
+    } else if (defenseStatus === 'vulnerable') {
+      score -= (defMult - 1.0) * 200; // 重罰！防止秒殺卡被推上前台
+    }
+
+    // 三圍體質 + 星等權重 + 特殊招式獎勵
+    const activeAttack = card.moveCategory === "特殊" ? (card.spAtk || card.attack) : card.attack;
+    const statSum = (Number(card.hp) || 0) + (Number(activeAttack) || 0) + (Number(card.defense) || 0);
+    const starWeight = (card.category === 'special' ? 0 : (Number(card.stars) || 1)) * 35;
+
     score += statSum * 0.3 + starWeight + getMechanicScore(card.specialMechanic);
 
-    return { card, score: Math.round(score), offenseMult, defenseMult: worstDefenseMult };
+    return {
+      card,
+      score: Math.round(score),
+      offenseMult,
+      defMult,
+      defenseStatus,
+      worstDefenseMult
+    };
   });
 
   return scored.sort((a, b) => b.score - a.score);
