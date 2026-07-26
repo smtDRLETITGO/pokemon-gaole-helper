@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import TypeIcon, { getTypeColor } from './TypeIcon';
 import SpecialMechanicBadge from './SpecialMechanicBadge';
-import { GALAXY_2_BOSS_PRESETS } from '../data/bossPresets';
+import { GALAXY_2_BOSS_PRESETS_6STAR, GALAXY_2_BOSS_PRESETS_5STAR } from '../data/bossPresets';
 import { getEffectiveness } from '../data/pokemonDb';
 
 const ALL_TYPES = ['火','水','草','電','冰','格鬥','毒','地面','飛行','超能力','蟲','岩石','幽靈','龍','惡','鋼','妖精','一般'];
@@ -22,6 +22,7 @@ const makeOpponents = () => [
 export default function BattleQuickPick({ collection }) {
   const [opponents, setOpponents] = useState(makeOpponents);
   const [activeBossId, setActiveBossId] = useState(null);
+  const [bossStarTab, setBossStarTab] = useState('6'); // '6' or '5'
 
   // ── 一鍵帶入首領關卡預設（自動勾選機台螢幕顯示的【有利招式屬性】） ──
   const applyBossPreset = (preset) => {
@@ -120,6 +121,7 @@ export default function BattleQuickPick({ collection }) {
   }, [collection, opponents]);
 
   const lineupCards = opponents.filter(o => o.assigned).map(o => o.assigned);
+  const currentPresets = bossStarTab === '6' ? GALAXY_2_BOSS_PRESETS_6STAR : GALAXY_2_BOSS_PRESETS_5STAR;
 
   return (
     <div className="glass-panel mb-4" style={{ paddingBottom: '16px' }}>
@@ -139,16 +141,44 @@ export default function BattleQuickPick({ collection }) {
 
       {/* 👑 一鍵首領快速帶入列 (銀河第二彈) */}
       <div style={{
-        marginBottom: '14px', padding: '8px 10px',
+        marginBottom: '14px', padding: '10px',
         background: 'rgba(255,159,10,0.06)', border: '1px solid rgba(255,159,10,0.2)',
         borderRadius: '10px',
       }}>
-        <div style={{ fontSize: '11px', fontWeight: '800', color: '#ff9f0a', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-          👑 一鍵首領帶入 (銀河第二彈 6★)
-          <span style={{ fontSize: '9px', fontWeight: 'normal', color: 'rgba(255,255,255,0.5)' }}>點首領 0.1s 自動組隊</span>
+        {/* 星級頁籤切換鈕 (★6 / ★5) */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+          <div style={{ fontSize: '11px', fontWeight: '800', color: '#ff9f0a' }}>
+            👑 一鍵首領帶入 (銀河第二彈)
+          </div>
+          <div style={{ display: 'flex', gap: '4px', background: 'rgba(0,0,0,0.3)', padding: '2px', borderRadius: '8px' }}>
+            <button
+              onClick={() => setBossStarTab('6')}
+              style={{
+                background: bossStarTab === '6' ? 'rgba(255,159,10,0.3)' : 'transparent',
+                border: bossStarTab === '6' ? '1px solid #ff9f0a' : 'none',
+                color: bossStarTab === '6' ? '#fff' : 'rgba(255,255,255,0.6)',
+                borderRadius: '6px', padding: '2px 8px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer',
+              }}
+            >
+              👑 ★6 超級明星 ({GALAXY_2_BOSS_PRESETS_6STAR.length})
+            </button>
+            <button
+              onClick={() => setBossStarTab('5')}
+              style={{
+                background: bossStarTab === '5' ? 'rgba(245,158,11,0.3)' : 'transparent',
+                border: bossStarTab === '5' ? '1px solid #f59e0b' : 'none',
+                color: bossStarTab === '5' ? '#fff' : 'rgba(255,255,255,0.6)',
+                borderRadius: '6px', padding: '2px 8px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer',
+              }}
+            >
+              ⭐ ★5 明星首領 ({GALAXY_2_BOSS_PRESETS_5STAR.length})
+            </button>
+          </div>
         </div>
+
+        {/* 首領按鈕橫向滑動列 */}
         <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px', scrollbarWidth: 'none' }}>
-          {GALAXY_2_BOSS_PRESETS.map(b => {
+          {currentPresets.map(b => {
             const isSel = activeBossId === b.id;
             return (
               <button
@@ -160,7 +190,7 @@ export default function BattleQuickPick({ collection }) {
                   padding: '4px 10px',
                   borderRadius: '20px',
                   border: isSel ? '2px solid #ff9f0a' : '1px solid rgba(255,255,255,0.12)',
-                  background: isSel ? 'rgba(255,159,10,0.25)' : b.avatarBg,
+                  background: isSel ? 'rgba(255,159,10,0.3)' : b.avatarBg,
                   color: '#fff',
                   fontSize: '11px', fontWeight: 'bold',
                   cursor: 'pointer',
@@ -169,7 +199,9 @@ export default function BattleQuickPick({ collection }) {
                 }}
               >
                 <span>{b.name}</span>
-                <span style={{ fontSize: '8px', opacity: 0.8 }}>({b.bossTypes.join('/')})</span>
+                <span style={{ fontSize: '8px', opacity: 0.8 }}>
+                  ({b.bossRawTypes.join('/')})
+                </span>
               </button>
             );
           })}

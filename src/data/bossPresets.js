@@ -1,10 +1,10 @@
 /**
- * bossPresets.js — 銀河系列熱門 6 星首領關卡預設包
+ * bossPresets.js — 銀河系列熱門 6 星與 5 星首領關卡預設包
  * ⚠️ 關鍵設定：配合機台螢幕顯示的「效果絕佳/有利招式」，
  * 點擊首領按鈕時，自動帶入的是「剋制該首領與陪襯寶可夢的【有利招式屬性】」！
  */
 
-export const GALAXY_2_BOSS_PRESETS = [
+export const GALAXY_2_BOSS_PRESETS_6STAR = [
   {
     id: 'zarude',
     name: '薩戮德',
@@ -12,7 +12,6 @@ export const GALAXY_2_BOSS_PRESETS = [
     stars: 6,
     bossRawTypes: ['草', '惡'],
     bossMoveType: '草',
-    // 剋制薩戮德的有利招式 (蟲4x, 火/冰/格2x)
     advantageousTypes: ['蟲', '火', '冰', '格鬥'],
     companionAdvantageousTypes: [['火', '草'], ['蟲', '火']],
     avatarBg: '#15803d',
@@ -25,7 +24,6 @@ export const GALAXY_2_BOSS_PRESETS = [
     stars: 6,
     bossRawTypes: ['妖精', '鋼'],
     bossMoveType: '鋼',
-    // 剋制蒼響的有利招式 (火/地面 2x)
     advantageousTypes: ['火', '地面'],
     companionAdvantageousTypes: [['火', '地面'], ['超能力', '格鬥']],
     avatarBg: '#0284c7',
@@ -38,7 +36,6 @@ export const GALAXY_2_BOSS_PRESETS = [
     stars: 6,
     bossRawTypes: ['格鬥', '鋼'],
     bossMoveType: '鋼',
-    // 剋制藏瑪然特的有利招式 (火/地面/格鬥 2x)
     advantageousTypes: ['火', '地面', '格鬥'],
     companionAdvantageousTypes: [['火', '格鬥'], ['超能力', '格鬥']],
     avatarBg: '#b91c1c',
@@ -51,7 +48,6 @@ export const GALAXY_2_BOSS_PRESETS = [
     stars: 6,
     bossRawTypes: ['鋼', '龍'],
     bossMoveType: '鋼',
-    // 剋制鋁鋼龍的有利招式 (格鬥/地面 2x)
     advantageousTypes: ['格鬥', '地面'],
     companionAdvantageousTypes: [['格鬥', '地面'], ['火', '地面']],
     avatarBg: '#475569',
@@ -64,7 +60,6 @@ export const GALAXY_2_BOSS_PRESETS = [
     stars: 6,
     bossRawTypes: ['火', '飛行'],
     bossMoveType: '火',
-    // 剋制噴火龍的有利招式 (岩石4x, 水/電2x)
     advantageousTypes: ['岩石', '水', '電'],
     companionAdvantageousTypes: [['水', '地面'], ['格鬥', '岩石']],
     avatarBg: '#ea580c',
@@ -77,7 +72,6 @@ export const GALAXY_2_BOSS_PRESETS = [
     stars: 6,
     bossRawTypes: ['格鬥', '鋼'],
     bossMoveType: '格鬥',
-    // 剋制路卡利歐的有利招式 (火/格鬥/地面 2x)
     advantageousTypes: ['火', '格鬥', '地面'],
     companionAdvantageousTypes: [['超能力', '飛行'], ['火', '格鬥']],
     avatarBg: '#2563eb',
@@ -90,7 +84,6 @@ export const GALAXY_2_BOSS_PRESETS = [
     stars: 6,
     bossRawTypes: ['龍', '飛行'],
     bossMoveType: '飛行',
-    // 剋制烈空坐的有利招式 (冰4x, 岩石/龍/妖精2x)
     advantageousTypes: ['冰', '岩石', '妖精'],
     companionAdvantageousTypes: [['冰', '妖精'], ['惡', '冰']],
     avatarBg: '#047857',
@@ -103,7 +96,6 @@ export const GALAXY_2_BOSS_PRESETS = [
     stars: 6,
     bossRawTypes: ['毒', '龍'],
     bossMoveType: '毒',
-    // 剋制四顎針龍的有利招式 (冰/地面/龍/超能力 2x)
     advantageousTypes: ['冰', '地面', '龍', '超能力'],
     companionAdvantageousTypes: [['地面', '超能力'], ['冰', '地面']],
     avatarBg: '#7e22ce',
@@ -116,7 +108,6 @@ export const GALAXY_2_BOSS_PRESETS = [
     stars: 6,
     bossRawTypes: ['龍', '超能力'],
     bossMoveType: '超能力',
-    // 剋制拉帝亞斯的有利招式 (蟲/幽靈/惡/冰/妖精 2x)
     advantageousTypes: ['蟲', '幽靈', '惡', '冰', '妖精'],
     companionAdvantageousTypes: [['惡', '幽靈'], ['蟲', '妖精']],
     avatarBg: '#db2777',
@@ -129,10 +120,162 @@ export const GALAXY_2_BOSS_PRESETS = [
     stars: 6,
     bossRawTypes: ['龍', '超能力'],
     bossMoveType: '超能力',
-    // 剋制拉帝歐斯的有利招式 (蟲/幽靈/惡/冰/妖精 2x)
     advantageousTypes: ['蟲', '幽靈', '惡', '冰', '妖精'],
     companionAdvantageousTypes: [['惡', '幽靈'], ['蟲', '妖精']],
     avatarBg: '#4f46e5',
     weaknessText: '🎯 有利招式：蟲/幽/惡/冰/妖(2x)',
   },
+];
+
+export const GALAXY_2_BOSS_PRESETS_5STAR = [
+  {
+    id: 'metagross',
+    name: '巨金怪',
+    series: '銀河第二彈',
+    stars: 5,
+    bossRawTypes: ['鋼', '超能力'],
+    bossMoveType: '鋼',
+    advantageousTypes: ['火', '地面', '幽靈', '惡'],
+    companionAdvantageousTypes: [['火', '格鬥'], ['超能力', '惡']],
+    avatarBg: '#334155',
+    weaknessText: '🎯 有利招式：火/地面/幽靈/惡(2x)',
+  },
+  {
+    id: 'haxorus',
+    name: '雙斧戰龍',
+    series: '銀河第二彈',
+    stars: 5,
+    bossRawTypes: ['龍'],
+    bossMoveType: '龍',
+    advantageousTypes: ['冰', '龍', '妖精'],
+    companionAdvantageousTypes: [['冰', '妖精'], ['格鬥', '地面']],
+    avatarBg: '#15803d',
+    weaknessText: '🎯 有利招式：冰/龍/妖精(2x)',
+  },
+  {
+    id: 'aerodactyl',
+    name: '化石翼龍',
+    series: '銀河第二彈',
+    stars: 5,
+    bossRawTypes: ['岩石', '飛行'],
+    bossMoveType: '飛行',
+    advantageousTypes: ['水', '電', '冰', '岩石'],
+    companionAdvantageousTypes: [['水', '電'], ['岩石', '鋼']],
+    avatarBg: '#78350f',
+    weaknessText: '🎯 有利招式：水/電/冰/岩石(2x)',
+  },
+  {
+    id: 'emboar',
+    name: '炎武王',
+    series: '銀河第二彈',
+    stars: 5,
+    bossRawTypes: ['火', '格鬥'],
+    bossMoveType: '火',
+    advantageousTypes: ['水', '地面', '飛行', '超能力'],
+    companionAdvantageousTypes: [['水', '地面'], ['超能力', '飛行']],
+    avatarBg: '#c2410c',
+    weaknessText: '🎯 有利招式：水/地面/飛/超(2x)',
+  },
+  {
+    id: 'serperior',
+    name: '君主蛇',
+    series: '銀河第二彈',
+    stars: 5,
+    bossRawTypes: ['草'],
+    bossMoveType: '草',
+    advantageousTypes: ['火', '冰', '毒', '飛行', '蟲'],
+    companionAdvantageousTypes: [['火', '飛行'], ['毒', '蟲']],
+    avatarBg: '#166534',
+    weaknessText: '🎯 有利招式：火/冰/毒/飛/蟲(2x)',
+  },
+  {
+    id: 'samurott',
+    name: '大劍鬼',
+    series: '銀河第二彈',
+    stars: 5,
+    bossRawTypes: ['水'],
+    bossMoveType: '水',
+    advantageousTypes: ['草', '電'],
+    companionAdvantageousTypes: [['草', '電'], ['地面', '草']],
+    avatarBg: '#0369a1',
+    weaknessText: '🎯 有利招式：草/電(2x)',
+  },
+  {
+    id: 'irontreads',
+    name: '鐵轍跡',
+    series: '銀河第二彈',
+    stars: 5,
+    bossRawTypes: ['地面', '鋼'],
+    bossMoveType: '地面',
+    advantageousTypes: ['火', '水', '格鬥', '地面'],
+    companionAdvantageousTypes: [['水', '格鬥'], ['火', '地面']],
+    avatarBg: '#52525b',
+    weaknessText: '🎯 有利招式：火/水/格/地面(2x)',
+  },
+  {
+    id: 'alakazam',
+    name: '胡地',
+    series: '銀河第二彈',
+    stars: 5,
+    bossRawTypes: ['超能力'],
+    bossMoveType: '超能力',
+    advantageousTypes: ['蟲', '幽靈', '惡'],
+    companionAdvantageousTypes: [['惡', '幽靈'], ['蟲', '惡']],
+    avatarBg: '#a16207',
+    weaknessText: '🎯 有利招式：蟲/幽靈/惡(2x)',
+  },
+  {
+    id: 'dracovish',
+    name: '鰓魚龍',
+    series: '銀河第二彈',
+    stars: 5,
+    bossRawTypes: ['水', '龍'],
+    bossMoveType: '龍',
+    advantageousTypes: ['龍', '妖精'],
+    companionAdvantageousTypes: [['妖精', '龍'], ['草', '電']],
+    avatarBg: '#0e7490',
+    weaknessText: '🎯 有利招式：龍/妖精(2x)',
+  },
+  {
+    id: 'dracozolt',
+    name: '雷鳥龍',
+    series: '銀河第二彈',
+    stars: 5,
+    bossRawTypes: ['電', '龍'],
+    bossMoveType: '電',
+    advantageousTypes: ['地面', '冰', '龍', '妖精'],
+    companionAdvantageousTypes: [['地面', '冰'], ['妖精', '龍']],
+    avatarBg: '#a16207',
+    weaknessText: '🎯 有利招式：地面/冰/龍/妖(2x)',
+  },
+  {
+    id: 'arctozolt',
+    name: '雷鳥海獸',
+    series: '銀河第二彈',
+    stars: 5,
+    bossRawTypes: ['電', '冰'],
+    bossMoveType: '冰',
+    advantageousTypes: ['火', '格鬥', '地面', '岩石'],
+    companionAdvantageousTypes: [['火', '格鬥'], ['地面', '岩石']],
+    avatarBg: '#0284c7',
+    weaknessText: '🎯 有利招式：火/格/地/岩(2x)',
+  },
+  {
+    id: 'golisopod',
+    name: '具甲武者',
+    series: '銀河第二彈',
+    stars: 5,
+    bossRawTypes: ['蟲', '水'],
+    bossMoveType: '蟲',
+    advantageousTypes: ['電', '飛行', '岩石'],
+    companionAdvantageousTypes: [['電', '飛行'], ['岩石', '草']],
+    avatarBg: '#0f766e',
+    weaknessText: '🎯 有利招式：電/飛行/岩石(2x)',
+  },
+];
+
+// 向後相容全合集
+export const GALAXY_2_BOSS_PRESETS = [
+  ...GALAXY_2_BOSS_PRESETS_6STAR,
+  ...GALAXY_2_BOSS_PRESETS_5STAR,
 ];
