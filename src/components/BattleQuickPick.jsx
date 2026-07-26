@@ -23,13 +23,13 @@ export default function BattleQuickPick({ collection }) {
   const [opponents, setOpponents] = useState(makeOpponents);
   const [activeBossId, setActiveBossId] = useState(null);
 
-  // ── 一鍵帶入首領關卡預設 ──
+  // ── 一鍵帶入首領關卡預設（自動勾選機台螢幕顯示的【有利招式屬性】） ──
   const applyBossPreset = (preset) => {
     setActiveBossId(preset.id);
     setOpponents([
-      { id: 0, types: [...preset.bossTypes], assigned: null },
-      { id: 1, types: preset.companions[0] ? [...preset.companions[0]] : [], assigned: null },
-      { id: 2, types: preset.companions[1] ? [...preset.companions[1]] : [], assigned: null },
+      { id: 0, types: [...preset.advantageousTypes], assigned: null, rawBossTypes: preset.bossRawTypes, bossMoveType: preset.bossMoveType },
+      { id: 1, types: preset.companionAdvantageousTypes[0] ? [...preset.companionAdvantageousTypes[0]] : [], assigned: null },
+      { id: 2, types: preset.companionAdvantageousTypes[1] ? [...preset.companionAdvantageousTypes[1]] : [], assigned: null },
     ]);
   };
 
